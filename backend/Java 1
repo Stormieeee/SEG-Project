@@ -1,0 +1,58 @@
+import java.sql.*;
+
+public class main {
+    private static Connection connection;
+    private static Statement statement;
+    private static ResultSet resultSet;
+
+    private static void initialize() {
+        try {
+            // Initialize  connection
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://127.0.0.1:3307/roombookingsystem",
+                    "link",
+                    "apple"
+            );
+            // Statement Object
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean authenticateUser(String userID, String password) {
+        initialize();
+
+        try {
+            // Execute the query to check if the userID and password combination exists (For Login basic)
+            String query = "SELECT * FROM `User Login` WHERE `User ID` = '" + userID + "' AND `Password` = '" + password + "'";
+            resultSet = statement.executeQuery(query);
+
+            // If there is a result then can login
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close the result set, statement, and connection
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(authenticateUser("bap1a27","data"));
+        System.out.println(authenticateUser("ap1a21","wdad"));
+    }
+
+
+
+
+
+}
