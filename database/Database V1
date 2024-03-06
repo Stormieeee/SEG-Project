@@ -63,5 +63,5 @@ CREATE TABLE Booking Request (
   -User ID VARCHAR(255),
   -Room ID VARCHAR(255),
   FOREIGN KEY (-User ID) REFERENCES Users(*User ID),
-  FOREIGN KEY (-Room ID) REFERENCES Room(*Room ID)
+  FOREIGN KEY (-Room ID) REFERENCES Room(*Room ID)
 );
