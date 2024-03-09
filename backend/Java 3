@@ -1,0 +1,242 @@
+import java.sql.*;
+import java.util.Random;
+
+public class main {
+    private static Connection connection;
+    private static Statement statement;
+    private static ResultSet resultSet;
+    static Random rand = new Random();
+
+    //WORKING
+    //Initializing the connection with the database and setting up the connect statement
+    private static void initialize() {
+        try {
+            // Initialize  connection
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://127.0.0.1:3307/roombookingsystem",
+                    "link",
+                    "apple"
+            );
+            // Statement Object
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //WORKING
+    //This authenticateUser is for login when need to check the userID and password
+    public static boolean userLoginCheck(String userID, String password) {
+        initialize();
+        try {
+            // Execute the query to check if the userID and password combination exists (For Login basic)
+            String query = "SELECT * FROM `User Login` WHERE `User ID` = '" + userID + "' AND `Password` = '" + password + "'";
+            resultSet = statement.executeQuery(query);
+
+            // If there is a result then can login
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close the result set, statement, and connection
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //CALL WHEN LOGIN (NOT TESTED)
+    public static boolean login(String userID, String password) {
+        initialize();
+
+        // Check if it's a valid in the database system
+        if (userLoginCheck(userID, password)) {
+            //Sets the token for current login session
+            String query = "UPDATE `User Login` SET `OTPKey` = '" + createToken() + "' WHERE `User ID` = '" + userID + "'";
+            try {
+                // Execute the update query
+                int rowsUpdated = statement.executeUpdate(query);
+                // Check if the update was successful
+                if (rowsUpdated > 0) {
+                    System.out.println("OTPKey updated successfully");
+                    return true; // Return true only if update was successful
+                } else {
+                    System.out.println("No rows updated");
+                }
+            } catch (SQLException e) {
+                System.err.println("Error updating OTPKey: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                // Close the connection and statement
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    if (connection != null) {
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    System.err.println("Error closing connection: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false; // Return false if userLoginCheck fails or no rows were updated
+    }
+
+
+    //CALL FOR VERIFICATION - TEMPORARY VERIFICATION FUNCTION (NOT TESTED)
+    public static boolean authentication(String userID, int key) {
+        initialize();
+
+        try {
+            String query = "SELECT `OTPKey` FROM `User Login` WHERE `User ID` = '" + userID + "'";
+            resultSet = statement.executeQuery(query);
+
+            // Check if the resultSet has any rows
+            if (resultSet.next()) {
+                // Retrieve the value of the OTPKey column
+                int otpKey = resultSet.getInt("OTPKey");
+
+                // Compare the retrieved OTPKey with the provided key
+                if (otpKey == key) {
+                    return true;        //Verify complete, proceed to login
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error verifying OTPKey: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close the connection and statement
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    //Creates a random token
+    public static int createToken(){
+        int key = rand.nextInt(1000,9999);
+        return key;
+    }
+
+
+    //Edit the existing password
+    public static boolean editPassword(String userID, String newPassword) {
+        initialize();
+
+        try {
+            // Construct the update query to change the password
+            String query = "UPDATE `User Login` SET `Password` = '" + newPassword + "' WHERE `User ID` = '" + userID + "'";
+
+            // Execute the update query
+            int rowsUpdated = statement.executeUpdate(query);
+
+            // Check if the update was successful
+            if (rowsUpdated > 0) {
+                System.out.println("Password updated successfully");
+                return true;
+            } else {
+                System.out.println("No rows updated");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating password: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close the connection and statement
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean viewRoomAvailability(String roomID, Date date, Time startTime, Time endTime) {
+        initialize();
+
+        try {
+            // Construct the query to check for overlapping bookings
+            String query = "SELECT COUNT(*) AS count FROM `Booking ID description`" +
+                    "WHERE `Room ID` = ? AND `Date` = ?" +
+                    "AND ((`Start Time` BETWEEN ? AND ?) OR (`End Time` BETWEEN ? AND ?))";
+
+            // Prepare the statement
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            // Set parameters for the prepared statement
+            preparedStatement.setString(1, roomID);
+            preparedStatement.setDate(2, date);
+            preparedStatement.setTime(3, startTime);
+            preparedStatement.setTime(4, endTime);
+            preparedStatement.setTime(5, startTime);
+            preparedStatement.setTime(6, endTime);
+
+            // Execute the query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Check if there are any overlapping bookings
+            if (resultSet.next()) {
+                int count = resultSet.getInt("count");
+                return count == 0; // If count is 0, there are no overlapping bookings
+            } else {
+                return false; // Error occurred or no result
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking room availability: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close the connection and statement
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+    public static void main(String[] args) {
+
+    }
+
+
+
+}
