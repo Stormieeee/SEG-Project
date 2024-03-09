@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {FORM_HEADER, ICON} from "./ComponentFormat";
 
 const ComponentTitle = (props:{title : string, image : string, altImg : string}) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { FORM_CONTAINER, FORM_HEADER, ICON } from "./ComponentFormat";
+import { FORM_CONTAINER } from "./ComponentFormat";
 import ComponentTitle from "./ComponentTitle";
 
 const descriptions = {
