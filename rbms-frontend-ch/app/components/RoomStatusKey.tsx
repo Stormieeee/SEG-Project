@@ -1,5 +1,5 @@
 import React from "react";
-import StatusComponent from "./RoomStatusComponents/StatusComponents";
+import StatusComponent from "../../../frontend/src/app/roombooking/RoomStatusComponents/StatusComponents";
 
 const RoomStatusKey = () => {
   return (

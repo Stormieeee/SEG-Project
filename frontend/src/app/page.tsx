@@ -1,10 +1,10 @@
 import { useState } from "react";
-import DateTime from "./roombooking/DateTime";
+import RoomBooking from "./roombooking/page";
 export default function Home() {
   return (
     <>
     <div>
-      <DateTime />
+      <RoomBooking />
     </div>
     </>
   );

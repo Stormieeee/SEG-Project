@@ -1,6 +1,6 @@
 import React from "react";
-import { FORM_CONTAINER } from "./ComponentFormat";
-import ComponentTitle from "./ComponentTitle";
+import { FORM_CONTAINER } from "../Date and Time Components/ComponentFormat";
+import ComponentTitle from "../Date and Time Components/ComponentTitle";
 
 const descriptions = {
   capacity : 1,
@@ -19,15 +19,17 @@ const Description = () => {
         <ComponentTitle title='3 Description' image="/Components-icon/Description Logo.svg" altImg="Datetime logo"/>
         <div className="flex">
           <div className="flex-col">
-            <div>Capacity</div>
-            <div>Equipment</div>
+            <div className="text-zinc-600 my-5">Capacity</div>
+            <div className="text-zinc-600 my-5">Equipment</div>
           </div>
           <div className="flex-col ml-3">
             <div>{descriptions.capacity}</div>
             <div className="flex-col">
               {descriptions.equipments.map((equipment, index) => (
-              <div key={index}>
-                <div>{equipment.name} x {equipment.quantity}</div>
+              <div className="flex" key={index}>
+                <div className="my-2 font-medium float-start">{equipment.name}</div>
+                <div className=" float-end items-center">{equipment.quantity}</div>
+                <span className=" float-right item-center">x</span>
               </div>))}
             </div>
           </div>
