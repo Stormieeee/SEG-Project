@@ -1,12 +1,18 @@
 import { useState } from "react";
-import DateTime from "./Components/components/DateTime";
+import Sidebar from "./Sidebar";
+
 
 export default function Home() {
   return (
     <>
-    <div>
-      <DateTime />
-    </div>
+      <div className="flex">
+        <div className="h-screen flex flex-row justify-start">
+          <Sidebar />
+        </div>
+        <div className="flex-grow flex">
+          {/* <DateTime /> */}
+        </div>
+      </div>
     </>
   );
 }
