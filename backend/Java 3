@@ -13,9 +13,9 @@ public class main {
         try {
             // Initialize  connection
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3307/roombookingsystem",
-                    "link",
-                    "apple"
+                    "jdbc:mysql://127.0.0.1:3307/roombookingsystem1",
+                    "root",
+                    ""
             );
             // Statement Object
             statement = connection.createStatement();
@@ -180,6 +180,7 @@ public class main {
         }
     }
 
+    //NOT TESTED
     public static boolean viewRoomAvailability(String roomID, Date date, Time startTime, Time endTime) {
         initialize();
 
@@ -233,10 +234,153 @@ public class main {
 
 
 
-    public static void main(String[] args) {
+    // Retrieve the last booking ID from the database (USED IN BELOW FUNCTION)
+    private static int getLastBookingRequestID() throws SQLException {
+        int lastBookingID = 0;
+        String query = "SELECT MAX(`Request ID`) AS last_booking_id FROM `Booking Request`";
+        try (ResultSet resultSet = statement.executeQuery(query)) {
+            if (resultSet.next()) {
+                lastBookingID = resultSet.getInt("last_booking_id");
+            }
+        }
+        return lastBookingID;
+    }
 
+
+    // Create a new booking request
+    public static void createBookingRequest(String userID, String roomID, String description, Date date, Time sTime, Time eTime) {
+        initialize();
+        try {
+            // Get the generated Booking ID
+            int bookingID = getLastBookingRequestID() + 1;
+
+            // Insert into Booking Request table
+            String insertRequestQuery = "INSERT INTO `Booking Request` (`Request ID`, `User ID`, `Room ID`) VALUES (?, ?, ?)";
+            PreparedStatement requestStatement = connection.prepareStatement(insertRequestQuery);
+            requestStatement.setInt(1, bookingID);
+            requestStatement.setString(2, userID);
+            requestStatement.setString(3, roomID);
+            requestStatement.executeUpdate();
+
+            // Insert into Booking Request Description table
+            String insertDescriptionQuery = "INSERT INTO `Booking Request Description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`) VALUES (?, ?, ?, ?)";
+            PreparedStatement descriptionStatement = connection.prepareStatement(insertDescriptionQuery, Statement.RETURN_GENERATED_KEYS);
+            descriptionStatement.setInt(1, bookingID);
+            descriptionStatement.setString(2, description);
+            descriptionStatement.setDate(3, date);
+            descriptionStatement.setTime(4, sTime);
+            descriptionStatement.setTime(5, eTime);
+            descriptionStatement.executeUpdate();
+
+
+            System.out.println("Booking request created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error creating booking request: " + e.getMessage());
+        } finally {
+            // Close the connection and statement
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
 
 
+
+//TEST AREA
+
+
+
+
+
+
+    public static void main(String[] args) {
+        testUserLoginCheck();
+        testLogin();
+        testAuthentication();
+        testEditPassword();
+        testViewRoomAvailability();
+        testCreateBookingRequest();
+    }
+
+    public static void testUserLoginCheck() {
+        System.out.println("Testing userLoginCheck...");
+
+        boolean result1 = main.userLoginCheck("user123", "password123");
+        assert result1 : "Test case 1 failed";
+
+        boolean result2 = main.userLoginCheck("invalidUser", "invalidPassword");
+        assert !result2 : "Test case 2 failed";
+
+        System.out.println("userLoginCheck tests passed.");
+    }
+
+    public static void testLogin() {
+        System.out.println("Testing login...");
+
+        boolean result1 = main.login("user123", "password123");
+        assert result1 : "Test case 1 failed";
+
+        boolean result2 = main.login("invalidUser", "invalidPassword");
+        assert !result2 : "Test case 2 failed";
+
+        System.out.println("login tests passed.");
+    }
+
+    public static void testAuthentication() {
+        System.out.println("Testing authentication...");
+
+        boolean result1 = main.authentication("user123", 1234);
+        assert result1 : "Test case 1 failed";
+
+        boolean result2 = main.authentication("user123", 4321);
+        assert !result2 : "Test case 2 failed";
+
+        System.out.println("authentication tests passed.");
+    }
+
+    public static void testEditPassword() {
+        System.out.println("Testing editPassword...");
+
+        boolean result1 = main.editPassword("user123", "newPassword123");
+        assert result1 : "Test case 1 failed";
+
+        boolean result2 = main.editPassword("invalidUser", "newPassword");
+        assert !result2 : "Test case 2 failed";
+
+        System.out.println("editPassword tests passed.");
+    }
+
+    public static void testViewRoomAvailability() {
+        System.out.println("Testing viewRoomAvailability...");
+
+        boolean result1 = main.viewRoomAvailability("room123", Date.valueOf("2024-03-10"), Time.valueOf("09:00:00"), Time.valueOf("10:00:00"));
+        assert result1 : "Test case 1 failed";
+
+        boolean result2 = main.viewRoomAvailability("room123", Date.valueOf("2024-03-10"), Time.valueOf("08:00:00"), Time.valueOf("09:30:00"));
+        assert !result2 : "Test case 2 failed";
+
+        System.out.println("viewRoomAvailability tests passed.");
+    }
+
+    public static void testCreateBookingRequest() {
+        System.out.println("Testing createBookingRequest...");
+
+        // Assuming successful execution indicates test passed
+        main.createBookingRequest("user123", "room123", "Meeting", Date.valueOf("2024-03-15"), Time.valueOf("10:00:00"), Time.valueOf("11:00:00"));
+
+        System.out.println("createBookingRequest tests passed.");
+    }
 }
+
+
+
