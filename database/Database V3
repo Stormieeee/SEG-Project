@@ -4,7 +4,7 @@ CREATE TABLE `User Roles` (
 );
 
 CREATE TABLE `Booking Request description` (
-  `Request ID` VARCHAR(255) PRIMARY KEY,
+  `Request ID` INT PRIMARY KEY,
   `Description` VARCHAR(255),
   `Date` DATE,
   `Start Time` TIME,
@@ -62,7 +62,7 @@ CREATE TABLE `Booking List` (
 );
 
 CREATE TABLE `Booking Request` (
-  `Request ID` VARCHAR(255),
+  `Request ID` INT,
   `User ID` VARCHAR(255),
   `Room ID` VARCHAR(255),
   PRIMARY KEY (`Request ID`),
