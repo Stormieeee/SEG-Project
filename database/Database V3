@@ -29,7 +29,7 @@ CREATE TABLE `Feedback` (
   `Feedback ID` VARCHAR(255) PRIMARY KEY,
   `Booking ID` VARCHAR(255),
   `Description` VARCHAR(255),
-  FOREIGN KEY (`Booking ID`) REFERENCES `Booking ID description`(`Booking ID`)
+  FOREIGN KEY (`Booking ID`) REFERENCES `Booking ID description`(`Booking ID`) ON DELETE CASCADE
 );
 
 CREATE TABLE `User Login` (
@@ -49,23 +49,21 @@ CREATE TABLE `Room` (
   `Room Type` VARCHAR(255),
   `Capacity` INT,
   `Floor` INT,
-  `Access ` INT
+  `Access` INT
 );
 
 CREATE TABLE `Booking List` (
-  `Booking ID` VARCHAR(255),
+  `Booking ID` VARCHAR(255) PRIMARY KEY,
   `User ID` VARCHAR(255),
   `Room ID` VARCHAR(255),
-  PRIMARY KEY (`Booking ID`),
-  FOREIGN KEY (`User ID`) REFERENCES `Users`(`User ID`),
-  FOREIGN KEY (`Room ID`) REFERENCES `Room`(`Room ID`)
+  FOREIGN KEY (`User ID`) REFERENCES `Users`(`User ID`) ON DELETE CASCADE,
+  FOREIGN KEY (`Room ID`) REFERENCES `Room`(`Room ID`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Booking Request` (
-  `Request ID` INT,
+  `Request ID` INT PRIMARY KEY,
   `User ID` VARCHAR(255),
   `Room ID` VARCHAR(255),
-  PRIMARY KEY (`Request ID`),
-  FOREIGN KEY (`User ID`) REFERENCES `Users`(`User ID`),
-  FOREIGN KEY (`Room ID`) REFERENCES `Room`(`Room ID`)
+  FOREIGN KEY (`User ID`) REFERENCES `Users`(`User ID`) ON DELETE CASCADE,
+  FOREIGN KEY (`Room ID`) REFERENCES `Room`(`Room ID`) ON DELETE CASCADE
 );
