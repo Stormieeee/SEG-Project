@@ -13,6 +13,24 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      animation: {
+        vote: 'vote 0.5s ease-in',
+      },
+
+      keyframes: {
+        vote: {
+          '0%, 100%': {
+            transform: 'rotate(0deg)',
+          },
+          '25%': {
+            transform: 'rotate(-10deg)',
+          },
+          '75%': {
+            transform: 'rotate(10deg)',
+          },
+        },
+      },
+
       
       colors:{
         'white' :{
@@ -40,6 +58,19 @@ const config: Config = {
           800: "#1A1A1E",
           900: "#141417",
         },
+
+        'primary' :{
+          50: "#E6F7FC",
+          100: "#B0E6F5",
+          200: "#8ADAF1",
+          300: "#54C9EA",
+          400: "#33BEE6",
+          500: "#00AEE0",
+          600: "#009ECC",
+          700: "#007C9F",
+          800: "#00607B", 
+          900: "#00495E",
+        }
       },
     },
 
