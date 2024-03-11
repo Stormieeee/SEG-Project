@@ -1,5 +1,7 @@
 "use client";
 
+import { Icon } from "@iconify/react";
+
 import roomBookingLight from "../../public/Sidebar-icon/Room Booking Light.svg";
 import roomBookingDark from "../../public/Sidebar-icon/Room Booking Dark.svg";
 import myBookingDark from "../../public/Sidebar-icon/My Booking Dark.svg";
@@ -29,7 +31,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="eft-0 flex flex-col  h-screen bg-white-50 border-zinc-200 ">
+      <div className="fixed top-0 left-0 flex flex-col  h-screen bg-white-50 border-zinc-200 ">
         <Link href="https://www.southampton.ac.uk/my/index.page">
           <Image
             src={companylogo}
