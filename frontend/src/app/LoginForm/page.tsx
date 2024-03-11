@@ -10,8 +10,8 @@ const LoginForm = () => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // router.push(`/auth?email=${encodeURIComponent(email)}`)
-        // router.push(`/auth?`)
-        router.push("/roombooking")
+        router.push(`/auth?`)
+        // router.push("/roombooking")
     
         // try {
         //   const response = await fetch('/api/login', {
@@ -26,8 +26,8 @@ const LoginForm = () => {
         //     const data = await response.json();
         //     // Store the token in local storage or cookies
         //     localStorage.setItem('token', data.token);
-        //     // Redirect to the dashboard or home page
-        //     router.push('/registeration');
+        //     // Redirect to the authentication page
+               // router.push(`/auth?`)
         //   } else {
         //     // Handle error response
         //     console.error('Login failed');
