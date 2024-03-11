@@ -1,11 +1,9 @@
-import { useState } from "react";
-import RoomBooking from "./roombooking/page";
-export default function Home() {
+import LoginForm from "./LoginForm/page";
+
+export default function page() {
   return (
-    <>
     <div>
-      <RoomBooking />
+      <LoginForm />
     </div>
-    </>
   );
 }
