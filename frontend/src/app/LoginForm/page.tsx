@@ -2,39 +2,49 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const LoginForm = () => {
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // router.push(`/auth?email=${encodeURIComponent(email)}`)
         router.push(`/auth?`)
-        // router.push("/roombooking")
-    
-        // try {
-        //   const response = await fetch('/api/login', {
-        //     method: 'POST',
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ email, password }),
-        //   });
-    
-        //   if (response.ok) {
-        //     const data = await response.json();
-        //     // Store the token in local storage or cookies
-        //     localStorage.setItem('token', data.token);
-        //     // Redirect to the authentication page
-               // router.push(`/auth?`)
-        //   } else {
-        //     // Handle error response
-        //     console.error('Login failed');
-        //   }
-        // } catch (error) {
-        //   console.error('Error:', error);
-        // }
+
+      //   try {
+      //     const response = await fetch('/api/verify-email', {
+      //       method: 'POST',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //       body: JSON.stringify({ email, password }),
+      //     });
+
+      //     if (response.ok) {
+      //       // Email and password are verified, send OTP via email
+      //       const otpResponse = await fetch('/api/send-otp', {
+      //         method: 'POST',
+      //         headers: {
+      //           'Content-Type': 'application/json',
+      //         },
+      //         body: JSON.stringify({ email }),
+      //       });
+
+      //       if (otpResponse.ok) {
+      //         // OTP sent successfully
+      //         console.log('OTP sent');
+      //         router.push(`/auth?email=${encodeURIComponent(email)}`);
+      //       } else {
+      //         // Handle error response
+      //         console.error('Failed to send OTP');
+      //       }
+      //     } else {
+      //       // Handle error response
+      //       console.error('Email and password verification failed');
+      //     }
+      //   } catch (error) {
+      //     console.error('Error:', error);
+      //   }
       };
 
     return (
@@ -100,4 +110,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default Login;
