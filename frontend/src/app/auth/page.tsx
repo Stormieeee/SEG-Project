@@ -99,10 +99,10 @@ const Authentication = () => {
                             <img src="/Company-logo/Company Logo.svg" alt="Company Logo" />
                         </div>
                         <div className="md:space-y-1">
-                            <div className="text-xl font-bold dark:text-white">
+                            <div className="text-xl font-bold dark:text-white-50">
                                 OTP Authentication
                             </div>
-                            <div className="text-sm dark:text-white">
+                            <div className="text-sm dark:text-white-50">
                                 An OTP has been sent to your email. Please enter the OTP code to continue.
                             </div>
                         </div>
@@ -110,7 +110,7 @@ const Authentication = () => {
                         <form className="space-y-4 md:space-y-6" onSubmit={handleAuth}>
                             <div>
                                 <label
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white-50"
                                 >
                                     OTP Code
                                 </label>

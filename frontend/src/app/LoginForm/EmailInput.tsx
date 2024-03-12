@@ -5,13 +5,13 @@ interface EmailInputProps {
     setEmail: (email: string) => void;
     error: string;
     }
-    
+
 const EmailInput = ({ email, setEmail, error }: EmailInputProps) => {
   return (
     <div>
       <label
         htmlFor="email"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white-50"
       >
         Your email
       </label>
