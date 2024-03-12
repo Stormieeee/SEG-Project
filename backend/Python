@@ -1,0 +1,162 @@
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
+import mysql.connector
+import random
+import logging
+
+app = FastAPI()
+
+# Define database connection settings
+MYSQL_CONFIG = {
+    "host": "127.0.0.1",
+    "port": 3307,
+    "user": "root",
+    "password": "",
+    "database": "roombookingsystem1"
+}
+
+# Dependency to establish database connection
+def get_database_connection():
+    connection = mysql.connector.connect(**MYSQL_CONFIG)
+    return connection
+
+###########################################
+
+# Login
+class Login(BaseModel):
+    user_id: str
+    password: str
+
+def generate_random_integer():
+    return random.randint(10000, 99999)
+
+#error
+def user_login_check(userID, password):
+    query = "SELECT * FROM `User Login` WHERE `User ID` = %s AND `Password` = %s"
+    cursor.execute(query, (userID, password))
+    return cursor.fetchone() is not None
+
+@app.post("/login/")
+def user_login(login: Login, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    if user_login_check(cursor, userID=login.user_id, password=login.password):
+        return {"message": "Login successful"}
+    else:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+###########################################
+
+class Auth(BaseModel):
+    user_id: str
+    key: int
+
+#working
+def authentication(cursor, userID, key):
+    query = "SELECT COUNT(*) FROM `User Login` WHERE `User ID` = %s AND `OTPKey` = %s"
+    cursor.execute(query, (userID, key))
+    return cursor.fetchone()[0] > 0
+
+@app.post("/authentication/")
+def user_authentication(auth: Auth, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    if authentication(cursor, userID=auth.user_id, key=auth.key):
+        return {"message": "Authentication successful"}
+    else:
+        raise HTTPException(status_code=401, detail="Authentication failed")
+
+###########################################
+
+
+class EditPassword(BaseModel):
+    user_id: str
+    new_password: str
+
+#error
+def edit_password(cursor, userID, new_password):
+    query = "UPDATE `User Login` SET `Password` = %s WHERE `User ID` = %s"
+    cursor.execute(query, (new_password, userID))
+
+
+@app.post("/edit_password/")
+def edit_user_password(edit_password: EditPassword, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    edit_password(cursor, userID=edit_password.user_id, new_password=edit_password.new_password)
+    return {"message": "Password updated successfully"}
+
+###########################################
+
+
+
+
+class BookingRequest(BaseModel):
+    user_id: str
+    room_id: str
+    description: str
+    date: str
+    start_time: str
+    end_time: str
+
+def create_booking_request(cursor, userID, room_id, description, date, start_time, end_time):
+    insert_request_query = "INSERT INTO `Booking Request` (`User ID`, `Room ID`) VALUES (%s, %s)"
+    cursor.execute(insert_request_query, (userID, room_id))
+    booking_id = cursor.lastrowid
+    insert_description_query = "INSERT INTO `Booking Request Description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`) VALUES (%s, %s, %s, %s, %s)"
+    cursor.execute(insert_description_query, (booking_id, description, date, start_time, end_time))
+
+@app.post("/booking_request/")
+def create_booking(booking_request: BookingRequest, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    create_booking_request(
+        cursor=cursor,
+        userID=booking_request.user_id,
+        room_id=booking_request.room_id,
+        description=booking_request.description,
+        date=booking_request.date,
+        start_time=booking_request.start_time,
+        end_time=booking_request.end_time
+    )
+    return {"message": "Booking request created successfully"}    
+
+
+###########################################
+
+class RoomAvailabilityRequest(BaseModel):
+    room_id: str
+    date: str
+    start_time: str
+    end_time: str
+
+
+def check_room_availability(cursor, room_id, date, start_time, end_time):
+    query = "SELECT COUNT(*) FROM `Booking ID description` AS BID " \
+            "INNER JOIN `Booking List` AS BL ON BID.`Booking ID` = BL.`Booking ID` " \
+            "WHERE BL.`Room ID` = %s AND BID.`Date` = %s " \
+            "AND ((BID.`Start Time` BETWEEN %s AND %s) OR (BID.`End Time` BETWEEN %s AND %s))"
+    cursor.execute(query, (room_id, date, start_time, end_time, start_time, end_time))
+    return cursor.fetchone()[0] == 0
+
+
+
+@app.post("/check_room_availability/")
+def check_room_availability(request: RoomAvailabilityRequest, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    available = check_room_availability(
+        cursor=cursor,
+        room_id=request.room_id,
+        date=request.date,
+        start_time=request.start_time,
+        end_time=request.end_time
+    )
+    return {"available": available}
+
+
+
+
+
+
+
+
+
+
+
+
