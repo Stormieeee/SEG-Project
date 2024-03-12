@@ -23,18 +23,18 @@ def get_database_connection():
 ###########################################
 
 # Login
+def generate_random_integer():
+    return random.randint(10000, 99999)
+
 class Login(BaseModel):
     user_id: str
     password: str
 
-def generate_random_integer():
-    return random.randint(10000, 99999)
-
 #error
-def user_login_check(userID, password):
-    query = "SELECT * FROM `User Login` WHERE `User ID` = %s AND `Password` = %s"
+def user_login_check(cursor, userID=None, password=None):
+    query = "SELECT COUNT(*) FROM `User Login` WHERE `User ID` = %s AND `Password` = %s"
     cursor.execute(query, (userID, password))
-    return cursor.fetchone() is not None
+    return cursor.fetchone()[0] > 0
 
 @app.post("/login/")
 def user_login(login: Login, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
