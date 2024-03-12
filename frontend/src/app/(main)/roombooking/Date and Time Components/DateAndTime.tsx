@@ -9,10 +9,52 @@ import {
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
 import Image from "next/image";
 
+
+var date = new Date()
+var currentHour = date.getHours();
+var currentDate = date.getDate();
+
+//return current hour in 4
+function startTimeOptions () {
+  var timeList = new Array()
+  var currentTime = changeTimeFormat(currentHour);
+  
+  for (let i = 0; i < 4; i++) {
+    timeList.push(changeTimeFormat(currentTime + i));
+  }
+  console.log(timeList)
+  return timeList;
+}
+function endTimeOptions(){
+  var timeList = startTimeOptions()
+  for (let i = 0; i < timeList.length; i++) {
+    var curTime = timeList[i]
+    if(curTime+1 > 12){
+      timeList[i] = changeTimeFormat(curTime)
+    }else{
+      timeList[i] += 1;
+    }
+    
+  }
+  console.log(timeList)
+  return timeList
+}
+function changeTimeFormat (time: number){
+  if(time > 12){
+    time -= 12 
+  }else if (time == 12){
+    time = 0;
+  }
+  return time
+}
+
 const DateTime = () => {
+  console.log(currentHour);
+  console.log(currentDate);
+
   const [date, setDate] = useState("");
-  const [startTime, setStartTime] = useState("12:00 PM");
-  const [endTime, setEndTime] = useState("12:00 PM");
+  const [startTime, setStartTime] = useState(currentHour.toString());
+  const [endTime, setEndTime] = useState((currentHour+1).toString());
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
@@ -28,7 +70,8 @@ const DateTime = () => {
     setEndTime(event.target.value);
   };
 
-  const timeOptions = ["12:00 PM", "1:00 PM", "2:00 PM"];
+  const startTimeList = startTimeOptions();
+  const endTimeList = endTimeOptions();
 
   return (
     <div className={FORM_CONTAINER}>
@@ -46,7 +89,7 @@ const DateTime = () => {
             className="flex w-6 h-6"
           />
 
-          <button className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto my-2 items-center justify-center flex p-2 rounded-md "
+          <button className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto mr-2 my-2 items-center justify-center flex p-2 rounded-md "
           onClick={checkAvailability}>
             Check Availability
           </button>
@@ -69,7 +112,7 @@ const DateTime = () => {
               value={startTime}
               onChange={handleStartTimeChange}
             >
-              {timeOptions.map((timeOption, index) => (
+              {startTimeList.map((timeOption, index) => (
                 <option key={index} value={timeOption}>
                   {timeOption}
                 </option>
@@ -84,7 +127,7 @@ const DateTime = () => {
               value={endTime}
               onChange={handleEndTimeChange}
             >
-              {timeOptions.map((timeOption, index) => (
+              {endTimeList.map((timeOption, index) => (
                 <option key={index} value={timeOption}>
                   {timeOption}
                 </option>
@@ -99,7 +142,7 @@ const DateTime = () => {
 
 const checkAvailability = async () => {
   try{
-    
+
   }catch (err){
     console.log("Current status could not be verified")
   }

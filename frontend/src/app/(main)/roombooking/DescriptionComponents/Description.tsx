@@ -1,20 +1,27 @@
 import React from "react";
 import CapacityLabel from "./CapacityLabel";
 import EquipmentLabel from "./EquipmentLabel";
+import descriptionLogo from "../../../../../public/Components-icon/Description Logo.svg"
+import Image from "next/image";
 
 const Description = () => {
   return (
     <div className="bg-white border border-gray-300 rounded-2xl h-full p-5 flex flex-col">
       <div className="flex">
-        <div>
-          <h1 className="text-md">Description</h1>
+      <div className="flex items-center flex-row grow">
+          <span className="text-zinc-800 font-medium text-xl px-2 items-center ">
+            3
+          </span>
+          <span className="text-zinc-600 font-medium text-xl items-center flex pr-2">
+            Description
+          </span>
+          <Image
+            src={descriptionLogo}
+            alt="Date Time Logo"
+            className="flex w-6 h-6"
+          />
         </div>
-        <img
-          src="../Components-icon/Description Logo.svg"
-          className="ml-2 mt-1 w-4 h-4"
-        />
-      </div>
-
+        </div>
       <div className="mt-3 flex-col w-full">
         <CapacityLabel number={20} />
         <EquipmentLabel
