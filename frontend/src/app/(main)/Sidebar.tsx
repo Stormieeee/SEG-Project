@@ -1,16 +1,38 @@
+// const Sidebar = () => {
+//   return (
+//     <div className="flex bg-white border-r border-gray-300 h-screen relative w-56">
+//       <div className="h-3/4">
+//         <img
+//           src="../Company-logo/Company Logo.svg"
+//           className="border-b border-gray-300 absolute top-0 p-4"
+//         />
+//       </div>
+
+//       <div className="bg-white border-t border-gray-300 absolute bottom-0 w-full h-1/4">
+//         {/*bottom box content in sidebar*/}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Sidebar;
+
+//------------------------------------------------------------------------------------------------
+
 "use client";
 
 import { Icon } from "@iconify/react";
-import roomBookingLight from "/public/Sidebar-icon/Room Booking Light.svg";
-import roomBookingDark from "/public/Sidebar-icon/Room Booking Dark.svg";
-import myBookingDark from "/public/Sidebar-icon/My Booking Dark.svg";
-import myBookingLight from "/public/Sidebar-icon/My Booking Light.svg";
-import profileDark from "/public/Sidebar-icon/Profile Dark.svg";
-import profileLight from "/public/Sidebar-icon/Profile Light.svg";
+
+import roomBookingLight from "../../../public/Sidebar-icon/Room Booking Light.svg"
+import roomBookingDark from "../../../public/Sidebar-icon/Room Booking Dark.svg";
+import myBookingDark from "../../../public/Sidebar-icon/My Booking Dark.svg";
+import myBookingLight from "../../../public/Sidebar-icon/My Booking Light.svg";
+import profileDark from "../../../public/Sidebar-icon/Profile Dark.svg";
+import profileLight from "../../../public/Sidebar-icon/Profile Light.svg";
 import useNavigation from "./hook/use-navigation";
 
 import Image from "next/image";
-import companylogo from "/public/Company-logo/Company Logo.svg";
+import companylogo from "../../../public/Company-logo/Company Logo.svg";
 import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -30,7 +52,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 flex flex-col  h-screen bg-white-50 border-zinc-200 ">
+      <div className="fixed top-0 left-0 flex flex-col h-screen bg-white-50 border-zinc-200 ">
         <Link href="https://www.southampton.ac.uk/my/index.page">
           <Image
             src={companylogo}

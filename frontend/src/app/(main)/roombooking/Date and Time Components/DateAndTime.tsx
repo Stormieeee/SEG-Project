@@ -33,8 +33,8 @@ const DateTime = () => {
 
   return (
     <div className={FORM_CONTAINER}>
-      <div className="flex-col flex-grow h-full justify-start">
-        <div className="flex items-center">
+      <div className="flex-col flex-grow h-full justify-center">
+        <div className="flex items-center flex-row grow">
           <span className="text-zinc-800 font-medium text-xl px-2 items-center ">
             1
           </span>
@@ -46,6 +46,11 @@ const DateTime = () => {
             alt="Date Time Logo"
             className="flex w-6 h-6"
           />
+
+          <button className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto my-2 items-center justify-center flex p-2 rounded-md "
+          onClick={checkAvailability}>
+            Check Availability
+          </button>
         </div>
         <div className="flex h-full py-5">
           <div className={WRAPPER}>
@@ -93,4 +98,11 @@ const DateTime = () => {
   );
 };
 
+const checkAvailability = async () => {
+  try{
+    
+  }catch (err){
+    console.log("Current status could not be verified")
+  }
+};
 export default DateTime;
