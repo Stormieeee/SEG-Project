@@ -1,69 +1,342 @@
-CREATE TABLE `User Roles` (
-  `Role ID` INT PRIMARY KEY,
-  `Name` VARCHAR(255)
-);
+import java.sql.*;
+import java.util.Random;
 
-CREATE TABLE `Booking Request description` (
-  `Request ID` INT PRIMARY KEY,
-  `Description` VARCHAR(255),
-  `Date` DATE,
-  `Start Time` TIME,
-  `End Time` TIME
-);
+public class main {
+    private static Connection connection;
+    private static Statement statement;
+    private static ResultSet resultSet;
+    static Random rand = new Random();
 
-CREATE TABLE `Users` (
-  `User ID` VARCHAR(255) PRIMARY KEY,
-  `Role ID` INT,
-  FOREIGN KEY (`Role ID`) REFERENCES `User Roles`(`Role ID`)
-);
+    //WORKING
+    //Initializing the connection with the database and setting up the connect statement
+    private static void initialize() {
+        try {
+            // Initialize  connection
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://127.0.0.1:3307/roombookingsystem1",
+                    "root",
+                    ""
+            );
+            // Statement Object
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-CREATE TABLE `Booking ID description` (
-  `Booking ID` VARCHAR(255) PRIMARY KEY,
-  `Description` VARCHAR(255),
-  `Date` DATE,
-  `Start Time` TIME,
-  `End Time` TIME
-);
+    //WORKING
+    //This authenticateUser is for login when need to check the userID and password
+    public static boolean userLoginCheck(String userID, String password) {
+        initialize();
+        try {
+            // Execute the query to check if the userID and password combination exists (For Login basic)
+            String query = "SELECT * FROM `User Login` WHERE `User ID` = '" + userID + "' AND `Password` = '" + password + "'";
+            resultSet = statement.executeQuery(query);
 
-CREATE TABLE `Feedback` (
-  `Feedback ID` VARCHAR(255) PRIMARY KEY,
-  `Booking ID` VARCHAR(255),
-  `Description` VARCHAR(255),
-  FOREIGN KEY (`Booking ID`) REFERENCES `Booking ID description`(`Booking ID`) ON DELETE CASCADE
-);
+            // If there is a result then can login
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close the result set, statement, and connection
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
 
-CREATE TABLE `User Login` (
-  `User ID` VARCHAR(255) PRIMARY KEY,
-  `Password` VARCHAR(255),
-  `OTPKey` INT,
-  `LoggedIn` BOOLEAN
-);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-CREATE TABLE `Item` (
-  `Room ID` VARCHAR(255) PRIMARY KEY,
-  `Equipment` VARCHAR(255)
-);
+    //CALL WHEN LOGIN (NOT TESTED)
+    public static boolean login(String userID, String password) {
+        initialize();
 
-CREATE TABLE `Room` (
-  `Room ID` VARCHAR(255) PRIMARY KEY,
-  `Room Type` VARCHAR(255),
-  `Capacity` INT,
-  `Floor` INT,
-  `Access` INT
-);
+        // Check if it's a valid in the database system
+        if (userLoginCheck(userID, password)) {
+            initialize();
+            //Sets the token for current login session
+            int token = createToken();
+            System.out.println(token);
+            String query = "UPDATE `User Login` SET `OTPKey` = '" + token + "' WHERE `User ID` = '" + userID + "'";
+            try {
+                // Execute the update query
+                int rowsUpdated = statement.executeUpdate(query);
 
-CREATE TABLE `Booking List` (
-  `Booking ID` VARCHAR(255) PRIMARY KEY,
-  `User ID` VARCHAR(255),
-  `Room ID` VARCHAR(255),
-  FOREIGN KEY (`User ID`) REFERENCES `Users`(`User ID`) ON DELETE CASCADE,
-  FOREIGN KEY (`Room ID`) REFERENCES `Room`(`Room ID`) ON DELETE CASCADE
-);
+                // Check if the update was successful
+                if (rowsUpdated > 0) {
+                    System.out.println("OTPKey updated successfully");
+                    return true; // Return true only if update was successful
+                } else {
+                    System.out.println("No rows updated");
+                }
+            } catch (SQLException e) {
+                System.err.println("Error updating OTPKey: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                // Close the connection and statement
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    if (connection != null) {
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    System.err.println("Error closing connection: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false; // Return false if userLoginCheck fails or no rows were updated
+    }
 
-CREATE TABLE `Booking Request` (
-  `Request ID` INT PRIMARY KEY,
-  `User ID` VARCHAR(255),
-  `Room ID` VARCHAR(255),
-  FOREIGN KEY (`User ID`) REFERENCES `Users`(`User ID`) ON DELETE CASCADE,
-  FOREIGN KEY (`Room ID`) REFERENCES `Room`(`Room ID`) ON DELETE CASCADE
-);
+    //Creates a random token
+    public static int createToken(){
+        int key = rand.nextInt(10000,99999);
+        return key;
+    }
+
+
+    //CALL FOR VERIFICATION - TEMPORARY VERIFICATION FUNCTION (NOT TESTED)
+    public static boolean authentication(String userID, int key) {
+        initialize();
+
+        String query = "SELECT `OTPKey` FROM `User Login` WHERE `User ID` = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int otpKey = resultSet.getInt("OTPKey");
+
+                if (otpKey == key) {
+                    // Construct the update query to change the password
+                    String updateQuery = "UPDATE `User Login` SET `LoggedIn` = ? WHERE `User ID` = ?";
+                    try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                        updateStatement.setBoolean(1, true);
+                        updateStatement.setString(2, userID);
+                        int rowsUpdated = updateStatement.executeUpdate();
+                        return true; // Verify complete, proceed to login
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error verifying OTPKey: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
+
+    //Edit the existing password
+    public static boolean editPassword(String userID, String newPassword) {
+        initialize();
+
+        try {
+            // Construct the update query to change the password
+            String query = "UPDATE `User Login` SET `Password` = '" + newPassword + "' WHERE `User ID` = '" + userID + "'";
+
+            // Execute the update query
+            int rowsUpdated = statement.executeUpdate(query);
+
+            // Check if the update was successful
+            if (rowsUpdated > 0) {
+                System.out.println("Password updated successfully");
+                return true;
+            } else {
+                System.out.println("No rows updated");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating password: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close the connection and statement
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //NOT TESTED
+    public static boolean viewRoomAvailability(String roomID, Date date, Time startTime, Time endTime) {
+        initialize();
+
+        try {
+            // Construct the query to check for overlapping bookings
+            String query = "SELECT COUNT(*) AS count FROM `Booking ID description` AS BID " +
+                    "INNER JOIN `Booking List` AS BL ON BID.`Booking ID` = BL.`Booking ID` " +
+                    "WHERE BL.`Room ID` = ? AND BID.`Date` = ? " +
+                    "AND ((BID.`Start Time` BETWEEN ? AND ?) OR (BID.`End Time` BETWEEN ? AND ?))";
+
+            // Prepare the statement
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            // Set parameters for the prepared statement
+            preparedStatement.setString(1, roomID);
+            preparedStatement.setDate(2, date);
+            preparedStatement.setTime(3, startTime);
+            preparedStatement.setTime(4, endTime);
+            preparedStatement.setTime(5, startTime);
+            preparedStatement.setTime(6, endTime);
+
+            // Execute the query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Check if there are any overlapping bookings
+            if (resultSet.next()) {
+                int count = resultSet.getInt("count");
+                return count == 0; // If count is 0, there are no overlapping bookings
+            } else {
+                return false; // Error occurred or no result
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking room availability: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Close the connection and statement
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+    // Retrieve the last booking ID from the database (USED IN BELOW FUNCTION)
+    private static int getLastBookingRequestID() throws SQLException {
+        int lastBookingID = 0;
+        String query = "SELECT MAX(`Request ID`) AS last_booking_id FROM `Booking Request`";
+        try (ResultSet resultSet = statement.executeQuery(query)) {
+            if (resultSet.next()) {
+                lastBookingID = resultSet.getInt("last_booking_id");
+            }
+        }
+        return lastBookingID;
+    }
+
+
+    // Create a new booking request
+    public static void createBookingRequest(String userID, String roomID, String description, Date date, Time sTime, Time eTime) {
+        initialize();
+        try {
+            // Get the generated Booking ID
+            int bookingID = getLastBookingRequestID() + 1;
+
+            // Insert into Booking Request table
+            String insertRequestQuery = "INSERT INTO `Booking Request` (`Request ID`, `User ID`, `Room ID`) VALUES (?, ?, ?)";
+            PreparedStatement requestStatement = connection.prepareStatement(insertRequestQuery);
+            requestStatement.setInt(1, bookingID);
+            requestStatement.setString(2, userID);
+            requestStatement.setString(3, roomID);
+            requestStatement.executeUpdate();
+
+            // Insert into Booking Request Description table
+            String insertDescriptionQuery = "INSERT INTO `Booking Request Description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement descriptionStatement = connection.prepareStatement(insertDescriptionQuery, Statement.RETURN_GENERATED_KEYS);
+            descriptionStatement.setInt(1, bookingID);
+            descriptionStatement.setString(2, description);
+            descriptionStatement.setDate(3, date);
+            descriptionStatement.setTime(4, sTime);
+            descriptionStatement.setTime(5, eTime);
+            descriptionStatement.executeUpdate();
+
+
+            System.out.println("Booking request created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error creating booking request: " + e.getMessage());
+        } finally {
+            // Close the connection and statement
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public static void testAllFunctions() {
+        // Test userLoginCheck
+        //System.out.println("Testing userLoginCheck...");
+        //boolean loginCheckResult = userLoginCheck("ap1a21@soton.ac.uk", "newPassword");
+        //System.out.println("Login check result: " + loginCheckResult);
+
+        // Test login
+        System.out.println("\nTesting login...");
+        boolean loginResult = login("ap1a21@soton.ac.uk", "newPassword");
+        System.out.println("Login result: " + loginResult);
+//
+//        // Test authentication
+        //System.out.println("\nTesting authentication...");
+        //boolean authResult = authentication("ap1a21@soton.ac.uk", 12345);
+        //System.out.println("Authentication result: " + authResult);
+//
+//        // Test createToken
+        //System.out.println("\nTesting createToken...");
+        //int token = createToken();
+        //System.out.println("Generated token: " + token);
+//
+//        // Test editPassword
+//        System.out.println("\nTesting editPassword...");
+//        boolean editPassResult = editPassword("ap1a21@soton.ac.uk", "newPassword");
+//        System.out.println("Edit password result: " + editPassResult);
+//
+//        // Test viewRoomAvailability
+        //System.out.println("\nTesting viewRoomAvailability...");
+        //boolean roomAvailResult = viewRoomAvailability("A101", Date.valueOf("2024-03-12"), Time.valueOf("12:00:01"), Time.valueOf("15:00:00"));
+        //System.out.println("Room availability result: " + roomAvailResult);
+//
+        // Test createBookingRequest
+        //System.out.println("\nTesting createBookingRequest...");
+        //createBookingRequest("ap1a21@soton.ac.uk", "A101", "Meeting with faculty", Date.valueOf("2024-03-12"), Time.valueOf("10:00:00"), Time.valueOf("12:00:00"));
+    }
+
+    public static void main(String[] args) {
+        testAllFunctions();
+    }
+
+
+
+
+}
+
+
+
