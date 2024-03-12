@@ -7,7 +7,7 @@ import {
   FORM_LABEL,
   WRAPPER,
 } from "./ComponentFormat";
-import datetimeLogo from "../../../../public/Components-icon/Datetime Logo.svg";
+import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
 import Image from "next/image";
 
 const DateTime = () => {

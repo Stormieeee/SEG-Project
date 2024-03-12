@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles/globals.css";
 
-import PageWrapper from "./roombooking/page-wrapper";
-import MarginWidthWrapper from "./roombooking/marginWidthWrapper";
-import Sidebar from "./Sidebar";
+// import PageWrapper from "./roombooking/page-wrapper";
+// import MarginWidthWrapper from "./roombooking/marginWidthWrapper";
+// import Sidebar from "./Sidebar";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,12 +24,12 @@ export default function RootLayout({
       <body className={inter.className}><div className="flex">
           
           <main className="flex-1">
-
-            <MarginWidthWrapper>
+            {children}
+            {/* <MarginWidthWrapper>
             <Sidebar />
-              {/* <Header /> */}
+              <Header />
               <PageWrapper>{children}</PageWrapper>
-            </MarginWidthWrapper>
+            </MarginWidthWrapper> */}
           </main>
         </div></body>
     </html>

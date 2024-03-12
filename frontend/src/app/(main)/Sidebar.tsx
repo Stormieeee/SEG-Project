@@ -1,17 +1,16 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-
-import roomBookingLight from "../../public/Sidebar-icon/Room Booking Light.svg";
-import roomBookingDark from "../../public/Sidebar-icon/Room Booking Dark.svg";
-import myBookingDark from "../../public/Sidebar-icon/My Booking Dark.svg";
-import myBookingLight from "../../public/Sidebar-icon/My Booking Light.svg";
-import profileDark from "../../public/Sidebar-icon/Profile Dark.svg";
-import profileLight from "../../public/Sidebar-icon/Profile Light.svg";
+import roomBookingLight from "/public/Sidebar-icon/Room Booking Light.svg";
+import roomBookingDark from "/public/Sidebar-icon/Room Booking Dark.svg";
+import myBookingDark from "/public/Sidebar-icon/My Booking Dark.svg";
+import myBookingLight from "/public/Sidebar-icon/My Booking Light.svg";
+import profileDark from "/public/Sidebar-icon/Profile Dark.svg";
+import profileLight from "/public/Sidebar-icon/Profile Light.svg";
 import useNavigation from "./hook/use-navigation";
 
 import Image from "next/image";
-import companylogo from "../../public/Company-logo/Company Logo.svg";
+import companylogo from "/public/Company-logo/Company Logo.svg";
 import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
