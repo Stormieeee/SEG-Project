@@ -68,7 +68,7 @@ const Login = () => {
             <div className="flex items-center justify-center mb-4">
                 <img src="/Company-logo/Company Logo.svg" alt="Company Logo" />
             </div>
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-slate-500">
               Sign in to your account
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
