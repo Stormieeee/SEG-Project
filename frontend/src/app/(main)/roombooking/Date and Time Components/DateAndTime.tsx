@@ -6,6 +6,7 @@ import {
   FORM_LABEL,
   WRAPPER,
 } from "../ComponentFormat";
+import { FormHeader } from "../ComponentFormat";
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
 import Image from "next/image";
 
@@ -34,18 +35,7 @@ const DateTime = () => {
     <div className={FORM_CONTAINER}>
       <div className="flex-col flex-grow h-full justify-center">
         <div className="flex items-center flex-row grow">
-          <span className="text-zinc-800 font-medium text-xl px-2 items-center ">
-            1
-          </span>
-          <span className="text-zinc-600 font-medium text-xl items-center flex pr-2">
-            Date and Time
-          </span>
-          <Image
-            src={datetimeLogo}
-            alt="Date Time Logo"
-            className="flex w-6 h-6"
-          />
-
+          <FormHeader id="1" title="Date and Time" imgPath={datetimeLogo} imgAlt="Date Time Logo" />
           <button className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto my-2 items-center justify-center flex p-2 rounded-md "
           onClick={checkAvailability}>
             Check Availability
