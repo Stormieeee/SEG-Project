@@ -34,7 +34,7 @@ const Authentication = () => {
 
         // Just for testing purposes
         if (otp === '1234') {
-            router.push('/main');
+            router.push('/roombooking');
             return;
         }
         // Uncomment the code below to verify OTP
@@ -52,7 +52,7 @@ const Authentication = () => {
         //     if (response.ok) {
         //         // OTP verification successful
         //         // Redirect the user to the main page
-        //         router.push('/main');
+        //         router.push('/roombooking');
         //     } else {
         //         // OTP verification failed
         //         console.log('Invalid OTP');
