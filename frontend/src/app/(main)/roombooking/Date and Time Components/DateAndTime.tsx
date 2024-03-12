@@ -1,12 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import ComponentTitle from "./ComponentTitle";
 import {
   FORM_CONTAINER,
   FORM_INPUT,
   FORM_LABEL,
   WRAPPER,
-} from "./ComponentFormat";
+} from "../ComponentFormat";
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
 import Image from "next/image";
 

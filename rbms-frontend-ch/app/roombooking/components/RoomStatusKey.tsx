@@ -1,21 +1,26 @@
 import React from "react";
-import StatusComponent from "../../../../frontend/src/app/roombooking/RoomStatusComponents/StatusComponents";
+// import { FORM_CONTAINER } from "./ComponentFormat";
+
+const STATUS = [
+  { name: "Available", color: "bg-cyan-500" },
+  { name: "Not suitable", color: "bg-yellow-400" },
+  { name: "Fully Booked", color: "bg-red-600" },
+  { name: "Unavailable", color: "bg-gray-200" }
+];
+
+const STATUS_COLOR = "w-5 h-5 rounded-full ml-auto";
 
 const RoomStatusKey = () => {
   return (
     <div className="bg-white border border-gray-300 rounded-2xl h-full p-5 flex flex-col">
-      <StatusComponent 
-        status={["Available", "../Room-icon/Alert Icon.svg"]} 
-      />
-      <StatusComponent
-        status={["Not available", "../Room-icon/Alert Icon.svg"]}
-      />
-      <StatusComponent
-        status={["Fully Booked", "../Room-icon/Alert Icon.svg"]}
-      />
-      <StatusComponent
-        status={["Unavailable", "../Room-icon/Alert Icon.svg"]}
-      />
+      <div className="flex flex-col h-full">
+        {STATUS.map((status, index) => (
+          <div key={index} className="flex h-1/4 items-center">
+            <div>{status.name}</div>
+            <div className={`${STATUS_COLOR} ${status.color}`}></div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

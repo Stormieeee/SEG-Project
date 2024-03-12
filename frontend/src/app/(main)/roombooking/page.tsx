@@ -2,7 +2,7 @@ import DateTime from "./Date and Time Components/DateAndTime";
 import Description from "./DescriptionComponents/Description";
 import FloorPlan from "./Floorplan Components/FloorPlan";
 import RoomSpecifics from "./RoomSpecificsComponents/RoomSpecifics";
-import RoomStatusKey from "./RoomSpecificsComponents/RoomStatusKey";
+import RoomStatusKey from "./RoomStatusComponents/StatusComponents";
 
 export default function RoomBooking() {
   return (

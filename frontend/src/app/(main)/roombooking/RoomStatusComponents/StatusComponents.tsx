@@ -1,23 +1,28 @@
-// components/CustomTupleLabel.tsx
-
 import React from "react";
+import { FORM_CONTAINER } from "../ComponentFormat";
 
-interface StatusProps {
-  status: [string, string];
-}
+const STATUS = [
+  { name: "Available", color: "bg-cyan-500" },
+  { name: "Not suitable", color: "bg-yellow-400" },
+  { name: "Fully Booked", color: "bg-red-600" },
+  { name: "Unavailable", color: "bg-gray-200" }
+];
 
-const StatusComponent: React.FC<StatusProps> = ({ status }) => {
-  const [statusName, svgLink] = status;
+const STATUS_COLOR = "w-5 h-5 rounded-full ml-auto";
 
+const RoomStatusKey = () => {
   return (
-    <div className="flex flex-row flex-grow">
-      <label className="flex w-3/4 p-1.5">{statusName}</label>
-
-      <div className="flex items-start">
-        <img src={svgLink} alt="SVG Image" className="w-8 h-8" />
+    <div className={FORM_CONTAINER}>
+      <div className="flex flex-col h-full">
+        {STATUS.map((status, index) => (
+          <div key={index} className="flex h-1/4 items-center">
+            <div>{status.name}</div>
+            <div className={`${STATUS_COLOR} ${status.color}`}></div>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default StatusComponent;
+export default RoomStatusKey;

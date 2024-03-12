@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import RectangularCheckbox from "./RectangularCheckbox";
 import CapacityInput from "./CapacityInputBox";
 import LargeTextbox from "./LargeTextBox";
-import { FORM_CONTAINER } from "../Date and Time Components/ComponentFormat";
+import { FORM_CONTAINER } from "../ComponentFormat";
 import roomspecificlogo from "/public/Components-icon/Room Specifics Logo.svg";
 import Image from "next/image";
 const RoomSpecifics = () => {
