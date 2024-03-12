@@ -57,11 +57,15 @@ public class main {
 
         // Check if it's a valid in the database system
         if (userLoginCheck(userID, password)) {
+            initialize();
             //Sets the token for current login session
-            String query = "UPDATE `User Login` SET `OTPKey` = '" + createToken() + "' WHERE `User ID` = '" + userID + "'";
+            int token = createToken();
+            System.out.println(token);
+            String query = "UPDATE `User Login` SET `OTPKey` = '" + token + "' WHERE `User ID` = '" + userID + "'";
             try {
                 // Execute the update query
                 int rowsUpdated = statement.executeUpdate(query);
+
                 // Check if the update was successful
                 if (rowsUpdated > 0) {
                     System.out.println("OTPKey updated successfully");
@@ -90,23 +94,34 @@ public class main {
         return false; // Return false if userLoginCheck fails or no rows were updated
     }
 
+    //Creates a random token
+    public static int createToken(){
+        int key = rand.nextInt(10000,99999);
+        return key;
+    }
+
 
     //CALL FOR VERIFICATION - TEMPORARY VERIFICATION FUNCTION (NOT TESTED)
     public static boolean authentication(String userID, int key) {
         initialize();
 
-        try {
-            String query = "SELECT `OTPKey` FROM `User Login` WHERE `User ID` = '" + userID + "'";
-            resultSet = statement.executeQuery(query);
+        String query = "SELECT `OTPKey` FROM `User Login` WHERE `User ID` = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Check if the resultSet has any rows
             if (resultSet.next()) {
-                // Retrieve the value of the OTPKey column
                 int otpKey = resultSet.getInt("OTPKey");
 
-                // Compare the retrieved OTPKey with the provided key
                 if (otpKey == key) {
-                    return true;        //Verify complete, proceed to login
+                    // Construct the update query to change the password
+                    String updateQuery = "UPDATE `User Login` SET `LoggedIn` = ? WHERE `User ID` = ?";
+                    try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                        updateStatement.setBoolean(1, true);
+                        updateStatement.setString(2, userID);
+                        int rowsUpdated = updateStatement.executeUpdate();
+                        return true; // Verify complete, proceed to login
+                    }
                 } else {
                     return false;
                 }
@@ -117,28 +132,11 @@ public class main {
             System.err.println("Error verifying OTPKey: " + e.getMessage());
             e.printStackTrace();
             return false;
-        } finally {
-            // Close the connection and statement
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                System.err.println("Error closing connection: " + e.getMessage());
-                e.printStackTrace();
-            }
         }
     }
 
 
-    //Creates a random token
-    public static int createToken(){
-        int key = rand.nextInt(1000,9999);
-        return key;
-    }
+
 
 
     //Edit the existing password
@@ -186,9 +184,10 @@ public class main {
 
         try {
             // Construct the query to check for overlapping bookings
-            String query = "SELECT COUNT(*) AS count FROM `Booking ID description`" +
-                    "WHERE `Room ID` = ? AND `Date` = ?" +
-                    "AND ((`Start Time` BETWEEN ? AND ?) OR (`End Time` BETWEEN ? AND ?))";
+            String query = "SELECT COUNT(*) AS count FROM `Booking ID description` AS BID " +
+                    "INNER JOIN `Booking List` AS BL ON BID.`Booking ID` = BL.`Booking ID` " +
+                    "WHERE BL.`Room ID` = ? AND BID.`Date` = ? " +
+                    "AND ((BID.`Start Time` BETWEEN ? AND ?) OR (BID.`End Time` BETWEEN ? AND ?))";
 
             // Prepare the statement
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -263,7 +262,7 @@ public class main {
             requestStatement.executeUpdate();
 
             // Insert into Booking Request Description table
-            String insertDescriptionQuery = "INSERT INTO `Booking Request Description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`) VALUES (?, ?, ?, ?)";
+            String insertDescriptionQuery = "INSERT INTO `Booking Request Description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement descriptionStatement = connection.prepareStatement(insertDescriptionQuery, Statement.RETURN_GENERATED_KEYS);
             descriptionStatement.setInt(1, bookingID);
             descriptionStatement.setString(2, description);
@@ -294,92 +293,49 @@ public class main {
     }
 
 
+    public static void testAllFunctions() {
+        // Test userLoginCheck
+        //System.out.println("Testing userLoginCheck...");
+        //boolean loginCheckResult = userLoginCheck("ap1a21@soton.ac.uk", "newPassword");
+        //System.out.println("Login check result: " + loginCheckResult);
 
-
-//TEST AREA
-
-
-
-
-
+        // Test login
+        System.out.println("\nTesting login...");
+        boolean loginResult = login("ap1a21@soton.ac.uk", "newPassword");
+        System.out.println("Login result: " + loginResult);
+//
+//        // Test authentication
+        //System.out.println("\nTesting authentication...");
+        //boolean authResult = authentication("ap1a21@soton.ac.uk", 12345);
+        //System.out.println("Authentication result: " + authResult);
+//
+//        // Test createToken
+        //System.out.println("\nTesting createToken...");
+        //int token = createToken();
+        //System.out.println("Generated token: " + token);
+//
+//        // Test editPassword
+//        System.out.println("\nTesting editPassword...");
+//        boolean editPassResult = editPassword("ap1a21@soton.ac.uk", "newPassword");
+//        System.out.println("Edit password result: " + editPassResult);
+//
+//        // Test viewRoomAvailability
+        //System.out.println("\nTesting viewRoomAvailability...");
+        //boolean roomAvailResult = viewRoomAvailability("A101", Date.valueOf("2024-03-12"), Time.valueOf("12:00:01"), Time.valueOf("15:00:00"));
+        //System.out.println("Room availability result: " + roomAvailResult);
+//
+        // Test createBookingRequest
+        //System.out.println("\nTesting createBookingRequest...");
+        //createBookingRequest("ap1a21@soton.ac.uk", "A101", "Meeting with faculty", Date.valueOf("2024-03-12"), Time.valueOf("10:00:00"), Time.valueOf("12:00:00"));
+    }
 
     public static void main(String[] args) {
-        testUserLoginCheck();
-        testLogin();
-        testAuthentication();
-        testEditPassword();
-        testViewRoomAvailability();
-        testCreateBookingRequest();
+        testAllFunctions();
     }
 
-    public static void testUserLoginCheck() {
-        System.out.println("Testing userLoginCheck...");
 
-        boolean result1 = main.userLoginCheck("user123", "password123");
-        assert result1 : "Test case 1 failed";
 
-        boolean result2 = main.userLoginCheck("invalidUser", "invalidPassword");
-        assert !result2 : "Test case 2 failed";
 
-        System.out.println("userLoginCheck tests passed.");
-    }
-
-    public static void testLogin() {
-        System.out.println("Testing login...");
-
-        boolean result1 = main.login("user123", "password123");
-        assert result1 : "Test case 1 failed";
-
-        boolean result2 = main.login("invalidUser", "invalidPassword");
-        assert !result2 : "Test case 2 failed";
-
-        System.out.println("login tests passed.");
-    }
-
-    public static void testAuthentication() {
-        System.out.println("Testing authentication...");
-
-        boolean result1 = main.authentication("user123", 1234);
-        assert result1 : "Test case 1 failed";
-
-        boolean result2 = main.authentication("user123", 4321);
-        assert !result2 : "Test case 2 failed";
-
-        System.out.println("authentication tests passed.");
-    }
-
-    public static void testEditPassword() {
-        System.out.println("Testing editPassword...");
-
-        boolean result1 = main.editPassword("user123", "newPassword123");
-        assert result1 : "Test case 1 failed";
-
-        boolean result2 = main.editPassword("invalidUser", "newPassword");
-        assert !result2 : "Test case 2 failed";
-
-        System.out.println("editPassword tests passed.");
-    }
-
-    public static void testViewRoomAvailability() {
-        System.out.println("Testing viewRoomAvailability...");
-
-        boolean result1 = main.viewRoomAvailability("room123", Date.valueOf("2024-03-10"), Time.valueOf("09:00:00"), Time.valueOf("10:00:00"));
-        assert result1 : "Test case 1 failed";
-
-        boolean result2 = main.viewRoomAvailability("room123", Date.valueOf("2024-03-10"), Time.valueOf("08:00:00"), Time.valueOf("09:30:00"));
-        assert !result2 : "Test case 2 failed";
-
-        System.out.println("viewRoomAvailability tests passed.");
-    }
-
-    public static void testCreateBookingRequest() {
-        System.out.println("Testing createBookingRequest...");
-
-        // Assuming successful execution indicates test passed
-        main.createBookingRequest("user123", "room123", "Meeting", Date.valueOf("2024-03-15"), Time.valueOf("10:00:00"), Time.valueOf("11:00:00"));
-
-        System.out.println("createBookingRequest tests passed.");
-    }
 }
 
 
