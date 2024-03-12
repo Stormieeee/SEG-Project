@@ -52,76 +52,100 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="top-0 left-0 flex flex-col w-64 h-screen bg-white-50 border-r-2 md:flex">
+      <div className="top-0 left-0 flex flex-col h-screen bg-white-50 border-zinc-200 ">
         <Link href="https://www.southampton.ac.uk/my/index.page">
           <Image
             src={companylogo}
             alt="Company Logo"
-            className="object-contain w-25 pt-[30px] px-[30px] pb-[10px] border-b-2 flex items-center"
+            className="object-contain w-25 pt-[30px] px-[30px] pb-[10px] flex items-center"
           />
         </Link>
-        <div className="bg-white-600 mx-2.5 h-[1px]"></div>
+        <div className="bg-white-600 mx-2.5 h-[1px] mb-16"></div>
         <Link
           href="/roombooking"
-          className="flex flex-row space-x-2 items-center mx-4 py-2 relative duration-200 hover:shadow-md hover:translate-x-1"
+          className=" space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
         >
           {isRoomBookingActive ? (
-            <Image src={roomBookingDark} alt="Room Booking Dark" className="" />
+            <div className="flex flex-row py-2 bg-primary-200 rounded-md">
+              <Image
+                src={roomBookingDark}
+                alt="Room Booking Dark"
+                className="mx-2 justify-center p-0.5 animate-vote duration-200"
+              />
+              <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
+                Room Booking
+              </span>
+            </div>
           ) : (
-            <Image src={roomBookingLight} alt="Room Booking Dark" />
+            <div className="flex flex-row py-2 rounded-md">
+              <Image
+                src={roomBookingLight}
+                alt="Room Booking Light"
+                className="mx-2 justify-center p-0.5"
+              />
+              <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
+                Room Booking
+              </span>
+            </div>
           )}
-          <span
-            className={`text-xl pt-2 flex md:flex ${
-              isRoomBookingActive
-                ? "text-zinc-800 float-left text-base font-normal font-Inter"
-                : " text-stone-500"
-            }`}
-          >
-            Room Booking
-          </span>
-          {/* <span className='h-2 w-2 rounded-full bg-sky-500 absolute top-3 right-[16px] md:right-[100px]'></span> */}
         </Link>
 
         <Link
           href="/mybooking"
-          className="flex flex-row space-x-2 items-center mx-4 py-2 relative duration-200 hover:shadow-md hover:translate-x-1"
+          className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
         >
           {isMyBookingActive ? (
-            <Image src={myBookingDark} alt="My Booking Dark" />
+            <div className="flex flex-row py-2 bg-primary-200 rounded-md">
+              <Image
+                src={myBookingDark}
+                alt="My Booking Dark"
+                className="mx-2 justify-center p-0.5"
+              />
+              <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
+                My Booking
+              </span>
+            </div>
           ) : (
-            <Image src={myBookingLight} alt="My Booking Light" />
+            <div className="flex flex-row py-2 rounded-md">
+              <Image
+                src={myBookingLight}
+                alt="My Booking Light"
+                className="mx-2 justify-center p-0.5"
+              />
+              <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
+                My Booking
+              </span>
+            </div>
           )}
-          <span
-            className={`text-xl pt-2 flex md:flex ${
-              isMyBookingActive
-                ? "text-zinc-800 float-left text-base font-normal font-Inter"
-                : " text-stone-500"
-            }`}
-          >
-            My Booking
-          </span>
-          {/* <span className='h-2 w-2 rounded-full bg-sky-500 absolute top-3 right-[16px] md:right-[100px]'></span> */}
         </Link>
 
         <Link
           href="/profile"
-          className="flex flex-row space-x-4 items-center px-4 py-3 relative duration-200   hover:shadow-md hover:translate-x-1"
+          className=" static bottom-0 space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
         >
           {isProfileActive ? (
-            <Image src={profileDark} alt="My Booking Dark" />
+            <div className="flex flex-row py-1.5 bg-primary-200 rounded-md">
+              <Image
+                src={profileDark}
+                alt="Profile Dark"
+                className="mx-1 ml-2 justify-center p-0.5"
+              />
+              <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
+                Profile
+              </span>
+            </div>
           ) : (
-            <Image src={profileLight} alt="My Booking Light" />
+            <div className="flex flex-row py-1.5 rounded-md">
+              <Image
+                src={profileLight}
+                alt="Profile Light"
+                className="mx-1 ml-2 justify-center p-0.5"
+              />
+              <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
+                Profile
+              </span>
+            </div>
           )}
-          <span
-            className={`text-xl pt-2 flex md:flex ${
-              isProfileActive
-                ? "text-zinc-800 float-left text-base font-normal font-Inter"
-                : " text-stone-500"
-            }`}
-          >
-            Profile
-          </span>
-          {/* <span className='h-2 w-2 rounded-full bg-sky-500 absolute top-3 right-[16px] md:right-[100px]'></span> */}
         </Link>
       </div>
     </>
