@@ -35,22 +35,7 @@ const Login = () => {
 
     //     if (response.ok) {
     //       // Email and password are verified, send OTP via email
-    //       const otpResponse = await fetch('/api/send-otp', {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ email }),
-    //       });
-
-    //       if (otpResponse.ok) {
-    //         // OTP sent successfully
-    //         console.log('OTP sent');
     //         router.push(`/auth?email=${encodeURIComponent(email)}`);
-    //       } else {
-    //         // Handle error response
-    //         console.error('Failed to send OTP');
-    //       }
     //     } else {
     //       // Handle error response
     //       console.error('Email and password verification failed');

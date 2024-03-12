@@ -6,6 +6,12 @@ import logging
 from pydantic import BaseModel
 from datetime import date, time
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+
+
 app = FastAPI()
 
 # Define database connection settings
@@ -22,6 +28,30 @@ def get_database_connection():
     connection = mysql.connector.connect(**MYSQL_CONFIG)
     return connection
 
+
+############################################
+
+def send_email(sender_email, receiver_email, password, subject, otp, smtp_server, smtp_port):
+    # Create a multipart message and set headers
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = subject
+
+    # Add body to email
+    body = "You're OTP for login is as follows: " + str(otp)
+    message.attach(MIMEText(body, 'plain'))
+
+    # Connect to the SMTP server
+    server = smtplib.SMTP(smtp_server, smtp_port)
+    server.starttls()  # Upgrade the connection to TLS
+    server.login(sender_email, password)
+
+    # Send email
+    server.send_message(message)
+
+    # Close the connection
+    server.quit()
 ########################################### WORKING
 
 # Login
@@ -40,6 +70,7 @@ def user_login_check(db_connection, cursor, userID=None, password=None):
         new_otp_key = generate_random_integer()  # Assuming you have a function to generate OTP keys
         query = "UPDATE `user login` SET `OTPKey` = %s WHERE `User ID` = %s"
         cursor.execute(query, (new_otp_key, userID))
+        send_email ("segproject32@outlook.com", userID, "aquastorm797",'Room Booking System OTP', new_otp_key ,'smtp-mail.outlook.com',587 )
         db_connection.commit()  # Commit the transaction
         return True
     else:
@@ -125,24 +156,30 @@ def edit_user_password(edit_password: EditPassword, db_connection: mysql.connect
     return {"message": "Password updated successfully"}
 
 
-########################################### NOT COMPLETE
-
+########################################### WORKING
 
 class BookingRequest(BaseModel):
     user_id: str
     room_id: str
     description: str
-    date: str
-    start_time: str
-    end_time: str
+    date: date
+    start_time: time
+    end_time: time
 
 def create_booking_request(db_connection, cursor, userID, room_id, description, date, start_time, end_time):
-    insert_request_query = "INSERT INTO `Booking Request` (`User ID`, `Room ID`) VALUES (%s, %s)"
-    cursor.execute(insert_request_query, (userID, room_id))
-    db_connection.commit()
-    booking_id = cursor.lastrowid
+    last_booking_id = 0
+    query = "SELECT MAX(`Request ID`) AS last_booking_id FROM `Booking Request`"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result:
+        last_booking_id = result[0]+1
+
+    insert_request_query = "INSERT INTO `Booking Request` (`Request ID`, `User ID`, `Room ID`) VALUES (%s, %s, %s)"
+    cursor.execute(insert_request_query, (last_booking_id, userID, room_id))
+    #db_connection.commit()
+
     insert_description_query = "INSERT INTO `Booking Request Description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`) VALUES (%s, %s, %s, %s, %s)"
-    cursor.execute(insert_description_query, (booking_id, description, date, start_time, end_time))
+    cursor.execute(insert_description_query, (last_booking_id, description, date, start_time, end_time))
     db_connection.commit()
 
 @app.post("/booking_request/")
@@ -150,18 +187,17 @@ def create_booking(booking_request: BookingRequest, db_connection: mysql.connect
     cursor = db_connection.cursor()
     create_booking_request(
         db_connection,
-        cursor=cursor,
+        cursor,
         userID=booking_request.user_id,
         room_id=booking_request.room_id,
         description=booking_request.description,
         date=booking_request.date,
-        start_time=booking_request.start_time,
-        end_time=booking_request.end_time
+        start_time=booking_request.start_time.isoformat().split('.')[0],  # Convert time objects to ISO format strings
+        end_time=booking_request.end_time.isoformat().split('.')[0]     # Convert time objects to ISO format strings
     )
-    return {"message": "Booking request created successfully"}    
+    return {"message": "Booking request created successfully"}
 
-
-###########################################
+########################################### WORKING
 
 class RoomAvailabilityRequest(BaseModel):
     room_id: str
@@ -169,20 +205,12 @@ class RoomAvailabilityRequest(BaseModel):
     start_time: time
     end_time: time
 
-def preprocess_time(time_str: str) -> time:
-    # Remove milliseconds from the time string
-    time_str = time_str[:-1]
-    return time.fromisoformat(time_str.split('.')[0])
 
 def check_room_availability(cursor, room_id, date, start_time, end_time):
     query = "SELECT COUNT(*) FROM `Booking ID description` AS BID " \
             "INNER JOIN `Booking List` AS BL ON BID.`Booking ID` = BL.`Booking ID` " \
             "WHERE BL.`Room ID` = %s AND BID.`Date` = %s " \
             "AND ((BID.`Start Time` BETWEEN %s AND %s) OR (BID.`End Time` BETWEEN %s AND %s))"
-    
-    # Preprocess start_time and end_time
-    start_time = preprocess_time(start_time)
-    end_time = preprocess_time(end_time)
     
     cursor.execute(query, (room_id, date, start_time, end_time, start_time, end_time))
     return cursor.fetchone()[0] == 0
@@ -194,8 +222,8 @@ def check_room_availability_endpoint(request: RoomAvailabilityRequest, db_connec
         cursor,
         request.room_id,
         request.date,
-        request.start_time.isoformat(),  # Convert time objects to ISO format strings
-        request.end_time.isoformat()     # Convert time objects to ISO format strings
+        request.start_time.isoformat().split('.')[0],  # Convert time objects to ISO format strings
+        request.end_time.isoformat().split('.')[0]     # Convert time objects to ISO format strings
     )
     return {"available": available}
 
