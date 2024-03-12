@@ -161,7 +161,7 @@ def create_booking(booking_request: BookingRequest, db_connection: mysql.connect
     return {"message": "Booking request created successfully"}    
 
 
-###########################################
+########################################### WORKING
 
 class RoomAvailabilityRequest(BaseModel):
     room_id: str
@@ -169,20 +169,12 @@ class RoomAvailabilityRequest(BaseModel):
     start_time: time
     end_time: time
 
-def preprocess_time(time_str: str) -> time:
-    # Remove milliseconds from the time string
-    time_str = time_str[:-1]
-    return time.fromisoformat(time_str.split('.')[0])
 
 def check_room_availability(cursor, room_id, date, start_time, end_time):
     query = "SELECT COUNT(*) FROM `Booking ID description` AS BID " \
             "INNER JOIN `Booking List` AS BL ON BID.`Booking ID` = BL.`Booking ID` " \
             "WHERE BL.`Room ID` = %s AND BID.`Date` = %s " \
             "AND ((BID.`Start Time` BETWEEN %s AND %s) OR (BID.`End Time` BETWEEN %s AND %s))"
-    
-    # Preprocess start_time and end_time
-    start_time = preprocess_time(start_time)
-    end_time = preprocess_time(end_time)
     
     cursor.execute(query, (room_id, date, start_time, end_time, start_time, end_time))
     return cursor.fetchone()[0] == 0
@@ -194,8 +186,8 @@ def check_room_availability_endpoint(request: RoomAvailabilityRequest, db_connec
         cursor,
         request.room_id,
         request.date,
-        request.start_time.isoformat(),  # Convert time objects to ISO format strings
-        request.end_time.isoformat()     # Convert time objects to ISO format strings
+        request.start_time.isoformat().split('.')[0],  # Convert time objects to ISO format strings
+        request.end_time.isoformat().split('.')[0]     # Convert time objects to ISO format strings
     )
     return {"available": available}
 
