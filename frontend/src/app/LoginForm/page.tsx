@@ -91,6 +91,7 @@ const Login = () => {
                 setPassword={setPassword}
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
+                error={passwordError}
               />
               <LoginButton />
             </form>

@@ -8,9 +8,10 @@ interface PasswordInputProps {
   setPassword: (password: string) => void;
   showPassword: boolean;
   setShowPassword: (showPassword: boolean) => void;
+  error: string;
 }
 
-const PasswordInput = ({ password, setPassword, showPassword, setShowPassword }: PasswordInputProps) => {
+const PasswordInput = ({ password, setPassword, showPassword, setShowPassword, error }: PasswordInputProps) => {
   return (
     <div className=" w-full">
       <label
@@ -38,6 +39,7 @@ const PasswordInput = ({ password, setPassword, showPassword, setShowPassword }:
             {showPassword ? <Image src={visible} alt="Visible" /> : <Image src={invisible} alt="Invisible" />}
         </button>
       </div>
+      {error && <p className="text-red-500 text-xs mt-1 ml-2">{error}</p>}
     </div>
   );
 };

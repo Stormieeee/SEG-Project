@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import {
   FORM_CONTAINER,
+  FormHeader,
   FORM_INPUT,
   FORM_LABEL,
   WRAPPER,
 } from "../ComponentFormat";
-import { FormHeader } from "../ComponentFormat";
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
 import Image from "next/image";
 
