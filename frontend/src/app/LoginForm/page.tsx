@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [attempts, setAttempts] = useState(3);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -33,13 +34,14 @@ const Login = () => {
     e.preventDefault();
     
     if (!email.endsWith('@soton.ac.uk')) {
-      setError('Email domain must be @soton.ac.uk');
+      setEmailError('Email domain must be @soton.ac.uk');
       return;
     }
     // Just for testing purposes, so that we can move to the next page
     if (password === '1234') {
       router.push(`/auth?` + createQueryString('email', email));
     } else {
+      setPasswordError('Invalid email or password');
       setAttempts(prevAttempts => prevAttempts - 1);
     }
 
@@ -79,12 +81,13 @@ const Login = () => {
               Sign in to your account
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
-              <EmailInput email={email} setEmail={setEmail} error={error} />
+              <EmailInput email={email} setEmail={setEmail} error={emailError} />
               <PasswordInput
                 password={password}
                 setPassword={setPassword}
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
+                error={passwordError}
               />
               <LoginButton />
             </form>
