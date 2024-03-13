@@ -38,20 +38,11 @@ const Login = () => {
       return;
     }
     // Just for testing purposes, so that we can move to the next page
-<<<<<<< HEAD
-    if (password === '1234') {
-      router.push(`/auth?` + createQueryString('email', email));
-    } else {
-      setPasswordError('Invalid email or password');
-      setAttempts(prevAttempts => prevAttempts - 1);
-    }
-=======
     // if (password === '1234') {
     //   router.push(`/auth?` + createQueryString('email', email));
     // } else {
     //   setAttempts(prevAttempts => prevAttempts - 1);
     // }
->>>>>>> 37a294e8bfa434d2ad3789b149a2ff54f3cfba05
 
     // Uncomment the code below to verify email and password
 
