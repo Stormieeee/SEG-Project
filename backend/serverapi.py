@@ -18,16 +18,16 @@ app = FastAPI()
 #Allows all origins, methods, and headers. Use with caution and only in development.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[""],  # Allows all origins
+    allow_origins=["*"],  # Allows all origins
     allow_credentials=True,
-    allow_methods=[""],  # Allows all methods
+    allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
 
 # Define database connection settings
 MYSQL_CONFIG = {
     "host": "127.0.0.1",
-    "port": 8111,
+    "port": 3306,
     "user": "root",
     "password": "",
     "database": "roombookingsystem1"
