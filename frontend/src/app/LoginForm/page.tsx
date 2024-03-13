@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
 import LoginButton from "./LoginButton";
@@ -8,41 +8,61 @@ import { useRouter } from "next/navigation";
 const Login = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [attempts, setAttempts] = useState(3);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    if (attempts === 0) {
+      console.log('You have exceeded the number of attempts');
+      setAttempts(3);
+    }
+  },[attempts]);
+  
+  const createQueryString = (name: string, value: string) => {
+    const params = new URLSearchParams();
+    params.set(name, value);
+
+    return params.toString();
+  };
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     if (!email.endsWith('@soton.ac.uk')) {
       setError('Email domain must be @soton.ac.uk');
       return;
     }
     // Just for testing purposes, so that we can move to the next page
-    router.push(`/auth`);
-    return;
+    if (password === '1234') {
+      router.push(`/auth?` + createQueryString('email', email));
+    } else {
+      setAttempts(prevAttempts => prevAttempts - 1);
+    }
 
     // Uncomment the code below to verify email and password
 
-    // try {
-    //     const response = await fetch('/api/verify-email', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify({ email, password }),
-    //     });
+    try {
+        const response = await fetch('/api/verify-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
 
-    //     if (response.ok) {
-    //       // Email and password are verified, send OTP via email
-    //         router.push(`/auth?email=${encodeURIComponent(email)}`);
-    //     } else {
-    //       // Handle error response
-    //       console.error('Email and password verification failed');
-    //     }
-    // } catch (error) {
-    // console.error('Error:', error);
-    // }
+        if (response.ok && response) {
+          // Email and password are verified, send OTP via email
+            router.push(`/auth?email=${encodeURIComponent(email)}`);
+        } else {
+          // Handle error response
+          console.error('Email and password verification failed');
+          setAttempts(prevAttempts => prevAttempts - 1);
+        }
+    } catch (error) {
+    console.error('Error:', error);
+    }
 };
 
   return (

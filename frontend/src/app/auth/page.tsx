@@ -1,19 +1,13 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Authentication = () => {
     const [otp, setOtp] = useState('');
-    const [attempts, setAttempts] = useState(3);
     const [disableResend, setDisableResend] = useState(false);
     const [countdown, setCountdown] = useState(10); // Countdown in seconds
     const router = useRouter();
-
-    useEffect(() => {
-        if (attempts <= 0) {
-            router.replace('/') // Redirect to login page after 3 failed attempts
-        }
-    }, [attempts]);
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -30,37 +24,36 @@ const Authentication = () => {
 
     const handleAuth = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setAttempts(prevAttempts => prevAttempts - 1);
 
         // Just for testing purposes
         if (otp === '1234') {
             router.push('/roombooking');
             return;
+        } else {
+            router.replace('/')
         }
-        // Uncomment the code below to verify OTP
 
         // Check if OTP is correct
-        // try {
-        //     const response = await fetch('/api/verify-otp', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({ otp }),
-        //     });
+        try {
+            const response = await fetch('/api/verify-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ otp }),
+            });
 
-        //     if (response.ok) {
-        //         // OTP verification successful
-        //         // Redirect the user to the main page
-        //         router.push('/roombooking');
-        //     } else {
-        //         // OTP verification failed
-        //         console.log('Invalid OTP');
-        //         setAttempts(prevAttempts => prevAttempts + 1);
-        //     }
-        // } catch (error) {
-        //     console.error('Error:', error);
-        // }
+            if (response.ok) {
+                // OTP verification successful
+                // Redirect the user to the main page
+                router.push('/roombooking');
+            } else {
+                // OTP verification failed
+                console.log('Invalid OTP');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const handleResendOTP = async () => {
@@ -103,7 +96,7 @@ const Authentication = () => {
                                 OTP Authentication
                             </div>
                             <div className="text-sm dark:text-white-50">
-                                An OTP has been sent to your email. Please enter the OTP code to continue.
+                                An OTP has been sent to {searchParams.get("email")}. Please enter the OTP code to continue.
                             </div>
                         </div>
 
