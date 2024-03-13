@@ -61,6 +61,7 @@ const Login = () => {
         } else {
           // Handle error response
           console.error('Email and password verification failed');
+          setPasswordError('Invalid email or password');
           setAttempts(prevAttempts => prevAttempts - 1);
         }
     } catch (error) {
