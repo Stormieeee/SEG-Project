@@ -10,9 +10,19 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+# from routes.index import user_router
 
 app = FastAPI()
+#Allows all origins, methods, and headers. Use with caution and only in development.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Define database connection settings
 MYSQL_CONFIG = {

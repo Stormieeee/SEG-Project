@@ -38,25 +38,33 @@ const Login = () => {
       return;
     }
     // Just for testing purposes, so that we can move to the next page
+<<<<<<< HEAD
     if (password === '1234') {
       router.push(`/auth?` + createQueryString('email', email));
     } else {
       setPasswordError('Invalid email or password');
       setAttempts(prevAttempts => prevAttempts - 1);
     }
+=======
+    // if (password === '1234') {
+    //   router.push(`/auth?` + createQueryString('email', email));
+    // } else {
+    //   setAttempts(prevAttempts => prevAttempts - 1);
+    // }
+>>>>>>> 37a294e8bfa434d2ad3789b149a2ff54f3cfba05
 
     // Uncomment the code below to verify email and password
 
     try {
-        const response = await fetch('/api/verify-email', {
+        const response = await fetch('http://localhost:8000/login/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ user_id: email, password: password }),
         });
 
-        if (response.ok && response) {
+        if (response.ok) {
           // Email and password are verified, send OTP via email
             router.push(`/auth?email=${encodeURIComponent(email)}`);
         } else {
