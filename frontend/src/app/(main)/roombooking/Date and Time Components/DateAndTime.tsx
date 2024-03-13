@@ -11,6 +11,7 @@ import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.sv
 import Image from "next/image";
 
 
+//get Date
 var date = new Date()
 var currentHour = date.getHours();
 var currentDate = date.getDate();
@@ -19,13 +20,13 @@ var currentDate = date.getDate();
 function startTimeOptions () {
   var timeList = new Array()
   var currentTime = changeTimeFormat(currentHour);
-  
   for (let i = 0; i < 4; i++) {
     timeList.push(changeTimeFormat(currentTime + i));
   }
   console.log(timeList)
   return timeList;
 }
+//return current hour + 1hour in 4
 function endTimeOptions(){
   var timeList = startTimeOptions()
   for (let i = 0; i < timeList.length; i++) {
@@ -44,7 +45,7 @@ function changeTimeFormat (time: number){
   if(time > 12){
     time -= 12 
   }else if (time == 12){
-    time = 0;
+    time = 0x0;
   }
   return time
 }
