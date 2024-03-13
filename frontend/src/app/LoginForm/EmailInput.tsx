@@ -8,7 +8,7 @@ interface EmailInputProps {
 
 const EmailInput = ({ email, setEmail, error }: EmailInputProps) => {
   return (
-    <div>
+    <div className=" w-full">
       <label
         htmlFor="email"
         className="block mb-2 text-sm font-medium text-gray-900 dark:text-slate-500"

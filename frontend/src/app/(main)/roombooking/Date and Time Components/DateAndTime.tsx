@@ -80,8 +80,10 @@ const DateTime = () => {
       <div className="flex-col flex-grow h-full justify-center">
         <div className="flex items-center flex-row grow">
           <FormHeader id="1" title="Date and Time" imgPath={datetimeLogo} imgAlt="Date Time Logo" />
-          <button className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto my-2 items-center justify-center flex p-2 rounded-md "
-          onClick={checkAvailability}>
+          <button className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto my-2 items-center justify-center flex p-2 rounded-md"
+          onClick={() => { 
+            // handleCheckAvailability
+          }}>
             Check Availability
           </button>
         </div>
@@ -131,11 +133,28 @@ const DateTime = () => {
   );
 };
 
-const checkAvailability = async () => {
-  try{
+// const handleCheckAvailability = async (e: React.FormEvent<HTMLFormElement>) => {
+//   e.preventDefault();
 
-  }catch (err){
-    console.log("Current status could not be verified")
-  }
-};
+//   // Check if OTP is correct
+//   try {
+//     const response = await fetch("http://localhost:8000/check_room_availability/", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ room_id: , date: , start_time: , end_time: ,}),
+//     });
+
+//     if (response.ok) {
+  
+//     } else {
+//       // OTP verification failed
+//       console.log("Check Availability Failed");
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// };
+
 export default DateTime;

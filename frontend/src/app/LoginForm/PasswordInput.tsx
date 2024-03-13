@@ -12,7 +12,7 @@ interface PasswordInputProps {
 
 const PasswordInput = ({ password, setPassword, showPassword, setShowPassword }: PasswordInputProps) => {
   return (
-    <div>
+    <div className=" w-full">
       <label
         htmlFor="password"
         className="block mb-2 text-sm font-medium text-gray-900 dark:text-slate-500"
