@@ -12,9 +12,18 @@ import Image from "next/image";
 
 
 //get Date
-var date = new Date()
-var currentHour = date.getHours();
-var currentDate = date.getDate();
+var getDate = new Date()
+var currentHour = getDate.getHours();
+var currentDate = getDate.getDate();
+
+
+const [date, setDate] = useState("");
+const [startTime, setStartTime] = useState(currentHour.toString());
+const [endTime, setEndTime] = useState((currentHour+1).toString());
+
+function getStartTime(){
+  return startTime
+}
 
 //return current hour in 4
 function startTimeOptions () {
@@ -54,9 +63,6 @@ const DateTime = () => {
   console.log(currentHour);
   console.log(currentDate);
 
-  const [date, setDate] = useState("");
-  const [startTime, setStartTime] = useState(currentHour.toString());
-  const [endTime, setEndTime] = useState((currentHour+1).toString());
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);

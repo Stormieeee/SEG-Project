@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
   const [attempts, setAttempts] = useState(3);
   const [password, setPassword] = useState("");
