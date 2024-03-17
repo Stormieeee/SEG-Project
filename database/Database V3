@@ -1,12 +1,7 @@
+
 CREATE TABLE `User Roles` (
   `Role ID` INT PRIMARY KEY,
   `Name` VARCHAR(255)
-);
-
-CREATE TABLE `Access IDs` (
-  `Access` INT PRIMARY KEY,
-  `Role ID` INT,
-  FOREIGN KEY (`Role ID`) REFERENCES `User Roles`(`Role ID`)
 );
 
 CREATE TABLE `Users` (
@@ -27,8 +22,7 @@ CREATE TABLE `Room` (
   `Room Type` VARCHAR(255),
   `Capacity` INT,
   `Floor` INT,
-  `Access` INT,
-  FOREIGN KEY (`Access`) REFERENCES `Access IDs`(`Access`)
+  `StudentAccess` BOOLEAN
 );
 
 CREATE TABLE `Item` (
