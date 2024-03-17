@@ -3,21 +3,14 @@ CREATE TABLE `User Roles` (
   `Name` VARCHAR(255)
 );
 
-CREATE TABLE `Users` (
-  `User ID` VARCHAR(255) PRIMARY KEY,
+CREATE TABLE `Access IDs` (
+  `Access` INT PRIMARY KEY,
   `Role ID` INT,
   FOREIGN KEY (`Role ID`) REFERENCES `User Roles`(`Role ID`)
 );
 
-CREATE TABLE `Feedback` (
-  `Feedback ID` VARCHAR(255) PRIMARY KEY,
-  `Booking ID` VARCHAR(255),
-  `Description` VARCHAR(255),
-  FOREIGN KEY (`Booking ID`) REFERENCES `Booking ID description`(`Booking ID`)
-);
-
-CREATE TABLE `Access IDs` (
-  `Access` INT PRIMARY KEY,
+CREATE TABLE `Users` (
+  `User ID` VARCHAR(255) PRIMARY KEY,
   `Role ID` INT,
   FOREIGN KEY (`Role ID`) REFERENCES `User Roles`(`Role ID`)
 );
@@ -29,11 +22,6 @@ CREATE TABLE `User Login` (
   `LoggedIn` BOOLEAN
 );
 
-CREATE TABLE `Item` (
-  `Room ID` VARCHAR(255) PRIMARY KEY,
-  `Equipment` VARCHAR(255)
-);
-
 CREATE TABLE `Room` (
   `Room ID` VARCHAR(255) PRIMARY KEY,
   `Room Type` VARCHAR(255),
@@ -41,6 +29,11 @@ CREATE TABLE `Room` (
   `Floor` INT,
   `Access` INT,
   FOREIGN KEY (`Access`) REFERENCES `Access IDs`(`Access`)
+);
+
+CREATE TABLE `Item` (
+  `Room ID` VARCHAR(255) PRIMARY KEY,
+  `Equipment` VARCHAR(255)
 );
 
 CREATE TABLE `Booking List` (
@@ -57,6 +50,13 @@ CREATE TABLE `Booking Request` (
   `Room ID` VARCHAR(255),
   FOREIGN KEY (`User ID`) REFERENCES `Users`(`User ID`),
   FOREIGN KEY (`Room ID`) REFERENCES `Room`(`Room ID`)
+);
+
+CREATE TABLE `Feedback` (
+  `Feedback ID` VARCHAR(255) PRIMARY KEY,
+  `Booking ID` VARCHAR(255),
+  `Description` VARCHAR(255),
+  FOREIGN KEY (`Booking ID`) REFERENCES `Booking List`(`Booking ID`)
 );
 
 CREATE TABLE `Booking ID description` (
