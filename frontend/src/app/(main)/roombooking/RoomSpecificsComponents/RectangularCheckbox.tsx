@@ -10,9 +10,10 @@ const RectangularCheckbox: React.FC<{ label: string }> = ({ label }) => {
   };
 
   return (
-    <div className="flex items-center space-x-2 rounded-lg border border-blue-500 text-blue-500 my-3 p-3 w-56">
+    <div className="flex items-center relative space-x-2 rounded-[5px] border border-blue-400 text-blue-600 my-3 p-3 w-56 h-12">
+      <label>{label}</label>
       <div
-        className={`w-6 h-6 border border-gray-300 rounded cursor-pointer flex items-center justify-center ${
+        className={`w-6 h-6 border border-gray-300 rounded cursor-pointer flex right-4 absolute ${
           isChecked ? "bg-blue-500 border-blue-500" : ""
         }`}
         onClick={handleCheckboxChange}
@@ -34,7 +35,7 @@ const RectangularCheckbox: React.FC<{ label: string }> = ({ label }) => {
           </svg>
         )}
       </div>
-      <label>{label}</label>
+      
     </div>
   );
 };

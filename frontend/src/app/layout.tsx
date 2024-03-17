@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}><div className="flex">
           
-          <main className="flex">
+          <main className="flex-1 flex">
             {children}
             {/* <MarginWidthWrapper>
             <Sidebar />

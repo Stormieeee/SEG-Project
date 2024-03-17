@@ -25,12 +25,12 @@ const roomid = [
 const handlesRoomUpdate = () =>{
   
 }
-
+  // const [checkStatus, setCheckStatus] = useState("");
 const FloorPlan = () => {
   
-  const [checkStatus, setCheckStatus] = useState("");
+
   return (
-    <div className="bg-white border border-gray-300 rounded-2xl h-full p-5">
+    <div className="bg-white-50 border border-neutral-400 rounded-2xl h-full p-5">
       <div className="m-2 flex flex-row">
         {roomid.map((room, index) => {
           if (room.status == false) {

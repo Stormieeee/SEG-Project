@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-export const FORM_CONTAINER = "h-full flex-col bg-white rounded-xl border border-neutral-400 px-3 py-6";
+export const FORM_CONTAINER = "h-full flex-col bg-white-50 rounded-xl border border-neutral-400 px-3 py-6";
 export const WRAPPER = "flex flex-col w-1/3 px-2 mx-3"
 export const FORM_LABEL = "pl-2 font-normal text-lg";
-export const FORM_INPUT = "bg-blue-100 border-blue-100 rounded mr-5 my-2 py-4 px-2 text-blue-400 rounded-lg";
+export const FORM_INPUT = "bg-secondary-50 border-blue-100 rounded mr-4 my-2 py-4 px-4 text-blue-500 rounded-lg text-center text-lg hover:cursor-pointer ";
 export const ICON = "px-1";
 
 interface FormHeaderProps {

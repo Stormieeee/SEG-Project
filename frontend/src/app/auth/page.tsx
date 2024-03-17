@@ -99,7 +99,7 @@ const Authentication = () => {
 
   //Return UI
   return (
-    <section className="bg-white-500 dark:bg-gray-900">
+    <section className="flex flex-auto bg-white-500 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -107,10 +107,10 @@ const Authentication = () => {
               <img src="/Company-logo/Company Logo.svg" alt="Company Logo" />
             </div>
             <div className="md:space-y-1">
-              <div className="text-xl font-bold dark:text-white-50">
+              <div className="text-xl font-bold dark:text-slate-300">
                 OTP Authentication
               </div>
-              <div className="text-sm dark:text-white-50">
+              <div className="text-sm dark:text-slate-300">
                 An OTP has been sent to {getEmailFromSessionStorage()}. Please
                 enter the OTP code to continue.
               </div>
@@ -130,7 +130,7 @@ const Authentication = () => {
                   id="otp"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-slate-500 dark:text-slate-200 dark:focus:border-blue-500 sm:text-sm"
                   required
                 />
               </div>

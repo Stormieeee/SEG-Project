@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FORM_CONTAINER,
   FormHeader,
@@ -10,86 +10,132 @@ import {
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
 import Image from "next/image";
 
-
-//get Date
-var getDate = new Date()
-var currentHour = getDate.getHours();
-var currentDate = getDate.getDate();
-
-
-const [date, setDate] = useState("");
-const [startTime, setStartTime] = useState(currentHour.toString());
-const [endTime, setEndTime] = useState((currentHour+1).toString());
-
-function getStartTime(){
-  return startTime
-}
-
-//return current hour in 4
-function startTimeOptions () {
-  var timeList = new Array()
-  var currentTime = changeTimeFormat(currentHour);
-  for (let i = 0; i < 4; i++) {
-    timeList.push(changeTimeFormat(currentTime + i));
-  }
-  console.log(timeList)
-  return timeList;
-}
-//return current hour + 1hour in 4
-function endTimeOptions(){
-  var timeList = startTimeOptions()
-  for (let i = 0; i < timeList.length; i++) {
-    var curTime = timeList[i]
-    if(curTime+1 > 12){
-      timeList[i] = changeTimeFormat(curTime)
-    }else{
-      timeList[i] += 1;
-    }
-    
-  }
-  console.log(timeList)
-  return timeList
-}
-function changeTimeFormat (time: number){
-  if(time > 12){
-    time -= 12 
-  }else if (time == 12){
-    time = 0x0;
-  }
-  return time
+interface Option {
+  value: number;
+  label: string;
 }
 
 const DateTime = () => {
-  console.log(currentHour);
-  console.log(currentDate);
+  const [date, setDate] = useState("");
+  const [startOptions, setStartOptions] = useState<Option[]>([]);
+  const [endOptions, setEndOptions] = useState<Option[]>([]);
+  const [startValue, setStartValue] = useState<number>(9); // Initialize with 9am
+  const [endValue, setEndValue] = useState<number>(23);
+  const [disabled, setDisabled] = useState(false);
 
+  useEffect(() => {
+    const currentTime = new Date().getHours();
+    setStartValue(currentTime);
+
+    const generateOptions = () => {
+      const availableOptions = [];
+
+      // Generate options starting from the current local time
+      for (let i = currentTime; i <= 23; i++) {
+        availableOptions.push({ value: i, label: `${i}:00` });
+      }
+
+      setStartOptions(availableOptions);
+
+      // Adjust the end time options based on the new start time
+      const initialEndOptions = availableOptions.filter(
+        (option) => option.value > currentTime
+      );
+      setEndOptions(availableOptions.slice(1));
+
+      // Check if current time is outside the allowed range
+      if (currentTime < 9 || currentTime > 23) {
+        setDisabled(true);
+      }
+    };
+
+    generateOptions();
+
+    const interval = setInterval(generateOptions, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
+    const selectedDate = event.target.value;
+    const currentDate = new Date().toLocaleDateString("en-US"); // Get today's date in "mm/dd/yyyy" format
+
+    // Convert both selectedDate and currentDate to mm/dd/yyyy format for comparison
+    const formattedSelectedDate = new Date(selectedDate).toLocaleDateString(
+      "en-US"
+    );
+    const formattedCurrentDate = new Date(currentDate).toLocaleDateString(
+      "en-US"
+    );
+
+    // Check if the formatted selected date is not equal to the formatted current date
+    if (formattedSelectedDate !== formattedCurrentDate) {
+      // If it's not today's date, update the start time to 9am and end time to 11pm
+      setStartValue(9);
+      setEndValue(23);
+
+      // Generate options starting from 9am to 11pm
+      const availableOptions = [];
+      for (let i = 9; i <= 23; i++) {
+        availableOptions.push({ value: i, label: `${i}:00` });
+      }
+      setStartOptions(availableOptions);
+      setEndOptions(availableOptions.slice(1));
+    } else {
+      const currentTime = new Date().getHours();
+
+      // Generate options starting from the current local time
+      const availableOptions = [];
+      for (let i = currentTime; i <= 23; i++) {
+        availableOptions.push({ value: i, label: `${i}:00` });
+      }
+      setStartOptions(availableOptions);
+      setEndOptions(availableOptions.slice(1));
+
+      // Set the start and end values to the current local time
+      setStartValue(currentTime);
+      setEndValue(currentTime);
+    }
+
+    setDate(selectedDate);
   };
 
-  const handleStartTimeChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setStartTime(event.target.value);
+  const handleStartChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = parseInt(e.target.value, 10);
+    setStartValue(newValue);
+
+    if (endValue < newValue) {
+      setEndValue(newValue);
+    }
+
+    // Update end time options based on the new start time
+    const newEndOptions = startOptions.filter(
+      (option) => option.value > newValue
+    );
+    setEndOptions(newEndOptions);
   };
 
-  const handleEndTimeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setEndTime(event.target.value);
+  const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = parseInt(e.target.value, 10);
+    setEndValue(newValue);
   };
-
-  const startTimeList = startTimeOptions();
-  const endTimeList = endTimeOptions();
 
   return (
     <div className={FORM_CONTAINER}>
       <div className="flex-col flex-grow h-full justify-center">
         <div className="flex items-center flex-row grow">
-          <FormHeader id="1" title="Date and Time" imgPath={datetimeLogo} imgAlt="Date Time Logo" />
-          <button className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto my-2 items-center justify-center flex p-2 rounded-md"
-          onClick={() => { 
-            // handleCheckAvailability
-          }}>
+          <FormHeader
+            id="1"
+            title="Date and Time"
+            imgPath={datetimeLogo}
+            imgAlt="Date Time Logo"
+          />
+          <button
+            className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto my-2 items-center justify-center flex p-2 rounded-md"
+            onClick={() => {
+              // handleCheckAvailability
+            }}
+          >
             Check Availability
           </button>
         </div>
@@ -108,12 +154,13 @@ const DateTime = () => {
             <label className={FORM_LABEL}>Start Time</label>
             <select
               className={FORM_INPUT}
-              value={startTime}
-              onChange={handleStartTimeChange}
+              value={startValue}
+              onChange={handleStartChange}
+              disabled={disabled}
             >
-              {startTimeList.map((timeOption, index) => (
-                <option key={index} value={timeOption}>
-                  {timeOption}
+              {startOptions.map((option, index) => (
+                <option key={index} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>
@@ -123,12 +170,13 @@ const DateTime = () => {
             <label className={FORM_LABEL}>End Time</label>
             <select
               className={FORM_INPUT}
-              value={endTime}
-              onChange={handleEndTimeChange}
+              value={endValue}
+              onChange={handleEndChange}
+              disabled={disabled}
             >
-              {endTimeList.map((timeOption, index) => (
-                <option key={index} value={timeOption}>
-                  {timeOption}
+              {endOptions.map((option, index) => (
+                <option key={index} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>
@@ -153,7 +201,7 @@ const DateTime = () => {
 //     });
 
 //     if (response.ok) {
-  
+
 //     } else {
 //       // OTP verification failed
 //       console.log("Check Availability Failed");

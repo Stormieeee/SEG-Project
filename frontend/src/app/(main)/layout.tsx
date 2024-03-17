@@ -22,7 +22,7 @@ export default function layout({
       <body className={inter.className}>
         <div className="flex">
           <Sidebar />
-          <div className="flex flex-col flex-grow">
+          <div className="flex flex-col flex-grow bg-[#F8F8F8]">
             <Topbar />
             {children}
           </div>

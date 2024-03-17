@@ -6,9 +6,9 @@ import RoomStatusKey from "./RoomStatusComponents/StatusComponents";
 
 export default function RoomBooking() {
   return (
-    <div className="flex">
-      <div className="w-1/2 flex flex-col">
-        <div className="h-1/2 p-1 mt-[10px] ml-[15px]">
+    <div className="flex flex-row  ">
+      <div className="w-1/2 flex flex-col h-full">
+        <div className="h-1/2 p-1 mt-[10px] ml-[15px] ">
           <DateTime />
         </div>
         <div className=" h-full p-1 mt-[10px] ml-[15px]">
@@ -17,11 +17,11 @@ export default function RoomBooking() {
       </div>
 
       <div className="w-1/2 flex flex-col">
-        <div className="h-4/6 p-1">
+        <div className="h-4/6 p-1 mt-[10px] ml-[5px]">
           <FloorPlan />
         </div>
         <div className="h-2/6 flex">
-          <div className="w-7/12 p-1">
+          <div className="w-7/12 p-1 ml-[5px] ">
             <Description />
           </div>
           <div className="w-5/12 p-1">
