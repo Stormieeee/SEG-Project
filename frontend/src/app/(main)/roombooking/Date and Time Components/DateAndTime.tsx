@@ -8,7 +8,6 @@ import {
   WRAPPER,
 } from "../ComponentFormat";
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
-import Image from "next/image";
 
 interface Option {
   value: number;
@@ -187,28 +186,29 @@ const DateTime = () => {
   );
 };
 
-// const handleCheckAvailability = async (e: React.FormEvent<HTMLFormElement>) => {
-//   e.preventDefault();
 
-//   // Check if OTP is correct
-//   try {
-//     const response = await fetch("http://localhost:8000/check_room_availability/", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ room_id: , date: , start_time: , end_time: ,}),
-//     });
+  // const handleCheckAvailability = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-//     if (response.ok) {
+  //   // Check if OTP is correct
+  //   try {
+  //     const response = await fetch("http://localhost:8000/check_room_availability/", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ room_id: , date: , start_time: , end_time: ,}),
+  //     });
 
-//     } else {
-//       // OTP verification failed
-//       console.log("Check Availability Failed");
-//     }
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// };
+  //     if (response.ok) {
+
+  //     } else {
+  //       // OTP verification failed
+  //       console.log("Check Availability Failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
 export default DateTime;

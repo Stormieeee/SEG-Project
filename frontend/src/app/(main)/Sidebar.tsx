@@ -271,13 +271,13 @@ const Sidebar = () => {
             className=" static bottom-0 space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
           >
             {isProfileActive ? (
-              <div className="flex flex-row py-1.5 bg-primary-200 rounded-md">
+              <div className="flex flex-row py-1.5 bg-primary-200 rounded-md justify-center">
                 <Image
                   src={profileDark}
                   alt="Profile Dark"
                   className="mx-1 ml-2 justify-center p-0.5"
                 />
-                <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
+                <span className=" text-lg items-center justify-center text-zinc-800 float-left font-normal font-Inter ">
                   Profile
                 </span>
               </div>

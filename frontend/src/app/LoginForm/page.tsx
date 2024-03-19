@@ -44,10 +44,11 @@ const Login = () => {
       if (response.ok) {
         //Response from API is ok (200) then store email in session and continue
         storeEmailInSessionStorage(email);
-        router.push(`/auth?email=${encodeURIComponent(email)}`);
+        router.push(`/auth`);
       } else {
         // Handle error response
         console.error("Email and password verification failed");
+        setPasswordError('Invalid email or password')
         setAttempts((prevAttempts) => prevAttempts - 1);
       }
     } catch (error) {

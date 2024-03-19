@@ -30,7 +30,7 @@ MYSQL_CONFIG = {
     "port": 3306,
     "user": "root",
     "password": "",
-    "database": "roombookingsystem1"
+    "database": "rbms"
 }
 
 # Dependency to establish database connection
@@ -39,7 +39,7 @@ def get_database_connection():
     return connection
 
 
-############################################
+############################################ EMAIL - WORKING
 
 def send_email(sender_email, receiver_email, password, subject, otp, smtp_server, smtp_port):
     # Create a multipart message and set headers
@@ -62,7 +62,7 @@ def send_email(sender_email, receiver_email, password, subject, otp, smtp_server
 
     # Close the connection
     server.quit()
-########################################### WORKING
+########################################### USER LOGIN - WORKING
 
 # Login
 def generate_random_integer():
@@ -94,7 +94,7 @@ def user_login(login: Login, db_connection: mysql.connector.connection.MySQLConn
     else:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-########################################### WORKING
+########################################### AUTHENTICATION - WORKING
 
 class Auth(BaseModel):
     user_id: str
@@ -120,7 +120,7 @@ def user_authentication(auth: Auth, db_connection: mysql.connector.connection.My
     else:
         raise HTTPException(status_code=401, detail="Authentication failed")
 
-########################################### WORKING
+########################################### LOGOUT - WORKING
 
 class Logout(BaseModel):
     user_id: str
@@ -146,7 +146,7 @@ def user_logout(logout: Logout, db_connection: mysql.connector.connection.MySQLC
     else:
         raise HTTPException(status_code=500, detail="Internal Server Error")
     
-########################################### WORKING
+########################################### EDIT PASSWORD - WORKING
 
 
 class EditPassword(BaseModel):
@@ -166,7 +166,7 @@ def edit_user_password(edit_password: EditPassword, db_connection: mysql.connect
     return {"message": "Password updated successfully"}
 
 
-########################################### WORKING
+########################################### TO BE EDITED 
 
 class BookingRequest(BaseModel):
     user_id: str
@@ -207,39 +207,96 @@ def create_booking(booking_request: BookingRequest, db_connection: mysql.connect
     )
     return {"message": "Booking request created successfully"}
 
-########################################### WORKING
+
+
+########################################### TO BE EDITED
 
 class RoomAvailabilityRequest(BaseModel):
-    room_id: str
+    userID: str
+    capacity: int
+    sec: str
     date: date
     start_time: time
     end_time: time
 
+# Function to check room availability
+def check_room_availability(cursor, userID, capacity, sec, date, start_time, end_time):
+    #Get all the rooms from the sectio
+    query = "SELECT `Room ID` FROM `Room` WHERE `Section` = %s;"
+    cursor.execute(query, (sec,))
 
-def check_room_availability(cursor, room_id, date, start_time, end_time):
-    query = "SELECT COUNT(*) FROM `Booking ID description` AS BID " \
-            "INNER JOIN `Booking List` AS BL ON BID.`Booking ID` = BL.`Booking ID` " \
-            "WHERE BL.`Room ID` = %s AND BID.`Date` = %s " \
-            "AND ((BID.`Start Time` BETWEEN %s AND %s) OR (BID.`End Time` BETWEEN %s AND %s))"
+    rows = cursor.fetchall()
+
+    #Get the availabilities of the different rooms (true = avaialable, false = not available)
+    query1 = "SELECT COUNT(*) FROM `Booking ID description` AS BID " \
+             "INNER JOIN `Booking List` AS BL ON BID.`Booking ID` = BL.`Booking ID` " \
+             "WHERE BL.`Room ID` = %s AND BID.`Date` = %s " \
+             "AND ((BID.`Start Time` BETWEEN %s AND %s) OR (BID.`End Time` BETWEEN %s AND %s))"
+
+    availability_list = []      #Data stored in availability_list
+    for row in rows:    
+        room_id = row[0]
+        cursor.execute(query1, (room_id, date, start_time, end_time, start_time, end_time))
+        availability = cursor.fetchone()[0] == 0
+        availability_list.append((room_id, availability))
+
     
-    cursor.execute(query, (room_id, date, start_time, end_time, start_time, end_time))
-    return cursor.fetchone()[0] == 0
+    #Base color coding rooms based on available or not
+    colored_availability_list = [(room_id, "green" if availability else "red") for room_id, availability in availability_list]
 
+    #Get a list of all rooms where users can book
+    rolecheck = "SELECT `role ID` from `users` where `User ID` = %s;"
+    cursor.execute(rolecheck, (userID,))
+    userRole = cursor.fetchall()
+    role_id = userRole[0][0]    # Extracted  role
+
+    #Only execute greyed out rooms if role is a student
+    if role_id == 1:        #If student then only student access rooms will show
+        query = "SELECT `Room ID` FROM `Room` WHERE `Section` = %s AND `StudentAccess` = %s ; "
+        cursor.execute(query, (sec, 1))
+
+        studentRooms = cursor.fetchall()
+
+        student_room_ids = {room[0] for room in studentRooms}
+        updated_availability_ids = {room[0] for room, _ in colored_availability_list}
+
+        # Get the set of room IDs that are not in both lists
+        ununioned_room_ids = updated_availability_ids.symmetric_difference(student_room_ids)
+
+        # Create the final availability list using list comprehension
+        final_availability_list = [
+            (room_id, "grey" if room_id not in ununioned_room_ids else color)
+            for room_id, color in colored_availability_list]
+    else:
+        final_availability_list = colored_availability_list
+        
+
+    #Change colors if the room is available but not suitable
+    capacityCheck = "SELECT `Room ID` FROM `room` WHERE `Capacity` IS NOT NULL AND `Capacity` < %s;"
+    cursor.execute(capacityCheck, (capacity,))
+    noCapacityRooms = cursor.fetchall()
+    no_capacity_room_ids = {room[0] for room in noCapacityRooms}
+
+    final_availability_list1 = [
+    (room_id, "yellow" if color == "green" and room_id in no_capacity_room_ids else color)
+    for room_id, color in final_availability_list]
+    
+    #final print
+    return final_availability_list1
+    
+
+# API endpoint to check room availability
 @app.post("/check_room_availability/")
 def check_room_availability_endpoint(request: RoomAvailabilityRequest, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
     cursor = db_connection.cursor()
-    available = check_room_availability(
+    availability_list = check_room_availability(
         cursor,
-        request.room_id,
+        request.userID,
+        request.capacity,
+        request.sec,
         request.date,
-        request.start_time.isoformat().split('.')[0],  # Convert time objects to ISO format strings
-        request.end_time.isoformat().split('.')[0]     # Convert time objects to ISO format strings
+        request.start_time.isoformat().split('.')[0],
+        request.end_time.isoformat().split('.')[0]
     )
-    return {"available": available}
-
-
-
-
-
-
+    return {"available": availability_list}
 
