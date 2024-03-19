@@ -1,23 +1,23 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 //Return Email from Session Storage
-function getEmailFromSessionStorage(): string | null {
+export function getEmailFromSessionStorage(): string | null {
   try {
-      // Check if session storage is supported
-      if (typeof sessionStorage !== 'undefined') {
-          // Retrieve the email from session storage
-          const userEmail = sessionStorage.getItem('userEmail');
-          console.log('Email retrieved from session storage:', userEmail);
-          return userEmail;
-      } else {
-          console.error('Session storage is not supported in this browser.');
-          return null;
-      }
-  } catch (error) {
-      console.error('Error retrieving email from session storage:', error);
+    // Check if session storage is supported
+    if (typeof sessionStorage !== "undefined") {
+      // Retrieve the email from session storage
+      const userEmail = sessionStorage.getItem("userEmail");
+      console.log("Email retrieved from session storage:", userEmail);
+      return userEmail;
+    } else {
+      console.error("Session storage is not supported in this browser.");
       return null;
+    }
+  } catch (error) {
+    console.error("Error retrieving email from session storage:", error);
+    return null;
   }
 }
 
@@ -27,7 +27,6 @@ const Authentication = () => {
   const [countdown, setCountdown] = useState(10); // Countdown in seconds
   const router = useRouter();
 
-  
   //Timeout for user if opt is not inputted in time
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -45,7 +44,6 @@ const Authentication = () => {
   //Handles OTP Authentication
   const handleAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     // Check if OTP is correct
     try {
       const response = await fetch("http://localhost:8000/authentication/", {
@@ -53,16 +51,25 @@ const Authentication = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id: getEmailFromSessionStorage(), key: otp }),
+        body: JSON.stringify({
+          user_id: getEmailFromSessionStorage(),
+          key: otp,
+        }),
       });
+
+      const successfulDestination = sessionStorage.getItem(
+        "successfulDestination"
+      );
+      const failedDestination = sessionStorage.getItem("failedDestination");
 
       if (response.ok) {
         // OTP verification successful
         // Redirect the user to the main page
-        router.push("/roombooking");
+        router.replace(successfulDestination || "/");
       } else {
         // OTP verification failed
         console.log("Invalid OTP");
+        router.replace(failedDestination || "/");
       }
     } catch (error) {
       console.error("Error:", error);
