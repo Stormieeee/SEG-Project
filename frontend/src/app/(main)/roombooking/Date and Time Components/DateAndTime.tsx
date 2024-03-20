@@ -8,7 +8,7 @@ import {
   WRAPPER,
 } from "../ComponentFormat";
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
-import User from "../../../types/types";
+import { User, AvailableItem } from "../../../types/types";
 
 interface Option {
   value: number;
@@ -19,7 +19,7 @@ const DateTime = () => {
   const currUser: User = {
     user_id: sessionStorage.getItem("userEmail"),
   };
-
+  const [availData, setAvailData] = useState<AvailableItem[]>([]);
   const [date, setDate] = useState("");
   const [startOptions, setStartOptions] = useState<Option[]>([]);
   const [endOptions, setEndOptions] = useState<Option[]>([]);
@@ -47,13 +47,16 @@ const DateTime = () => {
             sec: "3R",
             date: date,
             start_time: startValue,
-            end_time: endValue,
+            end_time: adjustTime(endValue),
           }),
         }
       );
 
       if (response.ok) {
+        const data = await response.json();
+        setAvailData(data);
         console.log("response ok");
+        console.log(data);
       } else {
         // OTP verification failed
         console.log("Check Availability Failed");
@@ -96,39 +99,44 @@ const DateTime = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const formatHour = (value: number): string => {
+    // Pad single-digit hours with leading zero and return as HH:00
+    return value.toString().padStart(2, "0") + ":00";
+  };
+
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value; // Assuming the input type is "date" and value is in "YYYY-MM-DD" format
 
     // Set the selected date directly if it's not today's date
     if (selectedDate !== new Date().toISOString().slice(0, 10)) {
-        setStartValue(9);
-        setEndValue(23);
-        
-        // Generate options starting from 9am to 11pm
-        const availableOptions = [];
-        for (let i = 9; i <= 23; i++) {
-            availableOptions.push({ value: i, label: `${i}:00` });
-        }
-        setStartOptions(availableOptions);
-        setEndOptions(availableOptions.slice(1));
+      setStartValue(9);
+      setEndValue(23);
+
+      // Generate options starting from 9am to 11pm
+      const availableOptions = [];
+      for (let i = 9; i <= 23; i++) {
+        availableOptions.push({ value: i, label: `${i}:00` });
+      }
+      setStartOptions(availableOptions);
+      setEndOptions(availableOptions.slice(1));
     } else {
-        const currentTime = new Date().getHours();
+      const currentTime = new Date().getHours();
 
-        // Generate options starting from the current local time
-        const availableOptions = [];
-        for (let i = currentTime; i <= 23; i++) {
-            availableOptions.push({ value: i, label: `${i}:00` });
-        }
-        setStartOptions(availableOptions);
-        setEndOptions(availableOptions.slice(1));
+      // Generate options starting from the current local time
+      const availableOptions = [];
+      for (let i = currentTime; i <= 23; i++) {
+        availableOptions.push({ value: i, label: `${i}:00` });
+      }
+      setStartOptions(availableOptions);
+      setEndOptions(availableOptions.slice(1));
 
-        // Set the start and end values to the current local time
-        setStartValue(currentTime);
-        setEndValue(currentTime);
+      // Set the start and end values to the current local time
+      setStartValue(currentTime);
+      setEndValue(currentTime);
     }
 
     setDate(selectedDate);
-};
+  };
 
   const handleStartChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
@@ -145,11 +153,34 @@ const DateTime = () => {
     setEndOptions(newEndOptions);
   };
 
-  const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newValue = parseInt(e.target.value, 10);
-    const adjustedEndValue = newValue - 1; // Subtract 1 from the selected end time
-    setEndValue(adjustedEndValue);
-    console.log(adjustedEndValue);
+  const convertHourToHHMM = (hour: number): [number, number] => {
+    const minute = 0; // Since we're converting from HH to HH:MM, minute will be 0
+    return [hour, minute];
+};
+
+  const adjustTime = (hour:number): string => {
+    
+    const [hours, minute] = convertHourToHHMM(hour)
+
+    // Convert hour and minute to minutes and subtract 1
+    let adjustedTime = (hours * 60) + minute - 1;
+
+    // Ensure adjustedTime does not go below 0
+    if (adjustedTime < 0) {
+        adjustedTime = 0;
+    }
+
+    // Convert adjustedTime back to "HH:MM" format
+    const adjustedHour = Math.floor(adjustedTime / 60);
+    const adjustedMinute = adjustedTime % 60;
+    const formattedTime = `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinute.toString().padStart(2, '0')}`;
+    console.log(formattedTime)
+    return formattedTime;
+};
+
+const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const newValue = parseInt(e.target.value, 10);
+  setEndValue(newValue);
 };
 
   return (
@@ -174,7 +205,6 @@ const DateTime = () => {
 
         {/* form */}
         <div className="flex h-full py-5">
-
           {/* date */}
           <div className={WRAPPER}>
             <label className={FORM_LABEL}>Date</label>
@@ -197,13 +227,13 @@ const DateTime = () => {
             >
               {startOptions.map((option, index) => (
                 <option key={index} value={option.value}>
-                  {option.label}
+                  {formatHour(option.value)} {/* Display only HH */}
                 </option>
               ))}
             </select>
           </div>
 
-                {/* end time */}
+          {/* end time */}
           <div className={WRAPPER}>
             <label className={FORM_LABEL}>End Time</label>
             <select
@@ -214,7 +244,7 @@ const DateTime = () => {
             >
               {endOptions.map((option, index) => (
                 <option key={index} value={option.value}>
-                  {option.label}
+                  {formatHour(option.value)} {/* Display only HH */}
                 </option>
               ))}
             </select>
