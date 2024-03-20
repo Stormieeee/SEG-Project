@@ -7,6 +7,7 @@ import { getEmailFromSessionStorage } from "@/app/auth/page";
 
 const BookingRequestPage = () => {
   const [data, setData] = useState<string[][] | null>(null);
+  const [isSelected, setIsSelected] = useState<boolean>(false);
   const [requestDetails, setRequestDetails] = useState<{
     index: number;
     bookingId: string;
@@ -51,15 +52,22 @@ const BookingRequestPage = () => {
         <SearchBar />
       </div>
       <div className="flex">
-        <div className="flex ml-10 mr-5 mt-5 w-2/3 overflow-auto h-[550px]">
+        <div
+          className={`flex ml-10 mr-5 mt-5 overflow-y h-[550px] transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
+        >
           <RequestTable
             data={data}
-            setData={setData}
+            isSelected={isSelected}
+            setIsSelected={setIsSelected}
             setRequestDetails={setRequestDetails}
           />
         </div>
-        <div className="flex pl-5 mt-5 mr-5 w-1/3 overflow-y border-l  border-black-100 h-[550px]">
-          <DetailsBar data={data} setData={setData} {...requestDetails} />
+        <div
+          className={`flex pl-5 mt-5 overflow-y border-l border-black-100 h-[550px] transform transition-transform duration-500 ${isSelected ? "translate-x-0 mr-5 w-1/3" : "translate-x-full"}`}
+        >
+          {isSelected && (
+            <DetailsBar data={data} setData={setData} {...requestDetails} />
+          )}
         </div>
       </div>
     </div>

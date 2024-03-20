@@ -1,9 +1,9 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 interface RequestTableProps {
   data: string[][] | null;
-  setData: React.Dispatch<React.SetStateAction<string[][] | null>>;
+  isSelected: boolean;
+  setIsSelected: React.Dispatch<React.SetStateAction<boolean>>;
   setRequestDetails: React.Dispatch<
     React.SetStateAction<{
       index: number;
@@ -17,11 +17,18 @@ interface RequestTableProps {
     } | null>
   >;
 }
-const RequestTable = ({ data, setRequestDetails }: RequestTableProps) => {
+const RequestTable = ({
+  data,
+  isSelected,
+  setIsSelected,
+  setRequestDetails,
+}: RequestTableProps) => {
   const header = ["Booking Number", "Room", "Date", "Start Time", "End Time"];
   const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
+  const [prevClickedIndex, setPrevClickedIndex] = useState<number | null>(null);
 
   const getRequestDetails = async (bookingId: string, index: number) => {
+    setSelectedRowIndex(index);
     try {
       const response = await fetch(
         "https://your-api-endpoint/get_request_details",
@@ -43,20 +50,21 @@ const RequestTable = ({ data, setRequestDetails }: RequestTableProps) => {
       console.error("Error fetching booking request details: ", error);
       throw error;
     }
-  };
-
-  useEffect(() => {
-    if (data) {
-      getRequestDetails(data[0][0], 0);
-      setSelectedRowIndex(0);
+    if (!isSelected) {
+      setIsSelected(!isSelected);
+    } else {
+      if (prevClickedIndex === index) {
+        setIsSelected(!isSelected);
+      }
     }
-  }, []);
+    setPrevClickedIndex(index);
+  };
 
   return (
     <div className="flex flex-1 flex-col">
       <div className="flex justify-between bg-white-200 border border-black-100 rounded-md">
         {header.map((item, index) => (
-          <div key={index} className="w-1/5 py-3 text-center font-semibold">
+          <div key={index} className="flex-1 py-3 text-center font-semibold">
             {item}
           </div>
         ))}
@@ -73,7 +81,12 @@ const RequestTable = ({ data, setRequestDetails }: RequestTableProps) => {
             onClick={() => getRequestDetails(rowData[0], rowIndex)}
           >
             {rowData.map((cellData, cellIndex) => (
-              <div key={cellIndex} className="w-1/6 py-2 text-center">
+              <div
+                key={cellIndex}
+                className={`flex-1 py-2 text-center ${
+                  cellIndex === 0 ? "pl-2" : ""
+                } ${cellIndex === header.length - 1 ? "pr-2" : ""}`}
+              >
                 {cellData}
               </div>
             ))}
