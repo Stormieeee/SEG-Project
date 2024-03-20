@@ -6,6 +6,7 @@ import logging
 import string
 from pydantic import BaseModel
 from datetime import date, time
+import datetime
 
 import smtplib
 from email.mime.text import MIMEText
@@ -179,7 +180,7 @@ def edit_user_password(edit_password: EditPassword, db_connection: mysql.connect
     return {"message": "Password updated successfully"}
 
 
-########################################### COMPLETE
+########################################### TESTING TO BE DONE
 
 class RoomAvailabilityRequest(BaseModel):
     userID: str
@@ -273,7 +274,7 @@ def check_room_availability_endpoint(request: RoomAvailabilityRequest, db_connec
 
 
 
-########################################### TO BE EDITED 
+########################################### TESTING TO BE DONE
 
 class BookingRequest(BaseModel):
     user_id: str
@@ -344,6 +345,144 @@ def create_booking(booking_request: BookingRequest, db_connection: mysql.connect
         end_time=booking_request.end_time.isoformat().split('.')[0]     # Convert time objects to ISO format strings
     )
     return {"booking successful"}
+
+
+
+
+########################################### TESTING TO BE DONE
+
+class userClass(BaseModel):
+    UserID: str
+
+def get_profile_details(db_connection, cursor, userID):
+    get_details = """
+        SELECT `user roles`.`Name` 
+        FROM `users` 
+        JOIN `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
+        WHERE `users`.`User ID` = %s
+    """ 
+    cursor.execute(get_details, (userID,))
+    role = cursor.fetchone()
+
+    profile = (userID, role[0])
+
+    return profile
+
+@app.post("/get_profile_details/")
+def get_profile(profile: userClass, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    prof =  get_profile_details(
+            db_connection,
+            cursor,
+            userID=profile.UserID
+            )
+    return {"username": prof[0], "role": prof[1]}
+
+
+
+########################################### TESTING TO BE DONE
+
+#Uses userClass
+
+def get_approving_role(db_connection, cursor, userID):
+    get_details = """
+        SELECT `user roles`.`Name` 
+        FROM `users` 
+        JOIN `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
+        WHERE `users`.`User ID` = %s
+    """ 
+    cursor.execute(get_details, (userID,))
+    
+    role = cursor.fetchone()
+    if role[0] in ["SAS Staff Member", "Property Manager"]:
+        return True
+    else:
+        return False
+
+@app.post("/check_approval_role/")
+def check_approval_role(username: userClass, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    check =  get_approving_role(
+            db_connection,
+            cursor,
+            userID=username.UserID
+            )
+    return (check)
+
+
+
+########################################### TESTING TO BE DONE
+
+#Uses userClass
+
+def get_booking_r(db_connection, cursor, userID):
+    # Assuming get_profile_details is imported or defined in the same module
+    profile = get_profile_details(db_connection, cursor, userID)
+    role = profile[1]
+
+    if role == "Property Manager":
+        sql_query = """
+            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
+                   `booking request description`.`Date`, 
+                   `booking request description`.`Start Time`, 
+                   `booking request description`.`End Time`
+            FROM `booking request`
+            JOIN `booking request description` 
+                ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+            WHERE `booking request description`.`End Time` > '17:00:00'
+        """
+    else:
+        sql_query = """
+            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
+                   `booking request description`.`Date`, 
+                   `booking request description`.`Start Time`, 
+                   `booking request description`.`End Time`
+            FROM `booking request`
+            JOIN `booking request description` 
+                ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+            WHERE `booking request description`.`End Time` < '17:00:00'
+        """
+    
+    cursor.execute(sql_query)
+
+    # Fetch all rows of the result
+    result = cursor.fetchall()
+     # Convert start and end times to formatted time strings
+    formatted_result = []
+    for row in result:
+        formatted_row = list(row)
+        formatted_row[3] = str(row[3])
+        formatted_row[4] = str(row[4])
+        formatted_result.append(formatted_row)
+
+    return formatted_result
+
+
+
+@app.post("/get_booking_requests/")
+def get_booking_requests(username: userClass, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    check =  get_booking_r(
+            db_connection,
+            cursor,
+            userID=username.UserID
+            )
+    return check
+
+
+########################################### TO BE COMPLETED
+
+
+
+
+
+#4. ⁠get_request_details, which I will give u bookingId and need {requester: “email”, roomSpecific: {capacity: 5, purpose: [“Meeting”, Presentation”]}}
+#Function name: get_request_details(BookingID)
+#return: [user ID (email), user Role (student), capacity, purpose]
+
+
+
+#syntax of {user_id: “actual email”, user_role: “student”…
 
 
 
