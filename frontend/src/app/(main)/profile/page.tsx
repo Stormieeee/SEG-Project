@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import profile from "/public/Sidebar-icon/Profile Dark.svg";
 import UserInfo from "./UserInfo";
-import PasswordVisibilityButton from "@/app/PasswordVisibilityButton";
 import { useRouter } from "next/navigation";
 import { getEmailFromSessionStorage } from "@/app/auth/page";
 import ResetButton from "./ResetButton";
@@ -11,10 +10,8 @@ import ResetButton from "./ResetButton";
 const Profile = () => {
   const [userInfo, setUserInfo] = useState<{
     email: string | null;
-    department: string | null;
-    password: string | null;
+    role: string | null;
   } | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const getUserInfo = async (email: string | null) => {
@@ -35,7 +32,6 @@ const Profile = () => {
     }
   };
   useEffect(() => {
-    sessionStorage.setItem("userEmail", "jyi1n21@soton.ac.uk");
     getUserInfo(getEmailFromSessionStorage());
   }, []);
 
@@ -68,32 +64,16 @@ const Profile = () => {
             type="text"
             value={(userInfo as any).email}
           />
-          <UserInfo
-            label="Department"
-            type="text"
-            value={(userInfo as any).department}
-          />
-          <UserInfo
-            type={showPassword ? "text" : "password"}
-            label="Password"
-            value={(userInfo as any).password}
-            children={{
-              editBtn: <ResetButton />,
-              visibilityBtn: (
-                <PasswordVisibilityButton
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                />
-              ),
-            }}
-          ></UserInfo>
+          <UserInfo label="Role" type="text" value={(userInfo as any).role} />
+          <UserInfo label="Password" type="password" value="********">
+            <ResetButton />
+          </UserInfo>
         </div>
       )}
       <button
         type="submit"
         onClick={handleLogout}
-        className="w-1/4 items-center justify-center text-white-50 px-5 py-3 text-center text-sm
-        bg-blue-400 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-bold rounded-lg"
+        className="w-1/4 text-white-50 px-5 py-3 text-sm bg-blue-400 hover:bg-blue-500 font-bold rounded-lg"
       >
         Log out
       </button>

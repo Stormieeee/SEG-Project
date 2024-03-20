@@ -4,14 +4,16 @@ import { usePathname } from "next/navigation";
 
 const getPageTitle = (path: string): string => {
   switch (path) {
-    case '/roombooking':
-      return 'Room Booking';
-    case '/mybooking':
-      return 'My Booking';
-    case '/profile':
-      return 'Profile';
+    case "/roombooking":
+      return "Room Booking";
+    case "/mybooking":
+      return "My Booking";
+    case "/profile":
+      return "Profile";
+    case "/bookingrequest":
+      return "Booking Request";
     default:
-      return 'Default Title';
+      return "Default Title";
   }
 };
 
