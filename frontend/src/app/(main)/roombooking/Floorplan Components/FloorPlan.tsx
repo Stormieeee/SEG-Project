@@ -60,7 +60,63 @@
 
 import React from "react";
 
+
+
 const FloorPlan = () => {
+
+  
+  function getDarkerShade(color: string): string {
+    // Mapping predefined color names to RGB values
+    const colorMap: { [key: string]: number[] } = {
+      red: [218, 43, 43],
+      cyan: [0, 179, 229],
+      yellow: [253, 210, 1],
+      grey: [242, 242, 242],
+    };
+
+    const rgbColor: number[] = colorMap[color];
+    if (!rgbColor) return "#000000"; // Default to black if color not found
+
+    // Calculate darker shade by reducing each RGB component
+    const darkerRgbColor: number[] = rgbColor.map((component) =>
+      Math.max(0, component - 75)
+    );
+
+    // Convert RGB to hexadecimal
+    const darkerHexColor: string = darkerRgbColor
+      .map((component) => component.toString(16).padStart(2, "0"))
+      .join("");
+
+    return "#" + darkerHexColor;
+  }
+
+  function getLighterShade(color: string): string {
+    // Mapping predefined color names to RGB values
+    const colorMap: { [key: string]: number[] } = {
+      red: [218, 43, 43],
+      cyan: [0, 179, 229],
+      yellow: [253, 210, 1],
+      grey: [242, 242, 242],
+    };
+
+    const rgbColor: number[] = colorMap[color];
+    if (!rgbColor) return "#FFFFFF"; // Default to white if color not found
+
+    // Calculate lighter shade by increasing each RGB component
+    const lighterRgbColor: number[] = rgbColor.map((component) =>
+      Math.min(255, component + 230)
+    );
+
+    // Convert RGB to hexadecimal
+    const lighterHexColor: string = lighterRgbColor
+      .map((component) => component.toString(16).padStart(2, "0"))
+      .join("");
+
+    return "#" + lighterHexColor;
+  }
+  
+
+
   return (
     <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
       <div className="flex flex-row h-[130px]">

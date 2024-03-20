@@ -8,6 +8,7 @@ import {
   WRAPPER,
 } from "../ComponentFormat";
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
+import User from "../../../types/types";
 
 interface Option {
   value: number;
@@ -15,12 +16,52 @@ interface Option {
 }
 
 const DateTime = () => {
+  const currUser: User = {
+    user_id: sessionStorage.getItem("userEmail"),
+  };
+
   const [date, setDate] = useState("");
   const [startOptions, setStartOptions] = useState<Option[]>([]);
   const [endOptions, setEndOptions] = useState<Option[]>([]);
   const [startValue, setStartValue] = useState<number>(9); // Initialize with 9am
   const [endValue, setEndValue] = useState<number>(23);
   const [disabled, setDisabled] = useState(false);
+
+  const handleCheckAvailability = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    // Check if OTP is correct
+    try {
+      const response = await fetch(
+        "http://localhost:8000/check_room_availability/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userID: currUser.user_id,
+            capacity: 40,
+            sec: "3R",
+            date: date,
+            start_time: startValue,
+            end_time: endValue,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("response ok");
+      } else {
+        // OTP verification failed
+        console.log("Check Availability Failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   useEffect(() => {
     const currentTime = new Date().getHours();
@@ -56,48 +97,38 @@ const DateTime = () => {
   }, []);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDate = event.target.value;
-    const currentDate = new Date().toLocaleDateString("en-US"); // Get today's date in "mm/dd/yyyy" format
+    const selectedDate = event.target.value; // Assuming the input type is "date" and value is in "YYYY-MM-DD" format
 
-    // Convert both selectedDate and currentDate to mm/dd/yyyy format for comparison
-    const formattedSelectedDate = new Date(selectedDate).toLocaleDateString(
-      "en-US"
-    );
-    const formattedCurrentDate = new Date(currentDate).toLocaleDateString(
-      "en-US"
-    );
-
-    // Check if the formatted selected date is not equal to the formatted current date
-    if (formattedSelectedDate !== formattedCurrentDate) {
-      // If it's not today's date, update the start time to 9am and end time to 11pm
-      setStartValue(9);
-      setEndValue(23);
-
-      // Generate options starting from 9am to 11pm
-      const availableOptions = [];
-      for (let i = 9; i <= 23; i++) {
-        availableOptions.push({ value: i, label: `${i}:00` });
-      }
-      setStartOptions(availableOptions);
-      setEndOptions(availableOptions.slice(1));
+    // Set the selected date directly if it's not today's date
+    if (selectedDate !== new Date().toISOString().slice(0, 10)) {
+        setStartValue(9);
+        setEndValue(23);
+        
+        // Generate options starting from 9am to 11pm
+        const availableOptions = [];
+        for (let i = 9; i <= 23; i++) {
+            availableOptions.push({ value: i, label: `${i}:00` });
+        }
+        setStartOptions(availableOptions);
+        setEndOptions(availableOptions.slice(1));
     } else {
-      const currentTime = new Date().getHours();
+        const currentTime = new Date().getHours();
 
-      // Generate options starting from the current local time
-      const availableOptions = [];
-      for (let i = currentTime; i <= 23; i++) {
-        availableOptions.push({ value: i, label: `${i}:00` });
-      }
-      setStartOptions(availableOptions);
-      setEndOptions(availableOptions.slice(1));
+        // Generate options starting from the current local time
+        const availableOptions = [];
+        for (let i = currentTime; i <= 23; i++) {
+            availableOptions.push({ value: i, label: `${i}:00` });
+        }
+        setStartOptions(availableOptions);
+        setEndOptions(availableOptions.slice(1));
 
-      // Set the start and end values to the current local time
-      setStartValue(currentTime);
-      setEndValue(currentTime);
+        // Set the start and end values to the current local time
+        setStartValue(currentTime);
+        setEndValue(currentTime);
     }
 
     setDate(selectedDate);
-  };
+};
 
   const handleStartChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
@@ -116,8 +147,10 @@ const DateTime = () => {
 
   const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
-    setEndValue(newValue);
-  };
+    const adjustedEndValue = newValue - 1; // Subtract 1 from the selected end time
+    setEndValue(adjustedEndValue);
+    console.log(adjustedEndValue);
+};
 
   return (
     <div className={FORM_CONTAINER}>
@@ -129,16 +162,20 @@ const DateTime = () => {
             imgPath={datetimeLogo}
             imgAlt="Date Time Logo"
           />
-          <button
-            className=" bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm ml-auto my-2 items-center justify-center flex p-2 rounded-md"
-            onClick={() => {
-              // handleCheckAvailability
-            }}
-          >
-            Check Availability
-          </button>
+          <form onSubmit={handleCheckAvailability} className="ml-auto">
+            <button
+              className="bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm  my-2 items-center justify-center flex p-2 rounded-md"
+              type="submit"
+            >
+              Check Availability
+            </button>
+          </form>
         </div>
+
+        {/* form */}
         <div className="flex h-full py-5">
+
+          {/* date */}
           <div className={WRAPPER}>
             <label className={FORM_LABEL}>Date</label>
             <input
@@ -149,6 +186,7 @@ const DateTime = () => {
             />
           </div>
 
+          {/* start time */}
           <div className={WRAPPER}>
             <label className={FORM_LABEL}>Start Time</label>
             <select
@@ -165,6 +203,7 @@ const DateTime = () => {
             </select>
           </div>
 
+                {/* end time */}
           <div className={WRAPPER}>
             <label className={FORM_LABEL}>End Time</label>
             <select
@@ -185,30 +224,5 @@ const DateTime = () => {
     </div>
   );
 };
-
-
-  // const handleCheckAvailability = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   // Check if OTP is correct
-  //   try {
-  //     const response = await fetch("http://localhost:8000/check_room_availability/", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ room_id: , date: , start_time: , end_time: ,}),
-  //     });
-
-  //     if (response.ok) {
-
-  //     } else {
-  //       // OTP verification failed
-  //       console.log("Check Availability Failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
 
 export default DateTime;
