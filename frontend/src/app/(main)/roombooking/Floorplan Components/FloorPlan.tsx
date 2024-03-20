@@ -66,7 +66,7 @@ const FloorPlan = () => {
       <div className="flex flex-row h-[130px]">
         <div className="flex flex-row w-1/5">
           <div className="flex flex-col w-1/3">
-            <button className="relative h-[60px] w-full bg-blue-400 border-4">
+            <button className="relative h-[60px] w-full bg-primary-100 border-2 border-primary-300 rounded-[6px] hover:border-2 hover:bg-primary-200 hover:border-primary-400">
               <span className="block transform -rotate-90 text-xs origin-center">
                 2R008
               </span>

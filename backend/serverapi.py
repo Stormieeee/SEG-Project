@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import mysql.connector
 import random
 import logging
+import string
 from pydantic import BaseModel
 from datetime import date, time
 
@@ -38,10 +39,23 @@ def get_database_connection():
     connection = mysql.connector.connect(**MYSQL_CONFIG)
     return connection
 
+#Random 5 alphanumeric code
+def generate_random_string():
+    # Define the characters to choose from
+    characters = string.ascii_letters + string.digits
 
-############################################ EMAIL - WORKING
+    # Generate a random 5-character alphanumeric string
+    random_string = ''.join(random.choice(characters) for _ in range(5))
 
-def send_email(sender_email, receiver_email, password, subject, otp, smtp_server, smtp_port):
+    return random_string
+
+#Random integer
+def generate_random_integer():
+    return random.randint(10000, 99999)
+
+############################################ EMAIL - EDITED TO CHECK
+
+def send_email(sender_email, receiver_email, password, subject, msg, smtp_server, smtp_port):
     # Create a multipart message and set headers
     message = MIMEMultipart()
     message['From'] = sender_email
@@ -49,8 +63,7 @@ def send_email(sender_email, receiver_email, password, subject, otp, smtp_server
     message['Subject'] = subject
 
     # Add body to email
-    body = "You're OTP for login is as follows: " + str(otp)
-    message.attach(MIMEText(body, 'plain'))
+    message.attach(MIMEText(msg, 'plain'))  # Changed from `message` to `body`
 
     # Connect to the SMTP server
     server = smtplib.SMTP(smtp_server, smtp_port)
@@ -65,8 +78,7 @@ def send_email(sender_email, receiver_email, password, subject, otp, smtp_server
 ########################################### USER LOGIN - WORKING
 
 # Login
-def generate_random_integer():
-    return random.randint(10000, 99999)
+
 
 class Login(BaseModel):
     user_id: str
@@ -77,10 +89,11 @@ def user_login_check(db_connection, cursor, userID=None, password=None):
     cursor.execute(query, (userID, password))
     if cursor.fetchone()[0] > 0:
         # Update OTP key if login is successful
-        new_otp_key = generate_random_integer()  # Assuming you have a function to generate OTP keys
+        new_otp_key = generate_random_integer() 
         query = "UPDATE `user login` SET `OTPKey` = %s WHERE `User ID` = %s"
         cursor.execute(query, (new_otp_key, userID))
-        send_email ("segproject32@outlook.com", userID, "aquastorm797",'Room Booking System OTP', new_otp_key ,'smtp-mail.outlook.com',587 )
+        otpMessage = "You're OTP for login is as follows: " + str(new_otp_key)
+        send_email("segproject32@outlook.com", userID, "aquastorm797", 'Room Booking System OTP', otpMessage, 'smtp-mail.outlook.com', 587)
         db_connection.commit()  # Commit the transaction
         return True
     else:
@@ -166,50 +179,7 @@ def edit_user_password(edit_password: EditPassword, db_connection: mysql.connect
     return {"message": "Password updated successfully"}
 
 
-########################################### TO BE EDITED 
-
-class BookingRequest(BaseModel):
-    user_id: str
-    room_id: str
-    description: str
-    date: date
-    start_time: time
-    end_time: time
-
-def create_booking_request(db_connection, cursor, userID, room_id, description, date, start_time, end_time):
-    last_booking_id = 0
-    query = "SELECT MAX(`Request ID`) AS last_booking_id FROM `Booking Request`"
-    cursor.execute(query)
-    result = cursor.fetchone()
-    if result:
-        last_booking_id = result[0]+1
-
-    insert_request_query = "INSERT INTO `Booking Request` (`Request ID`, `User ID`, `Room ID`) VALUES (%s, %s, %s)"
-    cursor.execute(insert_request_query, (last_booking_id, userID, room_id))
-    #db_connection.commit()
-
-    insert_description_query = "INSERT INTO `Booking Request Description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`) VALUES (%s, %s, %s, %s, %s)"
-    cursor.execute(insert_description_query, (last_booking_id, description, date, start_time, end_time))
-    db_connection.commit()
-
-@app.post("/booking_request/")
-def create_booking(booking_request: BookingRequest, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
-    cursor = db_connection.cursor()
-    create_booking_request(
-        db_connection,
-        cursor,
-        userID=booking_request.user_id,
-        room_id=booking_request.room_id,
-        description=booking_request.description,
-        date=booking_request.date,
-        start_time=booking_request.start_time.isoformat().split('.')[0],  # Convert time objects to ISO format strings
-        end_time=booking_request.end_time.isoformat().split('.')[0]     # Convert time objects to ISO format strings
-    )
-    return {"message": "Booking request created successfully"}
-
-
-
-########################################### TO BE EDITED
+########################################### COMPLETE
 
 class RoomAvailabilityRequest(BaseModel):
     userID: str
@@ -299,4 +269,81 @@ def check_room_availability_endpoint(request: RoomAvailabilityRequest, db_connec
         request.end_time.isoformat().split('.')[0]
     )
     return {"available": availability_list}
+
+
+
+
+########################################### TO BE EDITED 
+
+class BookingRequest(BaseModel):
+    user_id: str
+    room_id: str
+    capacity: int
+    description: str
+    date: date
+    start_time: time
+    end_time: time
+
+def create_booking_request(db_connection, cursor, userID, room_id, capacity, description, date, start_time, end_time):
+
+    #Has to create a new bookingRequestID which is unique.
+    while True:
+        # Generate a new bookingRequestID
+        bookingRequestID = generate_random_string()
+
+        # Checking if the ID is pre-existing
+        bookingRequestIDCheck = "SELECT `Request ID` FROM `booking request`"
+        cursor.execute(bookingRequestIDCheck)
+        currentRoomIDS = cursor.fetchall()
+
+        # Check if the bookingRequestID is in the currentRoomIDS
+        if any(bookingRequestID in row for row in currentRoomIDS):
+            print("Booking Request ID is in the current room IDs. Generating a new ID.")
+        else:
+            print("Booking Request ID is not in the current room IDs.")
+            break
+
+    #Inserting into Booking Request table first as parent table
+    insert_request_query = "INSERT INTO `Booking Request` (`Request ID`, `User ID`, `Room ID`) VALUES (%s, %s, %s)"
+    cursor.execute(insert_request_query, (bookingRequestID, userID, room_id))
+    db_connection.commit()
+
+    insert_description_query = "INSERT INTO `Booking Request Description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`, `capacity`) VALUES (%s, %s, %s, %s, %s, %s)"
+    cursor.execute(insert_description_query, (bookingRequestID, description, date, start_time, end_time, capacity))
+    db_connection.commit()
+
+    #Sending the confirmation email
+    confirmMessage = (
+        "You have sent in a booking request of ID: " +
+        str(bookingRequestID) + "\n" +
+        "Room ID:   " +
+        str(room_id) + "\n" +
+        "Booking Reason:   " +
+        str(description) + "\n" +
+        "Booking capacity:   " +
+        str(capacity) + "\n" +
+        "Date:   " +
+        str(date) + "\n" +
+        "Timing:   " +
+        str(start_time) + "  :  " + str(end_time) + ".\nIf you did not make this booking, please check your account immediately.")
+
+    send_email ("segproject32@outlook.com", userID, "aquastorm797",'Room Booking System OTP', confirmMessage ,'smtp-mail.outlook.com',587 )
+
+@app.post("/booking_request/")
+def create_booking(booking_request: BookingRequest, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    create_booking_request(
+        db_connection,
+        cursor,
+        userID=booking_request.user_id,
+        room_id=booking_request.room_id,
+        capacity = booking_request.capacity,
+        description=booking_request.description,
+        date=booking_request.date,
+        start_time=booking_request.start_time.isoformat().split('.')[0],  # Convert time objects to ISO format strings
+        end_time=booking_request.end_time.isoformat().split('.')[0]     # Convert time objects to ISO format strings
+    )
+    return {"booking successful"}
+
+
 
