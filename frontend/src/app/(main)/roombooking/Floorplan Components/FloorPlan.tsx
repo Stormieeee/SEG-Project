@@ -394,10 +394,142 @@ const ThirdFloor = () => {
   )
 }
 
+const SecondLeftWing = () => {
+  return (
+    <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
+
+      <div className="h-20/100 bg-black-50"></div>
+
+      <div className="h-60/100 flex flex-col">
+        
+        <div className="h-40/100 w-98/100 flex flex-row">
+          <div className="w-4/100 flex flex-col">
+            <div className="h-73/100 bg-black-400 border-2"></div>
+          </div>
+
+          <button className="w-7/100 bg-blue-400 border-2">
+            <span className="block transform -rotate-90 origin-center">2L011</span>
+          </button>
+
+          <button className="w-15/100 bg-blue-400 border-2">2L010</button>
+          <button className="w-18/100 bg-blue-400 border-2">2L009</button>
+          <button className="w-36/100 bg-blue-400 border-2">2L008</button>
+
+          <div className="w-10/100 flex flex-col">
+
+            <div className="h-46/100"></div>
+
+            <div className="h-32/100 flex flex-row">
+              <button className="w-1/3 bg-blue-400 border-2">
+                <span className="block transform -rotate-90 text-[8px] origin-center">2L005</span>
+              </button>
+              <button className="w-1/3 bg-blue-400 border-2">
+                <span className="block transform -rotate-90 text-[8px] origin-center">2L006</span>
+              </button>
+              <button className="w-1/3 bg-blue-400 border-2">
+                <span className="block transform -rotate-90 text-[8px] origin-center">2L007</span>
+              </button>
+            </div>
+
+            <div className="h-22/100 flex flex-row">
+              <button className="w-1/3 bg-blue-400 border-2 text-xs">T1</button>
+              <div className="w-1/3"></div>
+              <button className="w-1/3 bg-blue-400 border-2 text-xs">T2</button>
+            </div>
+
+          </div>
+
+          <div className="w-10/100 flex flex-col">
+            <div className="h-46/100"></div>
+            <div className="h-54/100 flex flex-row">
+              <button className="w-2/5 bg-blue-400 border-l-2 border-b-2 border-t-2">
+                <span className="block transform -rotate-90 text-xs origin-center">2L007</span>
+              </button>
+              <div className="w-3/5 flex">
+                <button className="w-full h-full bg-blue-400 border-b-2" style={{ clipPath: 'polygon(0 100%, 0 0, 100% 100%)' }}></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="h-10/100 w-98/100"></div>
+
+        <div className="h-50/100 w-98/100 flex flex-row">
+
+          <div className="w-5/100 flex flex-col">
+            <div className="h-2/3 flex flex-row">
+              <div className="w-2/3 flex flex-col">
+                <div className="h-20/100"></div>
+                <div className="h-30/100 bg-black-400 border-2"></div>
+                <div className="h-50/100 bg-black-400 border-2"></div>
+              </div>
+              <div className="w-1/3"></div>
+            </div>
+            <div className="h-1/3 bg-black-400 border-2"></div>
+          </div>
+
+          <div className="w-20/100 flex flex-col">
+
+            <div className="h-62/100 flex flex-row">
+
+              <div className="w-1/2 flex flex-col">
+                <button className="h-50/100 bg-blue-400 border-2">2L012</button>
+                <div className="h-30/100 flex flex-row">
+                  <button className="w-1/2 bg-blue-400 border-2 text-[8px]">2L016</button>
+                  <button className="w-1/2 bg-blue-400 border-2 text-[8px]">2L015</button>
+                </div>
+                <button className="h-20/100 bg-blue-400 border-l-2 border-b-2">L</button>
+              </div>
+
+              <div className="w-1/2 flex flex-col">
+                <div className="h-4/5 flex flex-row">
+                  <button className="w-35/100 bg-blue-400 border-2">
+                    <span className="block transform -rotate-90 text-xs origin-center">2L014</span>
+                  </button>
+                  <button className="w-65/100 bg-blue-400 border-t-2 border-l-2 border-r-2">
+                    <span className="block transform -rotate-90 text-xs origin-center">2L013</span>
+                  </button>
+                </div>
+                <button className="h-1/5 bg-blue-400 border-r-2 border-b-2">L</button>
+              </div>
+
+            </div>
+
+            <div className="h-38/100 flex flex-row">
+              <button className="w-1/2 bg-blue-400 border-2">2L017</button>
+              <button className="w-1/2 bg-blue-400 border-2">2L018</button>
+            </div>
+          </div>
+
+          <button className="w-15/100 bg-blue-400 border-2">2L019</button>
+
+          <button className="w-10/100 bg-blue-400 border-2">2L020</button>
+
+          <div className="w-40/100 flex flex-row">
+            <button className="w-1/4 bg-blue-400 border-2">2L021</button>
+            <button className="w-1/4 bg-blue-400 border-2">2L022</button>
+            <button className="w-1/4 bg-blue-400 border-2">2L023</button>
+            <button className="w-1/4 bg-blue-400 border-2">2L024</button>
+          </div>
+
+          <div className="w-10/100"></div>
+
+        </div>
+        
+      </div>
+
+      <div className="h-20/100 bg-black-50"></div>
+
+    </div>
+  )
+}
+
 const FloorPlan = () => {
   return (
     //SecondFloor()
     ThirdFloor()
+    //SecondLeftWing()
   );
 };
 
