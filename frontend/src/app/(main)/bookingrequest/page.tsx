@@ -1,22 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import RequestTable from "./RequestTable";
-import SearchBar from "./SearchBar";
+import Sortbar from "./Sortbar";
 import DetailsBar from "./DetailsBar";
 import { getEmailFromSessionStorage } from "@/app/auth/page";
 
 const BookingRequestPage = () => {
-  const [data, setData] = useState<string[][] | null>(null);
-  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [requests, setRequests] = useState<string[][]>([]);
+  const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
+  const isSelected = selectedRowIndex >= 0;
   const [requestDetails, setRequestDetails] = useState<{
-    index: number;
     bookingId: string;
-    requester: string;
-    bookingSpecific: {
-      room_capacity: number;
-      booking_capacity: number;
-      purpose: string[];
-    };
+    user_id: string;
+    user_role: string;
+    request_capacity: number;
+    room_capacity: number;
+    description: string;
   } | null>(null);
 
   const getRequestData = async () => {
@@ -34,7 +33,7 @@ const BookingRequestPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setData(data);
+        setRequests(data);
       }
     } catch (error) {
       console.error("Error fetching booking requests: ", error);
@@ -48,25 +47,35 @@ const BookingRequestPage = () => {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="w-[731px] h-9 ml-2 py-1.5">
-        <SearchBar />
+      <div className="ml-10">
+        <Sortbar
+          requests={requests}
+          setRequests={setRequests}
+          setSelectedRowIndex={setSelectedRowIndex}
+        />
       </div>
       <div className="flex">
         <div
           className={`flex ml-10 mr-5 mt-5 overflow-y h-[550px] transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
         >
           <RequestTable
-            data={data}
-            isSelected={isSelected}
-            setIsSelected={setIsSelected}
+            requests={requests}
             setRequestDetails={setRequestDetails}
+            selectedRowIndex={selectedRowIndex}
+            setSelectedRowIndex={setSelectedRowIndex}
           />
         </div>
         <div
-          className={`flex pl-5 mt-5 overflow-y border-l border-black-100 h-[550px] transform transition-transform duration-500 ${isSelected ? "translate-x-0 mr-5 w-1/3" : "translate-x-full"}`}
+          className={`flex pl-5 mt-5 overflow-y flex-shrink-0 border-l border-black-100 h-[550px] transform transition-transform duration-500 ${isSelected ? "translate-x-0 mr-5 w-1/3" : "translate-x-full"}`}
         >
           {isSelected && (
-            <DetailsBar data={data} setData={setData} {...requestDetails} />
+            <DetailsBar
+              requests={requests}
+              setRequests={setRequests}
+              selectedRowIndex={selectedRowIndex}
+              setSelectedRowIndex={setSelectedRowIndex}
+              {...requestDetails}
+            />
           )}
         </div>
       </div>

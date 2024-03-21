@@ -1,32 +1,47 @@
 import React, { useEffect } from "react";
 
-interface RequestTableProps {
-  requests: string[][];
-  setRequestDetails: React.Dispatch<
+interface BookingsTableProps {
+  bookings: string[][];
+  setBookingStatus: React.Dispatch<React.SetStateAction<string>>;
+  setBookingDetails: React.Dispatch<
     React.SetStateAction<{
-      bookingId: string;
+      index: number;
       user_id: string;
-      user_role: string;
       request_capacity: number;
       room_capacity: number;
       description: string;
+      comment: string;
     } | null>
   >;
   selectedRowIndex: number;
   setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
 }
-const RequestTable = ({
-  requests,
-  setRequestDetails,
+const BookingsTable = ({
+  bookings,
+  setBookingStatus,
+  setBookingDetails,
   selectedRowIndex,
   setSelectedRowIndex,
-}: RequestTableProps) => {
-  const header = ["Booking ID", "Room", "Date", "Start Time", "End Time"];
+}: BookingsTableProps) => {
+  const header = [
+    "Booking ID",
+    "Room",
+    "Date",
+    "Start Time",
+    "End Time",
+    "Status",
+  ];
 
-  const getRequestDetails = async (bookingId: string, index: number) => {
+  const getBookingDetails = async (
+    bookingId: string,
+    bookingStatus: string,
+    index: number
+  ) => {
+    setBookingStatus(bookingStatus);
+    setSelectedRowIndex(index);
     try {
       const response = await fetch(
-        "https://your-api-endpoint/get_request_details",
+        "https://your-api-endpoint/get_booking_details",
         {
           method: "POST",
           headers: {
@@ -38,7 +53,7 @@ const RequestTable = ({
 
       if (response.ok) {
         const data = await response.json();
-        setRequestDetails({ index, ...data });
+        setBookingDetails({ index, ...data });
       }
     } catch (error) {
       console.error("Error fetching booking request details: ", error);
@@ -51,24 +66,37 @@ const RequestTable = ({
       setSelectedRowIndex(index);
     }
   };
-
-  useEffect(() => {
-    if (selectedRowIndex >= 0 && requests) {
-      getRequestDetails(requests[selectedRowIndex][0], selectedRowIndex);
+  const getStatusColor = (cellData: string) => {
+    switch (cellData) {
+      case "Pending":
+        return "bg-yellow-50 text-orange-400";
+      case "Approved":
+        return "bg-sky-400 text-white-100";
+      case "Completed":
+        return "bg-black-500 text-white-50";
+      default:
+        return "bg-red-500 text-white-100";
     }
-  }, [requests]);
+  };
+  useEffect(() => {
+    if (selectedRowIndex >= 0 && bookings) {
+      const rowData = bookings[selectedRowIndex];
+      const [bookingId, bookingStatus] = [rowData[0], rowData[5]];
+      getBookingDetails(bookingId, bookingStatus, selectedRowIndex);
+    }
+  }, [bookings]);
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex justify-between bg-white-200 border border-black-100 rounded-md">
+      <div className="flex justify-between items-center bg-white-200 border border-black-100 rounded-md">
         {header.map((item, index) => (
           <div key={index} className="flex-1 py-3 text-center font-semibold">
             {item}
           </div>
         ))}
       </div>
-      {requests ? (
-        requests.map((rowData: any[], rowIndex: number) => (
+      {bookings ? (
+        bookings.map((rowData: any[], rowIndex: number) => (
           <button
             key={rowIndex}
             className={`flex h-[50px] flex-shrink-0 justify-between items-center border border-primary-400 rounded-md ${
@@ -76,10 +104,13 @@ const RequestTable = ({
                 ? "bg-primary-300"
                 : "bg-primary-50 hover:bg-primary-100 hover:border-primary-300 cursor-pointer transition duration-300 ease-in-out"
             }`}
-            onClick={() => getRequestDetails(rowData[0], rowIndex)}
+            onClick={() => getBookingDetails(rowData[0], rowData[5], rowIndex)}
           >
             {rowData.map((cellData, cellIndex) => (
-              <div key={cellIndex} className="flex-1 py-2 text-center">
+              <div
+                key={cellIndex}
+                className={`flex-1 py-2 text-center ${cellIndex === header.length - 1 ? `rounded-xl ${getStatusColor(cellData)}` : ""}`}
+              >
                 {cellData}
               </div>
             ))}
@@ -87,10 +118,10 @@ const RequestTable = ({
         ))
       ) : (
         <div className="flex justify-center items-center h-40">
-          No requests found
+          No booking found
         </div>
       )}
     </div>
   );
 };
-export default RequestTable;
+export default BookingsTable;
