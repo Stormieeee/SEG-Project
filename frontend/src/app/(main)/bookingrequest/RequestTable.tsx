@@ -44,12 +44,6 @@ const RequestTable = ({
       console.error("Error fetching booking request details: ", error);
       throw error;
     }
-
-    if (selectedRowIndex === index) {
-      setSelectedRowIndex(-1);
-    } else {
-      setSelectedRowIndex(index);
-    }
   };
 
   useEffect(() => {
@@ -67,7 +61,7 @@ const RequestTable = ({
           </div>
         ))}
       </div>
-      {requests ? (
+      {requests.length > 0 ? (
         requests.map((rowData: any[], rowIndex: number) => (
           <button
             key={rowIndex}
@@ -76,7 +70,14 @@ const RequestTable = ({
                 ? "bg-primary-300"
                 : "bg-primary-50 hover:bg-primary-100 hover:border-primary-300 cursor-pointer transition duration-300 ease-in-out"
             }`}
-            onClick={() => getRequestDetails(rowData[0], rowIndex)}
+            onClick={() => {
+              getRequestDetails(rowData[0], rowIndex);
+              if (selectedRowIndex === rowIndex) {
+                setSelectedRowIndex(-1);
+              } else {
+                setSelectedRowIndex(rowIndex);
+              }
+            }}
           >
             {rowData.map((cellData, cellIndex) => (
               <div key={cellIndex} className="flex-1 py-2 text-center">

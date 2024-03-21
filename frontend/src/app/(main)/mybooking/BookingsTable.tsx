@@ -59,12 +59,6 @@ const BookingsTable = ({
       console.error("Error fetching booking request details: ", error);
       throw error;
     }
-
-    if (selectedRowIndex === index) {
-      setSelectedRowIndex(-1);
-    } else {
-      setSelectedRowIndex(index);
-    }
   };
   const getStatusColor = (cellData: string) => {
     switch (cellData) {
@@ -95,7 +89,7 @@ const BookingsTable = ({
           </div>
         ))}
       </div>
-      {bookings ? (
+      {bookings.length > 0 ? (
         bookings.map((rowData: any[], rowIndex: number) => (
           <button
             key={rowIndex}
@@ -104,7 +98,14 @@ const BookingsTable = ({
                 ? "bg-primary-300"
                 : "bg-primary-50 hover:bg-primary-100 hover:border-primary-300 cursor-pointer transition duration-300 ease-in-out"
             }`}
-            onClick={() => getBookingDetails(rowData[0], rowData[5], rowIndex)}
+            onClick={() => {
+              getBookingDetails(rowData[0], rowData[5], rowIndex);
+              if (selectedRowIndex === rowIndex) {
+                setSelectedRowIndex(-1);
+              } else {
+                setSelectedRowIndex(rowIndex);
+              }
+            }}
           >
             {rowData.map((cellData, cellIndex) => (
               <div

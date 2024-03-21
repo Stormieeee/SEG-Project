@@ -2,25 +2,14 @@
 import React, { useState, useEffect } from "react";
 import BookingSwitcher from "./BookingSwitcher";
 import Sortbar from "./Sortbar";
-import BookingsTable from "./BookingsTable";
-import DetailsBar from "./DetailsBar";
+import BookingComponents from "./BookingComponents";
 import { getEmailFromSessionStorage } from "@/app/auth/page";
 
 const MyBookingPage = () => {
   const [isCurrentBooking, setIsCurrentBooking] = useState<boolean>(true);
   const [currentBookings, setCurrentBookings] = useState<string[][]>([]);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
-  const isSelected = selectedRowIndex >= 0;
-  const [bookingStatus, setBookingStatus] = useState<string>(""); // ["Pending", "Approved", "Rejected", "Completed"]
   const [pastBookings, setPastBookings] = useState<string[][]>([]);
-  const [bookingDetails, setBookingDetails] = useState<{
-    index: number;
-    user_id: string;
-    request_capacity: number;
-    room_capacity: number;
-    description: string;
-    comment: string;
-  } | null>(null);
 
   const getBookings = async () => {
     try {
@@ -68,36 +57,13 @@ const MyBookingPage = () => {
           />
         </div>
       </div>
-      <div className="flex">
-        <div
-          className={`flex ml-10 mr-5 overflow-y h-[550px] transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
-        >
-          <BookingsTable
-            bookings={isCurrentBooking ? currentBookings : pastBookings}
-            setBookingStatus={setBookingStatus}
-            setBookingDetails={setBookingDetails}
-            selectedRowIndex={selectedRowIndex}
-            setSelectedRowIndex={setSelectedRowIndex}
-          />
-        </div>
-        <div
-          className={`flex pl-5 overflow-y-auto flex-shrink-0 h-[550px] border-l border-black-100 transform transition-transform duration-500 ${isSelected ? "translate-x-0 mr-5 w-1/3" : "translate-x-full"}`}
-        >
-          {isSelected && (
-            <DetailsBar
-              bookings={isCurrentBooking ? currentBookings : pastBookings}
-              setBookings={
-                isCurrentBooking ? setCurrentBookings : setPastBookings
-              }
-              bookingStatus={bookingStatus}
-              selectedRowIndex={selectedRowIndex}
-              setSelectedRowIndex={setSelectedRowIndex}
-              isCurrentBooking={isCurrentBooking}
-              {...bookingDetails}
-            />
-          )}
-        </div>
-      </div>
+      <BookingComponents
+        selectedRowIndex={selectedRowIndex}
+        setSelectedRowIndex={setSelectedRowIndex}
+        isCurrentBooking={isCurrentBooking}
+        bookings={isCurrentBooking ? currentBookings : pastBookings}
+        setBookings={isCurrentBooking ? setCurrentBookings : setPastBookings}
+      />
     </div>
   );
 };
