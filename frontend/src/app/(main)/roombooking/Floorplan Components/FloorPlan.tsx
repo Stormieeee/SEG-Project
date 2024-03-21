@@ -308,7 +308,7 @@ const ThirdFloor = () => {
 
           <div className="w-1/5 flex flex-col">
             <div className="h-66/100 bg-black-400 border-2"></div>
-            <button className="h-34/100 bg-blue-400 border-2 mt-auto">3R028</button>
+            <button className="h-34/100 bg-blue-400 border-2 mt-auto">3R026</button>
           </div>
 
         </div>
