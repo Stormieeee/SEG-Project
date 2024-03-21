@@ -99,11 +99,13 @@ const DateTime = () => {
     return () => clearInterval(interval);
   }, []);
 
+  //convert time from HH to HH:MM form in string
   const formatHour = (value: number): string => {
     // Pad single-digit hours with leading zero and return as HH:00
     return value.toString().padStart(2, "0") + ":00";
   };
 
+  //Change Date
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value; // Assuming the input type is "date" and value is in "YYYY-MM-DD" format
 
@@ -138,6 +140,7 @@ const DateTime = () => {
     setDate(selectedDate);
   };
 
+  //Update Start time value
   const handleStartChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
     setStartValue(newValue);
@@ -153,35 +156,36 @@ const DateTime = () => {
     setEndOptions(newEndOptions);
   };
 
+  //Convert HH to [HH, MM]
   const convertHourToHHMM = (hour: number): [number, number] => {
     const minute = 0; // Since we're converting from HH to HH:MM, minute will be 0
     return [hour, minute];
-};
+  };
 
-  const adjustTime = (hour:number): string => {
-    
-    const [hours, minute] = convertHourToHHMM(hour)
+  //Minus 1 minute to [HH, MM]
+  const adjustTime = (hour: number): string => {
+    const [hours, minute] = convertHourToHHMM(hour);
 
     // Convert hour and minute to minutes and subtract 1
-    let adjustedTime = (hours * 60) + minute - 1;
+    let adjustedTime = hours * 60 + minute - 1;
 
     // Ensure adjustedTime does not go below 0
     if (adjustedTime < 0) {
-        adjustedTime = 0;
+      adjustedTime = 0;
     }
 
     // Convert adjustedTime back to "HH:MM" format
     const adjustedHour = Math.floor(adjustedTime / 60);
     const adjustedMinute = adjustedTime % 60;
-    const formattedTime = `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinute.toString().padStart(2, '0')}`;
-    console.log(formattedTime)
+    const formattedTime = `${adjustedHour.toString().padStart(2, "0")}:${adjustedMinute.toString().padStart(2, "0")}`;
+    console.log(formattedTime);
     return formattedTime;
-};
-
-const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  const newValue = parseInt(e.target.value, 10);
-  setEndValue(newValue);
-};
+  };
+  //Update End time Value
+  const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = parseInt(e.target.value, 10);
+    setEndValue(newValue);
+  };
 
   return (
     <div className={FORM_CONTAINER}>

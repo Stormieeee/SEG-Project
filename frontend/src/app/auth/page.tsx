@@ -65,7 +65,7 @@ const Authentication = () => {
       if (response.ok) {
         // OTP verification successful
         // Redirect the user to the main page
-        router.replace(successfulDestination || "/");
+        router.replace(successfulDestination || "/roombooking");
       } else {
         // OTP verification failed
         console.log("Invalid OTP");

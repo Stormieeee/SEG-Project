@@ -470,19 +470,60 @@ def get_booking_requests(username: userClass, db_connection: mysql.connector.con
     return check
 
 
-########################################### TO BE COMPLETED
-
-
-
+########################################### TESTING TO BE DONE
 
 
 #4. ⁠get_request_details, which I will give u bookingId and need {requester: “email”, roomSpecific: {capacity: 5, purpose: [“Meeting”, Presentation”]}}
 #Function name: get_request_details(BookingID)
 #return: [user ID (email), user Role (student), capacity, purpose]
-
-
-
 #syntax of {user_id: “actual email”, user_role: “student”…
+
+
+class RequestDetails(BaseModel):
+    bookingID: str
+
+def get_request_details(db_connection, cursor, bookingID):
+    query = """
+    SELECT 
+        `users`.`user ID` AS user_id,
+        `user roles`.`name` AS user_role,
+        `booking request description`.`capacity` AS request_capacity,
+        `room`.`capacity` AS room_capacity,
+        `booking request description`.`Description` AS request_description
+    FROM 
+        `booking request`
+    JOIN 
+        `users` ON `booking request`.`User ID` = `users`.`User ID`
+    JOIN 
+        `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
+    JOIN 
+        `booking request description` ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+    JOIN 
+        `room` ON `booking request`.`Room ID` = `room`.`Room ID`
+    WHERE 
+        `booking request`.`Request ID` = %s
+
+    """
+    cursor.execute(query, (bookingID,))
+    role = cursor.fetchone()
+
+    return role
+
+
+@app.post("/get_request_details/")
+def get_request_dets(request: RequestDetails, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    details = get_request_details(db_connection, cursor, bookingID = request.bookingID)
+
+    return {"user_id": details[0], "user_role": details[1], "request_capacity": details[2], "room_capacity": details[3], "description": details[4], }
+            
+
+
+########################################### TO BE COMPLETED
+
+#A function to accept / decline booking request
+
+#accept_booking_request(
 
 
 
