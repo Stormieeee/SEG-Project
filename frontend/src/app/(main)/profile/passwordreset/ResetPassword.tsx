@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import PasswordVisibilityButton from "@/app/PasswordVisibilityButton";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
   const isPasswordValid = (password: string) => {
@@ -79,38 +82,52 @@ const ResetPassword = () => {
                 >
                   New Password
                 </label>
-                <input
-                  type="password"
-                  name="new-password"
-                  id="new-password"
-                  value={newPassword}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 sm:text-sm focus:placeholder-gray-700"
-                  placeholder="Enter new password"
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  onFocus={(e) => (e.target.placeholder = "")}
-                  onBlur={(e) => (e.target.placeholder = "Enter new password")}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    name="new-password"
+                    id="new-password"
+                    value={newPassword}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 sm:text-sm focus:placeholder-gray-700"
+                    placeholder="Enter new password"
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    onFocus={(e) => (e.target.placeholder = "")}
+                    onBlur={(e) =>
+                      (e.target.placeholder = "Enter new password")
+                    }
+                    required
+                  />
+                  <PasswordVisibilityButton
+                    showPassword={showNewPassword}
+                    setShowPassword={setShowNewPassword}
+                  />
+                </div>
                 <label
                   htmlFor="confirm-password"
                   className="block mt-5 mb-2 text-sm font-medium text-gray-900"
                 >
                   Confirm Password
                 </label>
-                <input
-                  type="password"
-                  name="confirm-password"
-                  id="confirm-password"
-                  value={confirmPassword}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 sm:text-sm focus:placeholder-gray-700"
-                  placeholder="Confirm new password"
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  onFocus={(e) => (e.target.placeholder = "")}
-                  onBlur={(e) =>
-                    (e.target.placeholder = "Confirm new password")
-                  }
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirm-password"
+                    id="confirm-password"
+                    value={confirmPassword}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 sm:text-sm focus:placeholder-gray-700"
+                    placeholder="Confirm new password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onFocus={(e) => (e.target.placeholder = "")}
+                    onBlur={(e) =>
+                      (e.target.placeholder = "Confirm new password")
+                    }
+                    required
+                  />
+                  <PasswordVisibilityButton
+                    showPassword={showConfirmPassword}
+                    setShowPassword={setShowConfirmPassword}
+                  />
+                </div>
                 {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
               </div>
               <button

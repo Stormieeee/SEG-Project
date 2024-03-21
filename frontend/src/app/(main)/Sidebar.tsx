@@ -262,6 +262,34 @@ const Sidebar = () => {
               </div>
             )}
           </Link>
+          <Link
+            href="/bookingrequest"
+            className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+          >
+            {isMyBookingActive ? (
+              <div className="flex flex-row py-2 bg-primary-200 rounded-md">
+                <Image
+                  src={myBookingDark}
+                  alt="My Booking Dark"
+                  className="mx-2 justify-center p-0.5"
+                />
+                <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
+                  Booking Request
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-row py-2 rounded-md">
+                <Image
+                  src={myBookingLight}
+                  alt="My Booking Light"
+                  className="mx-2 justify-center p-0.5"
+                />
+                <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
+                  Booking Request
+                </span>
+              </div>
+            )}
+          </Link>
         </div>
 
         <div className=" bottom-0 w-full flex flex-col absolute mb-20">
@@ -271,7 +299,7 @@ const Sidebar = () => {
             className=" static bottom-0 space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
           >
             {isProfileActive ? (
-              <div className="flex flex-row py-1.5 bg-primary-200 rounded-md justify-center">
+              <div className="flex flex-row py-1.5 bg-primary-200 rounded-md">
                 <Image
                   src={profileDark}
                   alt="Profile Dark"
