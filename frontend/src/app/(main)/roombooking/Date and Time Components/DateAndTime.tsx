@@ -7,7 +7,8 @@ import {
   FORM_LABEL,
   WRAPPER,
 } from "../ComponentFormat";
-import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
+
+import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg"
 import { User, AvailableItem } from "../../../types/types";
 
 interface Option {
@@ -178,7 +179,6 @@ const DateTime = () => {
     const adjustedHour = Math.floor(adjustedTime / 60);
     const adjustedMinute = adjustedTime % 60;
     const formattedTime = `${adjustedHour.toString().padStart(2, "0")}:${adjustedMinute.toString().padStart(2, "0")}`;
-    console.log(formattedTime);
     return formattedTime;
   };
   //Update End time Value

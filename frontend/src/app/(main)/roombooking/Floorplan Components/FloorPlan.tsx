@@ -527,8 +527,8 @@ const SecondLeftWing = () => {
 
 const FloorPlan = () => {
   return (
-    //SecondFloor()
-    ThirdFloor()
+    SecondFloor()
+    // ThirdFloor()
     //SecondLeftWing()
   );
 };

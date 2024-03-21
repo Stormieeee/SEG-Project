@@ -521,9 +521,142 @@ def get_request_dets(request: RequestDetails, db_connection: mysql.connector.con
 
 ########################################### TO BE COMPLETED
 
-#A function to accept / decline booking request
 
-#accept_booking_request(
+class HandleBooking(BaseModel): 
+    action: str         #action is either "accept" or "decline"
+    bookingID: str
+    comment: str
 
+def accept_booking(db_connection, cursor, requestID, comment):
+    
+    #Has to create a new bookingRequestID which is unique.
+    while True:
+        # Generate a new bookingRequestID
+        NewbookingID = generate_random_string()
+
+        # Checking if the ID is pre-existing
+        bookingIDCheck = "SELECT `Booking ID` FROM `booking list`"
+        cursor.execute(bookingIDCheck)
+        currentBookingIDS = cursor.fetchall()
+
+        # Check if the bookingRequestID is in the currentRoomIDS
+        if any(requestID in row for row in bookingIDCheck):
+            print("Booking ID is in the current IDs. Generating a new ID.")     #Test print
+        else:
+            print("Booking ID is not in the current IDs.")                      #Test print
+            break
+
+    #New unique Booking ID named NewbookingID
+    print (NewbookingID)        #Test print
+
+    #Getting the data from the main tables for primary key purposes
+    getDetails1 = ("""
+        SELECT `User ID`, `Room ID`
+        FROM `booking request`
+        WHERE `Request ID` = %s;""")
+
+    cursor.execute(getDetails1,(requestID,))
+    details1 = cursor.fetchone()
+
+    # Insert data into Booking List table
+    insertDetails1 = ("""
+        INSERT INTO `Booking List` (`Booking ID`, `User ID`, `Room ID`)
+        VALUES (%s, %s, %s);""")
+    cursor.execute(insertDetails1,(NewbookingID, details1[0], details1[1]))
+
+    # Commit the transaction
+    db_connection.commit()
+
+
+    #Getting the dependant data from booking request description
+    getDetails2 = ("""SELECT * FROM `booking request description` WHERE `Request ID` = %s;""")
+    cursor.execute(getDetails2,(requestID,))
+    details2 = cursor.fetchone()
+
+    # Insert the data into booking id description
+    insertDetails2 = ("""
+        INSERT INTO `booking id description` (`Booking ID`, `Description`, `Date`, `Start Time`, `End Time` , `Capacity`, `Comment`)
+        VALUES (%s, %s, %s, %s, %s, %s, %s);""")
+
+    cursor.execute(insertDetails2,(NewbookingID, details2[1], details2[2], details2[3], details2[4], details2[5], comment))
+
+    # Commit the transaction
+    db_connection.commit()
+
+    #Remove the data from Booking Requests as already handled
+
+    delete1 = """
+        DELETE FROM `booking request description`
+        WHERE `Request ID` = %s
+    """
+
+    delete2 = """
+        DELETE FROM `booking request`
+        WHERE `Request ID` = %s
+    """
+
+    cursor.execute(delete1,(requestID,))
+    cursor.execute(delete2,(requestID,))
+
+    db_connection.commit()
+
+    msg = "The booking request " + str(requestID) + " has been approved.\n" \
+          "The ID of your booking has been updated to: " + str(NewbookingID) + "\n" \
+          "Please view the Room Booking System Website for further details"
+    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
+
+
+def decline_booking(db_connection, cursor, requestID, comment):
+
+    #Getting the data from the main tables for emailing  purposes
+    getDetails1 = ("""
+        SELECT `User ID`
+        FROM `booking request`
+        WHERE `Request ID` = %s;""")
+
+    cursor.execute(getDetails1,(requestID,))
+    details1 = cursor.fetchone()
+
+    #Remove the data from Booking Requests as already handled
+    delete1 = """
+        DELETE FROM `booking request description`
+        WHERE `Request ID` = %s
+    """
+
+    delete2 = """
+        DELETE FROM `booking request`
+        WHERE `Request ID` = %s
+    """
+
+    cursor.execute(delete1,(requestID,))
+    cursor.execute(delete2,(requestID,))
+
+    db_connection.commit()
+    
+    msg = "The booking request " + str(requestID) + " has been declined.\n" \
+          "The reason for the booking declined is: \n" + comment + "\n" \
+          "Please view the Room Booking System Website for further details"
+    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
+
+
+
+@app.post("/handle_booking/")
+def handle_booking(handling: HandleBooking, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    
+    action = handling.action
+
+    if action == "approve":
+        accept_booking(db_connection, cursor, handling.bookingID, handling.comment)
+        print ("approve successful")
+    else:
+        decline_booking(db_connection, cursor, handling.bookingID, handling.comment)
+        print ("decline successful")   
+
+    return {"successful"}
+
+
+
+#Alt 3 for comment, Alt 4 for uncomment
 
 

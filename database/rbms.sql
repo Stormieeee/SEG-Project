@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2024 at 09:27 AM
+-- Generation Time: Mar 21, 2024 at 03:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -33,27 +33,31 @@ CREATE TABLE `booking id description` (
   `Date` date DEFAULT NULL,
   `Start Time` time DEFAULT NULL,
   `End Time` time DEFAULT NULL,
-  `capacity` int(11) DEFAULT NULL
+  `capacity` int(11) DEFAULT NULL,
+  `Comment` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking id description`
 --
 
-INSERT INTO `booking id description` (`Booking ID`, `Description`, `Date`, `Start Time`, `End Time`, `capacity`) VALUES
-('BD24S', 'Group work', '2024-03-20', '09:00:00', '12:59:00', 40),
-('8N3PZ', 'Study', '2024-03-18', '14:00:00', '16:59:00', 40),
-('R72BG', 'Meeting', '2024-03-19', '10:00:00', '13:59:00', 40),
-('K1ET2', 'Event', '2024-03-20', '09:00:00', '11:59:00', 40),
-('6D0A8', 'Group work', '2024-03-21', '13:00:00', '15:59:00', 40),
-('Z5WQ9', 'Study', '2024-03-20', '12:00:00', '13:59:00', 40),
-('P7L9C', 'Study', '2024-03-23', '11:00:00', '14:59:00', 40),
-('N4XI6', 'Study', '2024-03-24', '08:00:00', '10:59:00', 40),
-('A3R0V', 'Meeting', '2024-03-20', '10:00:00', '10:59:00', 40),
-('U9F5H', 'Group work', '2024-03-26', '10:00:00', '12:59:00', 40),
-('V2G6Y', 'Meeting', '2024-03-27', '13:00:00', '15:59:00', 40),
-('I1T3J', 'Meeting', '2024-03-28', '11:00:00', '14:59:00', 40),
-('H4K8O', 'Group work', '2024-03-29', '09:00:00', '11:59:00', 40);
+INSERT INTO `booking id description` (`Booking ID`, `Description`, `Date`, `Start Time`, `End Time`, `capacity`, `Comment`) VALUES
+('BD24S', 'Group work', '2024-03-20', '09:00:00', '12:59:00', 40, NULL),
+('8N3PZ', 'Study', '2024-03-18', '14:00:00', '16:59:00', 40, NULL),
+('R72BG', 'Meeting', '2024-03-19', '10:00:00', '13:59:00', 40, NULL),
+('K1ET2', 'Event', '2024-03-20', '09:00:00', '11:59:00', 40, NULL),
+('6D0A8', 'Group work', '2024-03-21', '13:00:00', '15:59:00', 40, NULL),
+('Z5WQ9', 'Study', '2024-03-20', '12:00:00', '13:59:00', 40, NULL),
+('P7L9C', 'Study', '2024-03-23', '11:00:00', '14:59:00', 40, NULL),
+('N4XI6', 'Study', '2024-03-24', '08:00:00', '10:59:00', 40, NULL),
+('A3R0V', 'Meeting', '2024-03-20', '10:00:00', '10:59:00', 40, NULL),
+('U9F5H', 'Group work', '2024-03-26', '10:00:00', '12:59:00', 40, NULL),
+('V2G6Y', 'Meeting', '2024-03-27', '13:00:00', '15:59:00', 40, NULL),
+('I1T3J', 'Meeting', '2024-03-28', '11:00:00', '14:59:00', 40, NULL),
+('H4K8O', 'Group work', '2024-03-29', '09:00:00', '11:59:00', 40, NULL),
+('UzYRO', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
+('hHYCP', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
+('7vP1g', 'zoom call', '2024-03-26', '14:00:00', '20:59:00', 5, 'This is a test');
 
 -- --------------------------------------------------------
 
@@ -73,16 +77,19 @@ CREATE TABLE `booking list` (
 
 INSERT INTO `booking list` (`Booking ID`, `User ID`, `Room ID`) VALUES
 ('6D0A8', 'zzy1a21@soton.ac.uk', '3R011'),
+('7vP1g', 'ap1a21@soton.ac.uk', '3R006'),
 ('8N3PZ', 'ap1a21@soton.ac.uk', '3R009'),
 ('A3R0V', 'jyi1n21@soton.ac.uk', '3R014'),
 ('BD24S', 'ap1a21@soton.ac.uk', '3R006'),
 ('H4K8O', 'cht1c22@soton.ac.uk', '3R018'),
+('hHYCP', 'ap1a21@soton.ac.uk', '3R022'),
 ('I1T3J', 'cht1c22@soton.ac.uk', '3R017'),
 ('K1ET2', 'zzy1a21@soton.ac.uk', '3R009'),
 ('N4XI6', 'jyi1n21@soton.ac.uk', '3R006'),
 ('P7L9C', 'psbs1a21@soton.ac.uk', '3R012'),
 ('R72BG', 'ap1a21@soton.ac.uk', '3R009'),
 ('U9F5H', 'jyi1n21@soton.ac.uk', '3R015'),
+('UzYRO', 'ap1a21@soton.ac.uk', '3R006'),
 ('V2G6Y', 'jyi1n21@soton.ac.uk', '3R016'),
 ('Z5WQ9', 'psbs1a21@soton.ac.uk', '3R011');
 
@@ -103,10 +110,7 @@ CREATE TABLE `booking request` (
 --
 
 INSERT INTO `booking request` (`Request ID`, `User ID`, `Room ID`) VALUES
-('bGhKv', 'ap1a21@soton.ac.uk', '3R006'),
-('plmgM', 'ap1a21@soton.ac.uk', '3R022'),
-('pMFqv', 'ap1a21@soton.ac.uk', '3R006'),
-('Vykzh', 'zzy1a21@soton.ac.uk', '3R022');
+('1XUrT', 'ap1a21@soton.ac.uk', '3R023');
 
 -- --------------------------------------------------------
 
@@ -128,10 +132,7 @@ CREATE TABLE `booking request description` (
 --
 
 INSERT INTO `booking request description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`, `capacity`) VALUES
-('plmgM', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15),
-('Vykzh', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15),
-('bGhKv', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15),
-('pMFqv', 'zoom call', '2024-03-26', '14:00:00', '20:59:00', 5);
+('1XUrT', 'Study', '2024-05-13', '15:00:00', '15:59:00', 15);
 
 -- --------------------------------------------------------
 
