@@ -58,9 +58,17 @@
 
 // export default FloorPlan;
 
-import React from "react";
+import React, { useEffect } from "react";
 
-const SecondFloor = () => {
+
+
+const SecondFloor = ({fetchedData}: {fetchedData : any}) => {
+
+
+  console.log("This is from floorplan")
+  console.log(fetchedData);
+  
+
   return(
     <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
       <div className="flex flex-row h-[130px]">
@@ -525,9 +533,9 @@ const SecondLeftWing = () => {
   )
 }
 
-const FloorPlan = () => {
+const FloorPlan = ({fetchedData}: {fetchedData : any}) => {
   return (
-    SecondFloor()
+    SecondFloor( fetchedData = {fetchedData})
     // ThirdFloor()
     //SecondLeftWing()
   );

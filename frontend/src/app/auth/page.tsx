@@ -75,7 +75,7 @@ const Authentication = () => {
       console.error("Error:", error);
     }
   };
-
+  
   //Resend OTP for user
   const handleResendOTP = async () => {
     setDisableResend(true);

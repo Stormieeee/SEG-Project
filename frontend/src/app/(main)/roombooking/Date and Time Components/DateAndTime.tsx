@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import {
   FORM_CONTAINER,
   FormHeader,
@@ -9,63 +9,20 @@ import {
 } from "../ComponentFormat";
 
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg"
-import { User, AvailableItem } from "../../../types/types";
+import { User} from "../../../types/types";
 
 interface Option {
   value: number;
   label: string;
 }
 
-const DateTime = () => {
-  const currUser: User = {
-    user_id: sessionStorage.getItem("userEmail"),
-  };
-  const [availData, setAvailData] = useState<AvailableItem[]>([]);
+const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime} : any) => {
   const [date, setDate] = useState("");
   const [startOptions, setStartOptions] = useState<Option[]>([]);
   const [endOptions, setEndOptions] = useState<Option[]>([]);
   const [startValue, setStartValue] = useState<number>(9); // Initialize with 9am
   const [endValue, setEndValue] = useState<number>(23);
   const [disabled, setDisabled] = useState(false);
-
-  const handleCheckAvailability = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-
-    // Check if OTP is correct
-    try {
-      const response = await fetch(
-        "http://localhost:8000/check_room_availability/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userID: currUser.user_id,
-            capacity: 40,
-            sec: "3R",
-            date: date,
-            start_time: startValue,
-            end_time: adjustTime(endValue),
-          }),
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setAvailData(data);
-        console.log("response ok");
-        console.log(data);
-      } else {
-        // OTP verification failed
-        console.log("Check Availability Failed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   useEffect(() => {
     const currentTime = new Date().getHours();
@@ -99,13 +56,13 @@ const DateTime = () => {
 
     return () => clearInterval(interval);
   }, []);
+  
 
   //convert time from HH to HH:MM form in string
   const formatHour = (value: number): string => {
     // Pad single-digit hours with leading zero and return as HH:00
     return value.toString().padStart(2, "0") + ":00";
   };
-
   //Change Date
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value; // Assuming the input type is "date" and value is in "YYYY-MM-DD" format
@@ -144,7 +101,7 @@ const DateTime = () => {
   //Update Start time value
   const handleStartChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
-    setStartValue(newValue);
+    onSelectStartTime(newValue);
 
     if (endValue < newValue) {
       setEndValue(newValue);
@@ -184,7 +141,7 @@ const DateTime = () => {
   //Update End time Value
   const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
-    setEndValue(newValue);
+    onSelectEndTime(newValue);
   };
 
   return (
@@ -197,7 +154,7 @@ const DateTime = () => {
             imgPath={datetimeLogo}
             imgAlt="Date Time Logo"
           />
-          <form onSubmit={handleCheckAvailability} className="ml-auto">
+          <form onSubmit={fetchData} className="ml-auto">
             <button
               className="bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm  my-2 items-center justify-center flex p-2 rounded-md"
               type="submit"
