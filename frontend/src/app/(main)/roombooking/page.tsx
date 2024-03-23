@@ -90,9 +90,7 @@ export default function RoomBooking() {
 
   const handleSelectEndTime = (value: any) =>{ 
     setEndValue(parseInt(value));
-  }
-
-  
+  }  
  
   return (
     <div className="flex flex-row">
