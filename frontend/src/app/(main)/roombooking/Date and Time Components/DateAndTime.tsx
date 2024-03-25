@@ -102,6 +102,7 @@ const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime} : any) => {
   const handleStartChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
     onSelectStartTime(newValue);
+    setStartValue(newValue);  // Added here *
 
     if (endValue < newValue) {
       setEndValue(newValue);
@@ -142,6 +143,7 @@ const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime} : any) => {
   const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
     onSelectEndTime(newValue);
+    setEndValue(newValue); // Added here *
   };
 
   return (
