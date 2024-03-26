@@ -29,7 +29,7 @@ app.add_middleware(
 # Define database connection settings
 MYSQL_CONFIG = {
     "host": "127.0.0.1",
-    "port": 3306,
+    "port": 8111,
     "user": "root",
     "password": "",
     "database": "rbms"

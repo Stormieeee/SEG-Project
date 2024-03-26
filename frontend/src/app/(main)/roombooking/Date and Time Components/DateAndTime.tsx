@@ -16,7 +16,7 @@ interface Option {
   label: string;
 }
 
-const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime} : any) => {
+const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime, onSetDate} : any) => {
   const [date, setDate] = useState("");
   const [startOptions, setStartOptions] = useState<Option[]>([]);
   const [endOptions, setEndOptions] = useState<Option[]>([]);
@@ -96,6 +96,7 @@ const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime} : any) => {
     }
 
     setDate(selectedDate);
+    onSetDate(selectedDate);
   };
 
   //Update Start time value

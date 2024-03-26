@@ -7,18 +7,21 @@ import FloorPlan from "./Floorplan Components/FloorPlan";
 import RoomSpecifics from "./RoomSpecificsComponents/RoomSpecifics";
 import RoomStatusKey from "./RoomStatusComponents/StatusComponents";
 
+const getCurrentDate = (): string => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed, so add 1
+  const day = currentDate.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export default function RoomBooking() {
   const [fetchedData, setFetchedData] = useState(null);
   const [endValue, setEndValue] = useState<number>(new Date().getHours()+1);
-  const [startValue, setStartValue] = useState<number>(9); 
+  const [startValue, setStartValue] = useState<number>(new Date().getHours()); 
+  const[date, setDate] = useState(getCurrentDate())
 
-  const getCurrentDate = (): string => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed, so add 1
-    const day = currentDate.getDate().toString().padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
+  
   const convertHourToHHMM = (hour: number): [number, number] => {
     const minute = 0; // Since we're converting from HH to HH:MM, minute will be 0
     return [hour, minute];
@@ -44,10 +47,9 @@ export default function RoomBooking() {
     const formattedTime = `${adjustedHour.toString().padStart(2, "0")}:${adjustedMinute.toString().padStart(2, "0")}`;
     return formattedTime;
   };
+
+
   const fetchData = async () => {
-   var currDate = getCurrentDate()
-   var currStartTime = formatHour(new Date().getHours())
-   var currEndTime = adjustTime(endValue)
     // Check if OTP is correct
     try {
       const response = await fetch(
@@ -61,16 +63,16 @@ export default function RoomBooking() {
             userID: sessionStorage.getItem("userEmail"),
             capacity: 40,
             sec: "3R",
-            date: currDate,
-            start_time: currStartTime,
-            end_time: currEndTime,
+            date: date,
+            start_time: formatHour(startValue),
+            end_time: adjustTime(endValue),
           }),
         }
       );
       if (response.ok) {
         const data = await response.json();
         setFetchedData(data);
-        console.log(currDate)
+        console.log("fetched Data from page.tsx")
       } else {
         // OTP verification failed
         console.log("Check Availability Failed");
@@ -96,7 +98,7 @@ export default function RoomBooking() {
     <div className="flex flex-row">
       <div className="w-1/2 flex flex-col h-full">
         <div className="h-1/2 p-1 mt-[10px] ml-[15px]">
-          <DateTime fetchData={fetchData} onSelectStartTime ={handleSelectStartTime} onSelectEndTime = {handleSelectEndTime}/>
+          <DateTime fetchData={fetchData} onSelectStartTime ={handleSelectStartTime} onSelectEndTime = {handleSelectEndTime} setDate = {setDate}/>
         </div>
         <div className="h-full p-1 mt-[10px] ml-[15px]">
           <RoomSpecifics />
