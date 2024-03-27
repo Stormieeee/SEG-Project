@@ -1,14 +1,19 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
-("use client");
-
 import React, { useEffect, useState } from "react";
 import DateTime from "./Date and Time Components/DateAndTime";
 import Description from "./DescriptionComponents/Description";
 import FloorPlan from "./Floorplan Components/FloorPlan";
 import RoomSpecifics from "./RoomSpecificsComponents/RoomSpecifics";
 import RoomStatusKey from "./RoomStatusComponents/StatusComponents";
+import { getDataFromServer } from "./utils/utils";
+
+const getCurrentDate = (): string => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed, so add 1
+  const day = currentDate.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 export default function RoomBooking() {
   const [fetchedData, setFetchedData] = useState(null);

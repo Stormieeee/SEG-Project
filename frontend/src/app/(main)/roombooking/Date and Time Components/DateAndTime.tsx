@@ -33,31 +33,31 @@ const DateTime = ({
     const currentTime = new Date().getHours();
     setStartValue(currentTime);
 
-    //   const generateOptions = () => {
-    //     const availableOptions = [];
+    const generateOptions = () => {
+      const availableOptions = [];
 
-    //     // Generate options starting from the current local time
-    //     for (let i = currentTime; i <= 23; i++) {
-    //       availableOptions.push({ value: i, label: `${i}:00` });
-    //     }
+      // Generate options starting from the current local time
+      for (let i = currentTime; i <= 23; i++) {
+        availableOptions.push({ value: i, label: `${i}:00` });
+      }
 
-    //     setStartOptions(availableOptions);
+      setStartOptions(availableOptions);
 
-    //     // Adjust the end time options based on the new start time
-    //     const initialEndOptions = availableOptions.filter(
-    //       (option) => option.value > currentTime
-    //     );
-    //     setEndOptions(availableOptions.slice(1));
+      // Adjust the end time options based on the new start time
+      const initialEndOptions = availableOptions.filter(
+        (option) => option.value > currentTime
+      );
+      setEndOptions(availableOptions.slice(1));
 
-    //     // Check if current time is outside the allowed range
-    //     if (currentTime < 9 || currentTime > 23) {
-    //       setDisabled(true);
-    //     }
-    //   };
+      // Check if current time is outside the allowed range
+      if (currentTime < 9 || currentTime > 23) {
+        setDisabled(true);
+      }
+    };
 
-    //   generateOptions();
+    generateOptions();
 
-    //   const interval = setInterval(generateOptions, 60000);
+    const interval = setInterval(generateOptions, 60000);
 
     return () => clearInterval(interval);
   }, []);

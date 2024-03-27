@@ -1,7 +1,10 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-const ResetButton = () => {
+interface ResetButtonProps {
+  setShowResetPassword: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const ResetButton = ({ setShowResetPassword }: ResetButtonProps) => {
   const router = useRouter();
   const handleReset = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
