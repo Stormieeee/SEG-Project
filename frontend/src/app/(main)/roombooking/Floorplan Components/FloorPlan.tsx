@@ -239,7 +239,14 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
   );
 };
 
-const ThirdFloor = () => {
+const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
+  const fetchData = fetchedData.fetchedData.available;
+  console.log(fetchData);
+  const colorMap = Object.fromEntries(fetchData);
+
+  //takes in hexcode and convert into lighter shade for background
+  function lighterShade(color: string) {}
+
   return (
     <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-row">
       <div className="w-10/100 flex flex-col">
@@ -314,7 +321,18 @@ const ThirdFloor = () => {
 
           <div className="w-1/5 flex flex-col">
             <div className="h-66/100 bg-black-400 border-2"></div>
-            <button className="h-34/100 bg-blue-400 border-2 mt-auto">
+            <button
+              key={"3R026"}
+              className={`h-34/100 border-2 mt-auto rounded-md ${
+                colorMap["3R026"] === "green"
+                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                  : colorMap["3R026"] === "red"
+                    ? "bg-red-50 border border-red-400"
+                    : colorMap["3R026"] === "yellow"
+                      ? "bg-yellow-50 border border-yellow-400"
+                      : "bg-black-50"
+              }`}
+            >
               3R026
             </button>
           </div>
@@ -324,9 +342,45 @@ const ThirdFloor = () => {
           <div className="w-3/100"></div>
 
           <div className="w-13/100 flex flex-col">
-            <button className="h-47/100 bg-blue-400 border-2">3R013</button>
-            <button className="h-24/100 bg-blue-400 border-2">3R011</button>
-            <button className="h-24/100 bg-blue-400 border-2">3R009</button>
+            <button
+              className={`h-47/100 rounded-md ${
+                colorMap["3R013"] === "green"
+                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                  : colorMap["3R013"] === "red"
+                    ? "bg-red-50 border border-red-400"
+                    : colorMap["3R013"] === "yellow"
+                      ? "bg-yellow-50 border border-yellow-400"
+                      : "bg-black-50"
+              }`}
+            >
+              3R013
+            </button>
+            <button
+              className={`h-24/100 rounded-md ${
+                colorMap["3R011"] === "green"
+                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                  : colorMap["3R011"] === "red"
+                    ? "bg-red-50 border border-red-400"
+                    : colorMap["3R011"] === "yellow"
+                      ? "bg-yellow-50 border border-yellow-400"
+                      : "bg-black-50"
+              }`}
+            >
+              3R011
+            </button>
+            <button
+              className={`h-24/100 rounded-md ${
+                colorMap["3R009"] === "green"
+                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                  : colorMap["3R009"] === "red"
+                    ? "bg-red-50 border border-red-400"
+                    : colorMap["3R009"] === "yellow"
+                      ? "bg-yellow-50 border border-yellow-400"
+                      : "bg-black-50"
+              }`}
+            >
+              3R009
+            </button>
             <div className="5/100"></div>
           </div>
 
@@ -336,13 +390,43 @@ const ThirdFloor = () => {
             <div className="h-70/100 flex flex-row">
               <div className="w-53/100 flex flex-row">
                 <div className="w-22/100 flex flex-col">
-                  <button className="h-1/3 bg-blue-400 border-2 text-sm">
+                  <button
+                    className={`h-1/3 text-sm rounded-md ${
+                      colorMap["3R002"] === "green"
+                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                        : colorMap["3R002"] === "red"
+                          ? "bg-red-50 border border-red-400"
+                          : colorMap["3R002"] === "yellow"
+                            ? "bg-yellow-50 border border-yellow-400"
+                            : "bg-black-50"
+                    }`}
+                  >
                     3R002
                   </button>
-                  <button className="h-1/3 bg-blue-400 border-2 text-sm">
+                  <button
+                    className={`h-1/3 text-sm rounded-md ${
+                      colorMap["3R003"] === "green"
+                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                        : colorMap["3R003"] === "red"
+                          ? "bg-red-50 border border-red-400"
+                          : colorMap["3R003"] === "yellow"
+                            ? "bg-yellow-50 border border-yellow-400"
+                            : "bg-black-50"
+                    }`}
+                  >
                     3R003
                   </button>
-                  <button className="h-1/3 bg-blue-400 border-2 text-sm">
+                  <button
+                    className={`h-1/3 text-sm rounded-md ${
+                      colorMap["3R004"] === "green"
+                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                        : colorMap["3R004"] === "red"
+                          ? "bg-red-50 border border-red-400"
+                          : colorMap["3R004"] === "yellow"
+                            ? "bg-yellow-50 border border-yellow-400"
+                            : "bg-black-50"
+                    }`}
+                  >
                     3R004
                   </button>
                 </div>
@@ -360,7 +444,19 @@ const ThirdFloor = () => {
                 </div>
                 <div className="w-27/100 flex flex-col">
                   <div className="h-1/3"></div>
-                  <button className="h-2/3 bg-blue-400 border-2">3R032</button>
+                  <button
+                    className={`h-2/3 rounded-md ${
+                      colorMap["3R032"] === "green"
+                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                        : colorMap["3R032"] === "red"
+                          ? "bg-red-50 border border-red-400"
+                          : colorMap["3R032"] === "yellow"
+                            ? "bg-yellow-50 border border-yellow-400"
+                            : "bg-black-50"
+                    }`}
+                  >
+                    3R032
+                  </button>
                 </div>
               </div>
 
@@ -369,30 +465,98 @@ const ThirdFloor = () => {
               <div className="w-29/100 flex flex-col">
                 <div className="h-1/3"></div>
                 <div className="h-1/3 flex flex-row">
-                  <button className="w-36/100 bg-blue-400 border-2">
+                  <button
+                    className={`w-36/100 rounded-md ${
+                      colorMap["3R031"] === "green"
+                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                        : colorMap["3R031"] === "red"
+                          ? "bg-red-50 border border-red-400"
+                          : colorMap["3R031"] === "yellow"
+                            ? "bg-yellow-50 border border-yellow-400"
+                            : "bg-black-50"
+                    }`}
+                  >
                     <span className="block transform -rotate-90 text-sm origin-center">
                       3R031
                     </span>
                   </button>
-                  <button className="w-64/100 bg-blue-400 border-2">
+                  <button
+                    className={`w-64/100 rounded-md ${
+                      colorMap["3R030"] === "green"
+                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                        : colorMap["3R030"] === "red"
+                          ? "bg-red-50 border border-red-400"
+                          : colorMap["3R030"] === "yellow"
+                            ? "bg-yellow-50 border border-yellow-400"
+                            : "bg-black-50"
+                    }`}
+                  >
                     3R030
                   </button>
                 </div>
-                <button className="h-1/3 bg-blue-400 border-2">3R033</button>
+                <button
+                  className={`h-1/3 rounded-md ${
+                    colorMap["3R033"] === "green"
+                      ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                      : colorMap["3R033"] === "red"
+                        ? "bg-red-50 border border-red-400"
+                        : colorMap["3R033"] === "yellow"
+                          ? "bg-yellow-50 border border-yellow-400"
+                          : "bg-black-50"
+                  }`}
+                >
+                  3R033
+                </button>
               </div>
 
               <div className="w-4/100"></div>
 
-              <div className="w-10/100 bg-black-400"></div>
+              <div className="w-10/100 bg-black-50"></div>
             </div>
 
             <div className="h-25/100 flex flex-row">
-              <button className="w-20/100 bg-blue-400 border-2">3R005</button>
+              <button
+                className={`w-20/100 rounded-md ${
+                  colorMap["3R009"] === "green"
+                    ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                    : colorMap["3R009"] === "red"
+                      ? "bg-red-50 border border-red-400"
+                      : colorMap["3R009"] === "yellow"
+                        ? "bg-yellow-50 border border-yellow-400"
+                        : "bg-black-50"
+                }`}
+              >
+                3R005
+              </button>
               <div className="w-37/100"></div>
-              <button className="w-29/100 bg-blue-400 border-2">3R034</button>
+              <button
+                className={`w-29/100 rounded-md ${
+                  colorMap["3R034"] === "green"
+                    ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                    : colorMap["3R034"] === "red"
+                      ? "bg-red-50 border border-red-400"
+                      : colorMap["3R034"] === "yellow"
+                        ? "bg-yellow-50 border border-yellow-400"
+                        : "bg-black-50"
+                } `}
+              >
+                3R034
+              </button>
               <div className="w-14/100 flex flex-col">
                 <div className="h-28/100"></div>
-                <button className="h-72/100 bg-blue-400 border-2">3R035</button>
+                <button
+                  className={`h-72/100 rounded-md ${
+                    colorMap["3R035"] === "green"
+                      ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                      : colorMap["3R035"] === "red"
+                        ? "bg-red-50 border border-red-400"
+                        : colorMap["3R035"] === "yellow"
+                          ? "bg-yellow-50 border border-yellow-400"
+                          : "bg-black-50"
+                  }`}
+                >
+                  3R035
+                </button>
               </div>
             </div>
 
@@ -549,9 +713,9 @@ const SecondLeftWing = () => {
 };
 
 const FloorPlan = ({ fetchedData }: { fetchedData: any }) => {
-  return SecondFloor((fetchedData = { fetchedData }));
-  // ThirdFloor()
-  //SecondLeftWing()
+  // return SecondFloor((fetchedData = { fetchedData }));
+  return ThirdFloor((fetchedData = { fetchedData }));
+  //return SecondLeftWing()
 };
 
 export default FloorPlan;

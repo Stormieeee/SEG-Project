@@ -68,10 +68,8 @@ export default function RoomBooking() {
     fetchData(date, startValue, endValue); // Fetch data when component mounts
   }, []);
   useEffect(() => {
-    console.log(startValue);
   }, [startValue]);
-  useEffect(() => {
-    console.log(endValue);
+  useEffect(() => { 
   }, [endValue]);
 
   const handleSelectStartTime = (value: any) => {
