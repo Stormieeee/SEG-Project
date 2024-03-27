@@ -56,7 +56,7 @@
 
 // export default FloorPlan;
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
   console.log("This is from floorplan");
@@ -244,8 +244,19 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
   console.log(fetchData);
   const colorMap = Object.fromEntries(fetchData);
 
-  //takes in hexcode and convert into lighter shade for background
-  function lighterShade(color: string) {}
+  // State variable to track the active button
+  const [activeButton, setActiveButton] = useState<string | null>(null);
+
+  // Function to handle button click
+  const handleButtonClick = (buttonKey: string) => {
+    setActiveButton(buttonKey === activeButton ? null : buttonKey);
+    console.log(buttonKey)
+  };
+
+  const activeButtonStyle = (color: string) => ({
+    backgroundColor: color,
+  });
+
 
   return (
     <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-row">
@@ -320,18 +331,19 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
           </div>
 
           <div className="w-1/5 flex flex-col">
-            <div className="h-66/100 bg-black-400 border-2"></div>
+            <div className="h-66/100 bg-black-100 rounded-md"></div>
             <button
               key={"3R026"}
+              onClick={()=> handleButtonClick("3R026")}
               className={`h-34/100 border-2 mt-auto rounded-md ${
                 colorMap["3R026"] === "green"
-                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
+                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 active:bg-primary-300 active:border-primary-600 focus:border-2 "
                   : colorMap["3R026"] === "red"
                     ? "bg-red-50 border border-red-400"
                     : colorMap["3R026"] === "yellow"
                       ? "bg-yellow-50 border border-yellow-400"
                       : "bg-black-50"
-              }`}
+              } ${activeButton === "3R026" ? activeButtonStyle(colorMap["3R026"]) : ""} `} 
             >
               3R026
             </button>
@@ -391,7 +403,7 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
               <div className="w-53/100 flex flex-row">
                 <div className="w-22/100 flex flex-col">
                   <button
-                    className={`h-1/3 text-sm rounded-md ${
+                    className={`h-1/3 text-xs rounded-md ${
                       colorMap["3R002"] === "green"
                         ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
                         : colorMap["3R002"] === "red"
@@ -404,7 +416,7 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
                     3R002
                   </button>
                   <button
-                    className={`h-1/3 text-sm rounded-md ${
+                    className={`h-1/3 text-xs rounded-md ${
                       colorMap["3R003"] === "green"
                         ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
                         : colorMap["3R003"] === "red"
@@ -417,7 +429,7 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
                     3R003
                   </button>
                   <button
-                    className={`h-1/3 text-sm rounded-md ${
+                    className={`h-1/3 text-xs rounded-md ${
                       colorMap["3R004"] === "green"
                         ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
                         : colorMap["3R004"] === "red"
@@ -430,22 +442,22 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
                     3R004
                   </button>
                 </div>
-                <div className="w-51/100 flex flex-col">
-                  <div className="h-42/100 flex flex-row">
-                    <div className="w-19/100 bg-black-400"></div>
-                    <div className="w-46/100 bg-black-200"></div>
-                    <div className="w-19/100 bg-black-400"></div>
+                <div className="w-51/100 flex flex-col mx-1">
+                  <div className="h-42/100 flex flex-row ">
+                    <div className="w-19/100 bg-black-100 rounded-tl-md"></div>
+                    <div className="w-46/100 bg-black-100"></div>
+                    <div className="w-19/100 bg-black-100 rounded-tr-md "></div>
                     <div className="w-16/100 flex flex-col">
                       <div className="h-76/100"></div>
-                      <div className="h-24/100 bg-black-400"></div>
+                      <div className="h-24/100 bg-black-100 rounded-tr-md"></div>
                     </div>
                   </div>
-                  <div className="h-56/100 bg-black-400"></div>
+                  <div className="h-56/100 bg-black-100 rounded-bl-md rounded-br-md"></div>
                 </div>
                 <div className="w-27/100 flex flex-col">
                   <div className="h-1/3"></div>
                   <button
-                    className={`h-2/3 rounded-md ${
+                    className={`h-2/3 rounded-md text-sm ${
                       colorMap["3R032"] === "green"
                         ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
                         : colorMap["3R032"] === "red"
