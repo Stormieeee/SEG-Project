@@ -29,7 +29,7 @@ app.add_middleware(
 # Define database connection settings
 MYSQL_CONFIG = {
     "host": "127.0.0.1",
-    "port": 8111,
+    "port": 3307,
     "user": "root",
     "password": "",
     "database": "rbms"
@@ -89,13 +89,7 @@ def user_login_check(db_connection, cursor, userID=None, password=None):
     query = "SELECT COUNT(*) FROM `user login` WHERE `User ID` = %s AND `Password` = %s"
     cursor.execute(query, (userID, password))
     if cursor.fetchone()[0] > 0:
-        # Update OTP key if login is successful
-        new_otp_key = generate_random_integer() 
-        query = "UPDATE `user login` SET `OTPKey` = %s WHERE `User ID` = %s"
-        cursor.execute(query, (new_otp_key, userID))
-        otpMessage = "You're OTP for login is as follows: " + str(new_otp_key)
-        send_email("segproject32@outlook.com", userID, "aquastorm797", 'Room Booking System OTP', otpMessage, 'smtp-mail.outlook.com', 587)
-        db_connection.commit()  # Commit the transaction
+        send_otp(db_connection, cursor, userID)
         return True
     else:
         return False
@@ -107,6 +101,30 @@ def user_login(login: Login, db_connection: mysql.connector.connection.MySQLConn
         return {"message": "Login successful"}
     else:
         raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
+
+class Otp(BaseModel):
+    user_id: str
+
+def send_otp(db_connection, cursor, userID):
+    # Update OTP key if login is successful
+    new_otp_key = generate_random_integer()
+    query = "UPDATE `user login` SET `OTPKey` = %s WHERE `User ID` = %s"
+    cursor.execute(query, (new_otp_key, userID))
+    otpMessage = "You're OTP for login is as follows: " + str(new_otp_key)
+    send_email("segproject32@outlook.com", userID, "aquastorm797", 'Room Booking System OTP', otpMessage, 'smtp-mail.outlook.com', 587)
+    db_connection.commit()  # Commit the transaction
+    return True
+
+@app.post("/SendOTP/")
+def otp_control(otp: Otp, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    if send_otp(db_connection, cursor, userID=otp.user_id):
+        return {"message": "OTP sent"}
+    else:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
 
 ########################################### AUTHENTICATION - WORKING
 
@@ -459,7 +477,7 @@ def get_booking_r(db_connection, cursor, userID):
 
 
 
-@app.post("/get_booking_requests/")
+@app.post("/get_booking_requests_accepter/")
 def get_booking_requests(username: userClass, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
     cursor = db_connection.cursor()
     check =  get_booking_r(
@@ -510,16 +528,15 @@ def get_request_details(db_connection, cursor, bookingID):
     return role
 
 
-@app.post("/get_request_details/")
+@app.post("/get_request_details_accepter/")
 def get_request_dets(request: RequestDetails, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
     cursor = db_connection.cursor()
     details = get_request_details(db_connection, cursor, bookingID = request.bookingID)
 
     return {"user_id": details[0], "user_role": details[1], "request_capacity": details[2], "room_capacity": details[3], "description": details[4], }
-            
 
 
-########################################### TO BE COMPLETED
+########################################### TO BE tested
 
 
 class HandleBooking(BaseModel): 
@@ -527,8 +544,41 @@ class HandleBooking(BaseModel):
     bookingID: str
     comment: str
 
+def check_collision(db_connection, cursor, requestID):
+    query = """
+        SELECT br.`Room ID`, brd.`Date`, brd.`Start Time`, brd.`End Time`
+        FROM `booking request` AS br
+        JOIN `booking request description` AS brd ON br.`Request ID` = brd.`Request ID`
+        WHERE br.`Request ID` = %s
+    """
+    cursor.execute (query, (requestID,))
+    info = cursor.fetchone()
+
+    room_id = info[0]
+    date = info[1]
+    start_time = info[2]
+    end_time = info[3]
+
+    #Get the availabilities of the different rooms (true = avaialable, false = not available)
+    query1 = "SELECT COUNT(*) FROM `Booking ID description` AS BID " \
+             "INNER JOIN `Booking List` AS BL ON BID.`Booking ID` = BL.`Booking ID` " \
+             "WHERE BL.`Room ID` = %s AND BID.`Date` = %s " \
+             "AND ((BID.`Start Time` BETWEEN %s AND %s) OR (BID.`End Time` BETWEEN %s AND %s))"
+
+    cursor.execute(query1, (room_id, date, start_time, end_time, start_time, end_time))
+    collision_count = cursor.fetchone()[0]
+    if collision_count > 0:
+                return False
+
+    # If no collision found, return True
+    return True
+
+
 def accept_booking(db_connection, cursor, requestID, comment):
-    
+
+    if check_collision(db_connection, cursor, requestID) == False:
+        return False
+
     #Has to create a new bookingRequestID which is unique.
     while True:
         # Generate a new bookingRequestID
@@ -647,15 +697,75 @@ def handle_booking(handling: HandleBooking, db_connection: mysql.connector.conne
     action = handling.action
 
     if action == "approve":
-        accept_booking(db_connection, cursor, handling.bookingID, handling.comment)
-        print ("approve successful")
+        if accept_booking(db_connection, cursor, handling.bookingID, handling.comment):
+            return {"Approval Complete"}
+        else:
+            return {"Collision"}
     else:
         decline_booking(db_connection, cursor, handling.bookingID, handling.comment)
-        print ("decline successful")   
-
-    return {"successful"}
+        return {"Decline complete"}
 
 
+
+
+
+####################################TO BE COMPLETED
+
+#Uses userClass
+
+##def get_booking_r(db_connection, cursor, userID):
+##    # Assuming get_profile_details is imported or defined in the same module
+##    profile = get_profile_details(db_connection, cursor, userID)
+##    role = profile[1]
+##
+##    if role == "Property Manager":
+##        sql_query = """
+##            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
+##                   `booking request description`.`Date`,
+##                   `booking request description`.`Start Time`,
+##                   `booking request description`.`End Time`
+##            FROM `booking request`
+##            JOIN `booking request description`
+##                ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+##            WHERE `booking request description`.`End Time` > '17:00:00'
+##        """
+##    else:
+##        sql_query = """
+##            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
+##                   `booking request description`.`Date`,
+##                   `booking request description`.`Start Time`,
+##                   `booking request description`.`End Time`
+##            FROM `booking request`
+##            JOIN `booking request description`
+##                ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+##            WHERE `booking request description`.`End Time` < '17:00:00'
+##        """
+##
+##    cursor.execute(sql_query)
+##
+##    # Fetch all rows of the result
+##    result = cursor.fetchall()
+##     # Convert start and end times to formatted time strings
+##    formatted_result = []
+##    for row in result:
+##        formatted_row = list(row)
+##        formatted_row[3] = str(row[3])
+##        formatted_row[4] = str(row[4])
+##        formatted_result.append(formatted_row)
+##
+##    return formatted_result
+##
+##
+##
+##@app.post("/get_booking_requests_users/")
+##def get_booking_requests_users(username: userClass, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+##    cursor = db_connection.cursor()
+##    check =  get_booking_r(
+##            db_connection,
+##            cursor,
+##            userID=username.UserID
+##            )
+##    return check
 
 #Alt 3 for comment, Alt 4 for uncomment
 
