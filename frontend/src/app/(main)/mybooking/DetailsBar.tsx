@@ -40,31 +40,37 @@ const DetailsBar = ({
         : "Are you sure you want to cancel this booking request?"
     );
     if (confirmed) {
-      try {
-        const response = await fetch(
-          "https://your-api-endpoint/cancel_booking",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              booking_id: bookings[selectedRowIndex][0],
-            }),
-          }
-        );
+      //   try {
+      //     const response = await fetch(
+      //       "https://your-api-endpoint/cancel_booking",
+      //       {
+      //         method: "POST",
+      //         headers: {
+      //           "Content-Type": "application/json",
+      //         },
+      //         body: JSON.stringify({
+      //           booking_id: bookings[selectedRowIndex][0],
+      //         }),
+      //       }
+      //     );
 
-        if (response.ok) {
-          if (selectedRowIndex >= 0 && bookings) {
-            handleRemoveItem(selectedRowIndex);
-            if (selectedRowIndex === bookings.length - 1) {
-              setSelectedRowIndex(selectedRowIndex - 1);
-            }
-          }
+      //     if (response.ok) {
+      //       if (selectedRowIndex >= 0 && bookings) {
+      //         handleRemoveItem(selectedRowIndex);
+      //         if (selectedRowIndex === bookings.length - 1) {
+      //           setSelectedRowIndex(selectedRowIndex - 1);
+      //         }
+      //       }
+      //     }
+      //   } catch (error) {
+      //     console.error("Error cancel booking/booking request:", error);
+      //     throw error;
+      //   }
+      if (selectedRowIndex >= 0 && bookings) {
+        handleRemoveItem(selectedRowIndex);
+        if (selectedRowIndex === bookings.length - 1) {
+          setSelectedRowIndex(selectedRowIndex - 1);
         }
-      } catch (error) {
-        console.error("Error cancel booking/booking request:", error);
-        throw error;
       }
     }
   };

@@ -1,27 +1,21 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+("use client");
+
+import React, { useEffect, useState } from "react";
 import DateTime from "./Date and Time Components/DateAndTime";
 import Description from "./DescriptionComponents/Description";
 import FloorPlan from "./Floorplan Components/FloorPlan";
 import RoomSpecifics from "./RoomSpecificsComponents/RoomSpecifics";
 import RoomStatusKey from "./RoomStatusComponents/StatusComponents";
 
-const getCurrentDate = (): string => {
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-indexed, so add 1
-  const day = currentDate.getDate().toString().padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
-
 export default function RoomBooking() {
   const [fetchedData, setFetchedData] = useState(null);
-  const [endValue, setEndValue] = useState<number>(new Date().getHours()+1);
-  const [startValue, setStartValue] = useState<number>(new Date().getHours()); 
-  const[date, setDate] = useState(getCurrentDate())
+  const [endValue, setEndValue] = useState<number>(new Date().getHours() + 1);
+  const [startValue, setStartValue] = useState<number>(new Date().getHours());
+  const [date, setDate] = useState(getCurrentDate());
 
-  
   const convertHourToHHMM = (hour: number): [number, number] => {
     const minute = 0; // Since we're converting from HH to HH:MM, minute will be 0
     return [hour, minute];
@@ -48,57 +42,51 @@ export default function RoomBooking() {
     return formattedTime;
   };
 
-
-  const fetchData = async () => {
-    // Check if OTP is correct
+  const fetchData = async (
+    date: string,
+    startTime: number,
+    endTime: number
+  ) => {
     try {
-      const response = await fetch(
-        "http://localhost:8000/check_room_availability/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userID: sessionStorage.getItem("userEmail"),
-            capacity: 40,
-            sec: "3R",
-            date: date,
-            start_time: formatHour(startValue),
-            end_time: adjustTime(endValue),
-          }),
-        }
+      const data = await getDataFromServer(
+        date,
+        formatHour(startTime),
+        adjustTime(endTime)
       );
-      if (response.ok) {
-        const data = await response.json();
-        setFetchedData(data);
-        console.log("fetched Data from page.tsx")
-      } else {
-        // OTP verification failed
-        console.log("Check Availability Failed");
-      }
+      setFetchedData(data);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error fetching data:", error);
     }
   };
 
-  useEffect(() =>{
-    fetchData();
+  useEffect(() => {
+    fetchData(date, startValue, endValue); // Fetch data when component mounts
   }, []);
-  
-  const handleSelectStartTime = (value : any) =>{ 
-    setStartValue(parseInt(value));
-  }
+  useEffect(() => {
+    console.log(startValue);
+  }, [startValue]);
+  useEffect(() => {
+    console.log(endValue);
+  }, [endValue]);
 
-  const handleSelectEndTime = (value: any) =>{ 
+  const handleSelectStartTime = (value: any) => {
+    setStartValue(parseInt(value));
+  };
+
+  const handleSelectEndTime = (value: any) => {
     setEndValue(parseInt(value));
-  }  
- 
+  };
+
   return (
     <div className="flex flex-row">
       <div className="w-1/2 flex flex-col h-full">
         <div className="h-1/2 p-1 mt-[10px] ml-[15px]">
-          <DateTime fetchData={fetchData} onSelectStartTime ={handleSelectStartTime} onSelectEndTime = {handleSelectEndTime} setDate = {setDate}/>
+          <DateTime
+            fetchData={fetchData}
+            onSelectStartTime={handleSelectStartTime}
+            onSelectEndTime={handleSelectEndTime}
+            onSetDate={setDate}
+          />
         </div>
         <div className="h-full p-1 mt-[10px] ml-[15px]">
           <RoomSpecifics />
@@ -107,7 +95,7 @@ export default function RoomBooking() {
 
       <div className="w-1/2 flex flex-col">
         <div className="h-4/6 p-1 mt-[10px] ml-[5px]">
-          <FloorPlan fetchedData = {fetchedData} />
+          <FloorPlan fetchedData={fetchedData} />
         </div>
         <div className="h-2/6 flex">
           <div className="w-7/12 p-1 ml-[5px]">
@@ -121,3 +109,35 @@ export default function RoomBooking() {
     </div>
   );
 }
+
+// export async function getServerSideProps(context: any) {
+//   const { currentDate, startTime, endTime } = context.query;
+
+//   try {
+//     const fetchedData = await getDataFromServer(
+//       currentDate,
+//       parseInt(startTime),
+//       parseInt(endTime)
+//     );
+
+//     return {
+//       props: {
+//         fetchedData,
+//         currentDate,
+//         startTime,
+//         endTime,
+//       },
+//     };
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+
+//     return {
+//       props: {
+//         fetchedData: null,
+//         currentDate,
+//         startTime,
+//         endTime,
+//       },
+//     };
+//   }
+// }

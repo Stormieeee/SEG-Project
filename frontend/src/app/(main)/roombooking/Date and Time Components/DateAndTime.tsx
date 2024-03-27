@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FORM_CONTAINER,
   FormHeader,
@@ -8,15 +8,20 @@ import {
   WRAPPER,
 } from "../ComponentFormat";
 
-import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg"
-import { User} from "../../../types/types";
+import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
+import { User } from "../../../types/types";
 
 interface Option {
   value: number;
   label: string;
 }
 
-const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime, onSetDate} : any) => {
+const DateTime = ({
+  fetchData,
+  onSelectStartTime,
+  onSelectEndTime,
+  onSetDate,
+}: any) => {
   const [date, setDate] = useState("");
   const [startOptions, setStartOptions] = useState<Option[]>([]);
   const [endOptions, setEndOptions] = useState<Option[]>([]);
@@ -28,35 +33,34 @@ const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime, onSetDate} : 
     const currentTime = new Date().getHours();
     setStartValue(currentTime);
 
-    const generateOptions = () => {
-      const availableOptions = [];
+    //   const generateOptions = () => {
+    //     const availableOptions = [];
 
-      // Generate options starting from the current local time
-      for (let i = currentTime; i <= 23; i++) {
-        availableOptions.push({ value: i, label: `${i}:00` });
-      }
+    //     // Generate options starting from the current local time
+    //     for (let i = currentTime; i <= 23; i++) {
+    //       availableOptions.push({ value: i, label: `${i}:00` });
+    //     }
 
-      setStartOptions(availableOptions);
+    //     setStartOptions(availableOptions);
 
-      // Adjust the end time options based on the new start time
-      const initialEndOptions = availableOptions.filter(
-        (option) => option.value > currentTime
-      );
-      setEndOptions(availableOptions.slice(1));
+    //     // Adjust the end time options based on the new start time
+    //     const initialEndOptions = availableOptions.filter(
+    //       (option) => option.value > currentTime
+    //     );
+    //     setEndOptions(availableOptions.slice(1));
 
-      // Check if current time is outside the allowed range
-      if (currentTime < 9 || currentTime > 23) {
-        setDisabled(true);
-      }
-    };
+    //     // Check if current time is outside the allowed range
+    //     if (currentTime < 9 || currentTime > 23) {
+    //       setDisabled(true);
+    //     }
+    //   };
 
-    generateOptions();
+    //   generateOptions();
 
-    const interval = setInterval(generateOptions, 60000);
+    //   const interval = setInterval(generateOptions, 60000);
 
     return () => clearInterval(interval);
   }, []);
-  
 
   //convert time from HH to HH:MM form in string
   const formatHour = (value: number): string => {
@@ -103,7 +107,7 @@ const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime, onSetDate} : 
   const handleStartChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
     onSelectStartTime(newValue);
-    setStartValue(newValue);  // Added here *
+    setStartValue(newValue); // Added here *
 
     if (endValue < newValue) {
       setEndValue(newValue);
@@ -115,34 +119,11 @@ const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime, onSetDate} : 
     );
     setEndOptions(newEndOptions);
   };
-
-  //Convert HH to [HH, MM]
-  const convertHourToHHMM = (hour: number): [number, number] => {
-    const minute = 0; // Since we're converting from HH to HH:MM, minute will be 0
-    return [hour, minute];
-  };
-
-  //Minus 1 minute to [HH, MM]
-  const adjustTime = (hour: number): string => {
-    const [hours, minute] = convertHourToHHMM(hour);
-
-    // Convert hour and minute to minutes and subtract 1
-    let adjustedTime = hours * 60 + minute - 1;
-
-    // Ensure adjustedTime does not go below 0
-    if (adjustedTime < 0) {
-      adjustedTime = 0;
-    }
-
-    // Convert adjustedTime back to "HH:MM" format
-    const adjustedHour = Math.floor(adjustedTime / 60);
-    const adjustedMinute = adjustedTime % 60;
-    const formattedTime = `${adjustedHour.toString().padStart(2, "0")}:${adjustedMinute.toString().padStart(2, "0")}`;
-    return formattedTime;
-  };
   //Update End time Value
   const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
+    onSelectEndTime(newValue);
+    setEndValue(newValue); // Added here *
     onSelectEndTime(newValue);
     setEndValue(newValue); // Added here *
   };
@@ -157,7 +138,13 @@ const DateTime = ({fetchData, onSelectStartTime , onSelectEndTime, onSetDate} : 
             imgPath={datetimeLogo}
             imgAlt="Date Time Logo"
           />
-          <form onSubmit={fetchData} className="ml-auto">
+          <form
+            onSubmit={(event) => {
+              event.preventDefault(); // Prevent default form submission
+              fetchData(date, startValue, endValue); // Call fetchData when form is submitted
+            }}
+            className="ml-auto"
+          >
             <button
               className="bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm  my-2 items-center justify-center flex p-2 rounded-md"
               type="submit"

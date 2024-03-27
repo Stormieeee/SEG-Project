@@ -1,5 +1,5 @@
 import React from "react";
-import PasswordVisibilityButton from "../PasswordVisibilityButton";
+import PasswordVisibilityButton from "../Components/PasswordVisibilityButton";
 
 interface PasswordInputProps {
   password: string;

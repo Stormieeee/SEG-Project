@@ -1,33 +1,27 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-//Return Email from Session Storage
-export function getEmailFromSessionStorage(): string | null {
-  try {
-    // Check if session storage is supported
-    if (typeof sessionStorage !== "undefined") {
-      // Retrieve the email from session storage
-      const userEmail = sessionStorage.getItem("userEmail");
-      console.log("Email retrieved from session storage:", userEmail);
-      return userEmail;
-    } else {
-      console.error("Session storage is not supported in this browser.");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error retrieving email from session storage:", error);
-    return null;
-  }
-}
+import Image from "next/image";
+import getEmailFromSessionStorage from "../Components/CommonFunction";
 
 const Authentication = () => {
   const [otp, setOtp] = useState("");
   const [disableResend, setDisableResend] = useState(false);
   const [countdown, setCountdown] = useState(10); // Countdown in seconds
   const router = useRouter();
+  const [successfulDestination, setSuccessfulDestination] = useState("");
+  const [failedDestination, setFailedDestination] = useState("");
 
   //Timeout for user if opt is not inputted in time
+  useEffect(() => {
+    setSuccessfulDestination(
+      window.sessionStorage.getItem("successfulDestination") || ""
+    );
+    setFailedDestination(
+      window.sessionStorage.getItem("failedDestination") || ""
+    );
+  }, []);
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (disableResend && countdown > 0) {
@@ -56,11 +50,6 @@ const Authentication = () => {
           key: otp,
         }),
       });
-
-      const successfulDestination = sessionStorage.getItem(
-        "successfulDestination"
-      );
-      const failedDestination = sessionStorage.getItem("failedDestination");
 
       if (response.ok) {
         // OTP verification successful
@@ -111,7 +100,13 @@ const Authentication = () => {
         <div className="w-full bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <div className="flex items-center justify-center mb-4">
-              <img src="/Company-logo/Company Logo.svg" alt="Company Logo" />
+              <Image
+                src="/Company-logo/Company Logo.svg"
+                alt="Company Logo"
+                width={0}
+                height={0}
+                layout="responsive"
+              />
             </div>
             <div className="md:space-y-1">
               <div className="text-xl font-bold dark:text-slate-300">
@@ -152,7 +147,7 @@ const Authentication = () => {
                   {!disableResend ? (
                     <>
                       <span className="text-gray-500">
-                        Didn't receive the verification OTP?
+                        Didn{`'`}t receive the verification OTP?
                       </span>
                       <span
                         className="text-blue-400 cursor-pointer hover:text-blue-500 pl-1"

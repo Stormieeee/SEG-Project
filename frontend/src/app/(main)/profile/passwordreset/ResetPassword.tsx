@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import PasswordVisibilityButton from "@/app/PasswordVisibilityButton";
+import PasswordVisibilityButton from "@/app/Components/PasswordVisibilityButton";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");

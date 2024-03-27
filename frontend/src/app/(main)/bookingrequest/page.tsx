@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Sortbar from "./Sortbar";
 import RequestComponents from "./RequestComponents";
-import { getEmailFromSessionStorage } from "@/app/auth/page";
+import getEmailFromSessionStorage from "../../Components/CommonFunction";
 
 const BookingRequestPage = () => {
   const [requests, setRequests] = useState<string[][]>([]);

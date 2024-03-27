@@ -202,6 +202,7 @@ const Sidebar = () => {
             src={companylogo}
             alt="Company Logo"
             className="object-contain w-25 pt-[30px] px-[30px] pb-[10px] flex items-center"
+            width={25}
           />
         </Link>
         <div className="bg-white-600 mx-2.5 h-[1px] mb-16"></div>
@@ -215,7 +216,7 @@ const Sidebar = () => {
                 <Image
                   src={roomBookingDark}
                   alt="Room Booking Dark"
-                  className="mx-2 justify-center p-0.5 animate-vote duration-200"
+                  className="mx-2 w-10 justify-center p-0.5 animate-vote duration-200"
                 />
                 <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
                   Room Booking
@@ -226,9 +227,9 @@ const Sidebar = () => {
                 <Image
                   src={roomBookingLight}
                   alt="Room Booking Light"
-                  className="mx-2 justify-center p-0.5"
+                  className="mx-2 w-10 justify-center p-0.5"
                 />
-                <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
+                <span className="text-lg items-center text-stone-500 float-left font-normal font-Inter">
                   Room Booking
                 </span>
               </div>
@@ -243,7 +244,7 @@ const Sidebar = () => {
                 <Image
                   src={myBookingDark}
                   alt="My Booking Dark"
-                  className="mx-2 justify-center p-0.5"
+                  className="mx-2 w-10 justify-center p-0.5"
                 />
                 <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
                   My Booking
@@ -254,7 +255,7 @@ const Sidebar = () => {
                 <Image
                   src={myBookingLight}
                   alt="My Booking Light"
-                  className="mx-2 justify-center p-0.5"
+                  className="mx-2 w-10 justify-center p-0.5"
                 />
                 <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
                   My Booking
@@ -271,7 +272,7 @@ const Sidebar = () => {
                 <Image
                   src={myBookingDark}
                   alt="My Booking Dark"
-                  className="mx-2 justify-center p-0.5"
+                  className="mx-2 w-10 justify-center p-0.5"
                 />
                 <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
                   Booking Request
@@ -282,9 +283,9 @@ const Sidebar = () => {
                 <Image
                   src={myBookingLight}
                   alt="My Booking Light"
-                  className="mx-2 justify-center p-0.5"
+                  className="mx-2 w-10 justify-center p-0.5"
                 />
-                <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
+                <span className="text-lg items-center text-stone-500 float-left font-normal font-Inter">
                   Booking Request
                 </span>
               </div>
@@ -303,7 +304,7 @@ const Sidebar = () => {
                 <Image
                   src={profileDark}
                   alt="Profile Dark"
-                  className="mx-1 ml-2 justify-center p-0.5"
+                  className="mx-1 ml-2 w-10 justify-center p-0.5"
                 />
                 <span className=" text-lg items-center justify-center text-zinc-800 float-left font-normal font-Inter ">
                   Profile
@@ -314,7 +315,7 @@ const Sidebar = () => {
                 <Image
                   src={profileLight}
                   alt="Profile Light"
-                  className="mx-1 ml-2 justify-center p-0.5"
+                  className="mx-1 ml-2 w-10 justify-center p-0.5"
                 />
                 <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
                   Profile

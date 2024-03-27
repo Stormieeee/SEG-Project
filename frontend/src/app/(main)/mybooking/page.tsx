@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import BookingSwitcher from "./BookingSwitcher";
 import Sortbar from "./Sortbar";
 import BookingComponents from "./BookingComponents";
-import { getEmailFromSessionStorage } from "@/app/auth/page";
+import getEmailFromSessionStorage from "../../Components/CommonFunction";
 
 const MyBookingPage = () => {
   const [isCurrentBooking, setIsCurrentBooking] = useState<boolean>(true);
@@ -34,7 +34,17 @@ const MyBookingPage = () => {
   };
 
   useEffect(() => {
-    getBookings();
+    // getBookings();
+    setCurrentBookings([
+      ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
+      ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
+      ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
+    ]);
+    setPastBookings([
+      ["4", "Room 4", "2021-08-01", "14:00", "16:00", "Approved"],
+      ["5", "Room 5", "2021-08-02", "14:00", "16:00", "Pending"],
+      ["6", "Room 6", "2021-08-03", "14:00", "16:00", "Rejected"],
+    ]);
   }, []);
 
   return (

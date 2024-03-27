@@ -4,15 +4,17 @@ import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
 import LoginButton from "./LoginButton";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "../Components/LoadingSpinner";
+import Image from "next/image";
 
 const Login = () => {
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
   const [attempts, setAttempts] = useState(3);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   //Handles login attempts
@@ -31,6 +33,7 @@ const Login = () => {
       setError("Email domain must be @soton.ac.uk");
       return;
     }
+    setLoading(true);
 
     //Establish API connection and authenticate input
     try {
@@ -44,15 +47,19 @@ const Login = () => {
       if (response.ok) {
         //Response from API is ok (200) then store email in session and continue
         storeEmailInSessionStorage(email);
+        window.sessionStorage.setItem("successfulDestination", "/roombooking");
+        window.sessionStorage.setItem("failedDestination", "/");
         router.push(`/auth`);
       } else {
         // Handle error response
         console.error("Email and password verification failed");
-        setPasswordError('Invalid email or password')
+        setPasswordError("Invalid email or password");
         setAttempts((prevAttempts) => prevAttempts - 1);
       }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -71,7 +78,6 @@ const Login = () => {
     }
   }
 
-
   //Login Form
   return (
     <section className="flex flex-auto bg-white-500 dark:bg-gray-900">
@@ -79,7 +85,13 @@ const Login = () => {
         <div className="w-full bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col">
             <div className="flex items-center justify-center mb-4">
-              <img src="/Company-logo/Company Logo.svg" alt="Company Logo" />
+              <Image
+                src="/Company-logo/Company Logo.svg"
+                alt="Company Logo"
+                width={0}
+                height={0}
+                layout="responsive"
+              />
             </div>
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-slate-500">
               Sign in to your account
@@ -97,6 +109,7 @@ const Login = () => {
                 error={passwordError}
               />
               <LoginButton />
+              {loading && <LoadingSpinner />}
             </form>
           </div>
         </div>
