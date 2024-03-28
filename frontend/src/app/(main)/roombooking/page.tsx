@@ -16,10 +16,12 @@ const getCurrentDate = (): string => {
 };
 
 export default function RoomBooking() {
-  const [fetchedData, setFetchedData] = useState(null);
+  const [dataFromApi, setFetchedData] = useState(null);
   const [endValue, setEndValue] = useState<number>(new Date().getHours() + 1);
   const [startValue, setStartValue] = useState<number>(new Date().getHours());
   const [date, setDate] = useState(getCurrentDate());
+  const [capacity, setCapacity] = useState(30);
+  const [specifics, setSpecifics] = useState("");
 
   const convertHourToHHMM = (hour: number): [number, number] => {
     const minute = 0; // Since we're converting from HH to HH:MM, minute will be 0
@@ -27,7 +29,7 @@ export default function RoomBooking() {
   };
   const formatHour = (value: number): string => {
     // Pad single-digit hours with leading zero and return as HH:00
-    return value.toString().padStart(2, "0") + ":00";
+    return value.toString().padStart(2, "0") + ":00" +":00";
   };
   const adjustTime = (hour: number): string => {
     const [hours, minute] = convertHourToHHMM(hour);
@@ -44,7 +46,7 @@ export default function RoomBooking() {
     const adjustedHour = Math.floor(adjustedTime / 60);
     const adjustedMinute = adjustedTime % 60;
     const formattedTime = `${adjustedHour.toString().padStart(2, "0")}:${adjustedMinute.toString().padStart(2, "0")}`;
-    return formattedTime;
+    return formattedTime + ":00";
   };
 
   const fetchData = async (
@@ -56,7 +58,8 @@ export default function RoomBooking() {
       const data = await getDataFromServer(
         date,
         formatHour(startTime),
-        adjustTime(endTime)
+        adjustTime(endTime),
+        capacity,
       );
       setFetchedData(data);
     } catch (error) {
@@ -68,8 +71,10 @@ export default function RoomBooking() {
     fetchData(date, startValue, endValue); // Fetch data when component mounts
   }, []);
   useEffect(() => {
+    console.log(startValue);
   }, [startValue]);
-  useEffect(() => { 
+  useEffect(() => {
+    console.log(endValue);
   }, [endValue]);
 
   const handleSelectStartTime = (value: any) => {
@@ -92,13 +97,17 @@ export default function RoomBooking() {
           />
         </div>
         <div className="h-full p-1 mt-[10px] ml-[15px]">
-          <RoomSpecifics />
+          <RoomSpecifics setSpecifics= {setSpecifics} setCapacity = {setCapacity} />
         </div>
       </div>
 
       <div className="w-1/2 flex flex-col">
         <div className="h-4/6 p-1 mt-[10px] ml-[5px]">
-          <FloorPlan fetchedData={fetchedData} />
+          {dataFromApi ? (
+            <FloorPlan dataFromApi={dataFromApi} />
+          ) : (
+            <div>Loading... </div>
+          )}
         </div>
         <div className="h-2/6 flex">
           <div className="w-7/12 p-1 ml-[5px]">
@@ -112,35 +121,3 @@ export default function RoomBooking() {
     </div>
   );
 }
-
-// export async function getServerSideProps(context: any) {
-//   const { currentDate, startTime, endTime } = context.query;
-
-//   try {
-//     const fetchedData = await getDataFromServer(
-//       currentDate,
-//       parseInt(startTime),
-//       parseInt(endTime)
-//     );
-
-//     return {
-//       props: {
-//         fetchedData,
-//         currentDate,
-//         startTime,
-//         endTime,
-//       },
-//     };
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-
-//     return {
-//       props: {
-//         fetchedData: null,
-//         currentDate,
-//         startTime,
-//         endTime,
-//       },
-//     };
-//   }
-// }

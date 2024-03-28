@@ -1,7 +1,8 @@
 export async function getDataFromServer(
   date: any,
   startTime: any,
-  endTime: any
+  endTime: any,
+  capacity: any
 ) {
   try {
     const response = await fetch(
@@ -13,7 +14,7 @@ export async function getDataFromServer(
         },
         body: JSON.stringify({
           userID: sessionStorage.getItem("userEmail"),
-          capacity: 40,
+          capacity: capacity,
           sec: "3R",
           date: date,
           start_time: startTime,
@@ -23,9 +24,9 @@ export async function getDataFromServer(
     );
 
     if (response.ok) {
-      const fetchedData = await response.json();
+      const dataFromApi = await response.json();
       return {
-        fetchedData,
+        dataFromApi,
         currentDate: date,
         startTime,
         endTime,
@@ -33,7 +34,7 @@ export async function getDataFromServer(
     } else {
       console.log("Check Availability Failed");
       return {
-        fetchedData: null,
+        dataFromApi: null,
         currentDate: date,
         startTime,
         endTime,
@@ -42,7 +43,7 @@ export async function getDataFromServer(
   } catch (error) {
     console.error("Error:", error);
     return {
-      fetchedData: null,
+      dataFromApi: null,
       currentDate: date,
       startTime,
       endTime,

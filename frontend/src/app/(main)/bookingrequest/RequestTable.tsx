@@ -26,13 +26,13 @@ const RequestTable = ({
   const getRequestDetails = async (bookingId: string, index: number) => {
     try {
       const response = await fetch(
-        "https://your-api-endpoint/get_request_details",
+        "http://localhost:8000/get_request_details_accepter",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ booking_id: bookingId }),
+          body: JSON.stringify({ bookingID: bookingId }),
         }
       );
 

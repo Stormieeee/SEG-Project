@@ -58,22 +58,55 @@
 
 import React, { useEffect, useState } from "react";
 
-const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
-  console.log("This is from floorplan");
-  console.log(fetchedData);
+const getButtonColorClass = (color: string) => {
+  switch (color) {
+    case "green":
+      return "bg-primary-50 border border-primary-200 hover:bg-primary-100";
+    case "red":
+      return "bg-red-50 border border-red-400";
+    case "yellow":
+      return "bg-yellow-50 border border-yellow-400 hover:bg-yellow-100";
+    default:
+      return "bg-black-50 cursor-default" ;
+  }
+};
 
+const getActiveButtonClass = (isActive: boolean, color: string) => {
+  let backgroundColorClass = "";
+  if (isActive) {
+    switch (color) {
+      case "green":
+        backgroundColorClass =
+          "bg-primary-400 border-primary-600 border-2 hover:bg-primary-200";
+        break;
+      case "red":
+        backgroundColorClass = "bg-red-300 border-red-600 border-2";
+        break;
+      case "yellow":
+        backgroundColorClass =
+          "bg-yellow-300 border-yellow-600 border-2 hover:bg-yellow-200 ";
+        break;
+      default:
+        backgroundColorClass = "bg-black-50";
+        break;
+    }
+  }
+  return backgroundColorClass;
+};
+
+const SecondFloor = ({ dataFromApi }: { dataFromApi: any }) => {
   return (
     <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
       <div className="flex flex-row h-[130px]">
         <div className="flex flex-row w-1/5">
           <div className="flex flex-col w-1/3">
-            <button className="relative h-[60px] w-full bg-blue-400 border-2">
+            <button className="relative h-[60px] w-full  border-2">
               <span className="block transform -rotate-90 text-xs origin-center">
                 2R008
               </span>
             </button>
 
-            <button className="relative h-[60px] w-full mt-auto bg-blue-400 border-2">
+            <button className="relative h-[60px] w-full mt-auto  border-2">
               <span className="block transform -rotate-90 text-xs origin-center">
                 2R007
               </span>
@@ -81,11 +114,11 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
           </div>
 
           <div className="flex flex-col w-1/3 ml-auto">
-            <button className="relative h-[40px] w-full mt-auto bg-blue-400 border-2">
+            <button className="relative h-[40px] w-full mt-auto  border-2">
               <span className="text-[10px] origin-center">2R009</span>
             </button>
 
-            <button className="relative h-[20px] w-full bg-blue-400 border-2">
+            <button className="relative h-[20px] w-full  border-2">
               <span className="text-[10px] origin-center">2R010</span>
             </button>
           </div>
@@ -93,37 +126,27 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
 
         <div className="flex flex-row w-4/5">
           <div className="w-5/12 flex flex-row">
-            <button className="h-full w-[75px] bg-blue-400 border-2">
-              2R011
-            </button>
-            <button className="h-full flex-grow bg-blue-400 border-2">
-              2R012
-            </button>
-            <button className="h-full w-[75px] ml-auto bg-blue-400 border-2">
-              2R013
-            </button>
+            <button className="h-full w-[75px]  border-2">2R011</button>
+            <button className="h-full flex-grow  border-2">2R012</button>
+            <button className="h-full w-[75px] ml-auto  border-2">2R013</button>
           </div>
           <div className="w-7/12 bg-orange-400 flex flex-row">
-            <button className="h-full w-5/12 bg-blue-400 border-2">
-              2R014
-            </button>
-            <button className="h-full flex-grow bg-blue-400 border-2">
+            <button className="h-full w-5/12  border-2">2R014</button>
+            <button className="h-full flex-grow  border-2">
               <span className="block transform -rotate-90 text-xs origin-center">
                 2R015
               </span>
             </button>
-            <button className="h-full w-5/12 ml-auto bg-blue-400 border-2">
-              2R016
-            </button>
+            <button className="h-full w-5/12 ml-auto  border-2">2R016</button>
           </div>
         </div>
       </div>
 
       <div className="flex flex-row h-[30px]">
-        <button className="h-full bg-blue-400 border-2">
+        <button className="h-full  border-2">
           <span className="text-xs">2R006</span>
         </button>
-        <button className="h-full w-[65px] ml-auto bg-blue-400 border-2">
+        <button className="h-full w-[65px] ml-auto  border-2">
           <span className="text-xs">2R017</span>
         </button>
       </div>
@@ -131,17 +154,15 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
       <div className="flex flex-row flex-grow">
         <div className="flex flex-col w-1/3">
           <div className="flex flex-row h-1/5">
-            <button className="w-5/6 bg-blue-400 border-2">2R004</button>
-            <button className="w-1/6 bg-blue-400 border-2">
+            <button className="w-5/6  border-2">2R004</button>
+            <button className="w-1/6  border-2">
               <span className="block transform -rotate-90 text-[10px] origin-center">
                 2R005
               </span>
             </button>
           </div>
           <div className="flex flex-row h-4/5 bg-black-200">
-            <button className="w-1/3 h-1/4 ml-auto bg-blue-400 border-2">
-              2R003
-            </button>
+            <button className="w-1/3 h-1/4 ml-auto  border-2">2R003</button>
           </div>
         </div>
 
@@ -151,15 +172,13 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
               <div className="flex h-5/6 w-2/3">
                 <div className="flex flex-col w-2/3">
                   <div className="flex flex-row h-1/3 ">
-                    <button className="w-1/2 bg-blue-400 border-2">
-                      2R024
-                    </button>
-                    <button className="w-1/4 bg-blue-400 border-2">
+                    <button className="w-1/2  border-2">2R024</button>
+                    <button className="w-1/4  border-2">
                       <span className="block transform -rotate-90 text-xs origin-center">
                         2R025
                       </span>
                     </button>
-                    <button className="w-1/4 bg-blue-400 border-2">
+                    <button className="w-1/4  border-2">
                       <span className="block transform -rotate-90 text-xs origin-center">
                         2R027
                       </span>
@@ -169,31 +188,29 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
                   <div className="flex flex-row h-2/3">
                     <div className="flex flex-col w-1/2">
                       <div className="flex flex-row h-1/4">
-                        <button className="w-3/4 bg-blue-400 border-2 border-r-[3.5px] border-b-[3.5px] text-xs">
+                        <button className="w-3/4  border-2 border-r-[3.5px] border-b-[3.5px] text-xs">
                           2R023
                         </button>
-                        <button className="w-1/4 bg-blue-400 border-t-2">
-                          L
-                        </button>
+                        <button className="w-1/4  border-t-2">L</button>
                       </div>
                       <div className="flex flex-grow">
-                        <button className="bg-blue-400 flex-grow border-l-2 border-b-2 text-sm">
+                        <button className=" flex-grow border-l-2 border-b-2 text-sm">
                           L(2R022)
                         </button>
                       </div>
                     </div>
 
                     <div className="flex flex-col w-1/2">
-                      <button className="h-1/2 bg-blue-400 border-r-2 border-t-2 border-b-2">
+                      <button className="h-1/2  border-r-2 border-t-2 border-b-2">
                         L
                       </button>
                       <div className="flex flex-row h-1/2">
-                        <button className="w-1/2 bg-blue-400 border-2 border-l-4">
+                        <button className="w-1/2  border-2 border-l-4">
                           <span className="block transform -rotate-90 text-xs origin-center">
                             2R033
                           </span>
                         </button>
-                        <button className="w-1/2 bg-blue-400 border-2">
+                        <button className="w-1/2  border-2">
                           <span className="block transform -rotate-90 text-xs origin-center">
                             2R032
                           </span>
@@ -204,17 +221,17 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
                 </div>
 
                 <div className="flex flex-col w-1/3 ml-auto bg-blue-200">
-                  <button className="h-2/5 bg-blue-400 border-2">2R028</button>
-                  <button className="h-1/5 bg-blue-400 border-2">2R029</button>
+                  <button className="h-2/5  border-2">2R028</button>
+                  <button className="h-1/5  border-2">2R029</button>
                   <div className="h-2/5">
-                    <button className="h-2/3 w-full bg-blue-400 border-t-2 border-l-2 border-r-2 text-sm">
+                    <button className="h-2/3 w-full  border-t-2 border-l-2 border-r-2 text-sm">
                       L(2R029)
                     </button>
                     <div className="flex flex-row h-1/3">
-                      <button className="w-1/2 bg-blue-400 border-2 border-t-[3.5px] border-r-[3.5px] text-[8px]">
+                      <button className="w-1/2  border-2 border-t-[3.5px] border-r-[3.5px] text-[8px]">
                         2R031
                       </button>
-                      <button className="w-1/2 bg-blue-400 border-r-2 border-b-2">
+                      <button className="w-1/2  border-r-2 border-b-2">
                         L
                       </button>
                     </div>
@@ -223,14 +240,12 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
               </div>
 
               <div className="flex flex-col ml-auto w-1/5 bg-black-200">
-                <button className="h-1/3 bg-blue-400 border-2">2R018</button>
+                <button className="h-1/3  border-2">2R018</button>
               </div>
             </div>
 
             <div className="flex flex-row h-1/6">
-              <button className="ml-auto w-1/2 bg-blue-400 border-2">
-                2R019
-              </button>
+              <button className="ml-auto w-1/2  border-2">2R019</button>
             </div>
           </div>
         </div>
@@ -239,10 +254,11 @@ const SecondFloor = ({ fetchedData }: { fetchedData: any }) => {
   );
 };
 
-const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
-  const fetchData = fetchedData.fetchedData.available;
-  console.log(fetchData);
-  const colorMap = Object.fromEntries(fetchData);
+const ThirdFloor = ({ dataFromApi }: { dataFromApi: any }) => {
+  const fetchData = dataFromApi;
+  const roomStatus = fetchData.dataFromApi.available;
+  console.log(roomStatus);
+  const colorMap = Object.fromEntries(roomStatus);
 
   // State variable to track the active button
   const [activeButton, setActiveButton] = useState<string | null>(null);
@@ -250,46 +266,127 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
   // Function to handle button click
   const handleButtonClick = (buttonKey: string) => {
     setActiveButton(buttonKey === activeButton ? null : buttonKey);
-    console.log(buttonKey)
+    console.log(buttonKey);
   };
 
-  const activeButtonStyle = (color: string) => ({
-    backgroundColor: color,
-  });
-
-
   return (
-    <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-row">
+    <div className="bg-white-50 border border-gray-300 rounded-2xl h-full p-1.5 flex flex-row">
       <div className="w-10/100 flex flex-col">
         <div className="h-16/100 flex flex-row">
-          <button className="w-1/2 bg-blue-400 border-2">
+          <button
+            key={"3R041"}
+            onClick={() => handleButtonClick("3R041")}
+            disabled={colorMap["3R026"] === "grey"}
+            className={`"w-1/2  border-2"
+            ${getButtonColorClass(colorMap["3R041"])}
+            ${getActiveButtonClass(activeButton === "3R041", colorMap["3R041"])}
+            `}
+          >
             <span className="block transform -rotate-90 text-sm origin-center">
               3R041
             </span>
           </button>
-          <div className="w-1/2 h-2/3 bg-black-400 border-2"></div>
+          <div className="w-full h-2/3 bg-black-100 border-2"></div>
         </div>
-        <button className="h-12/100 bg-blue-400 border-2">3R016</button>
-        <button className="h-16/100 bg-blue-400 border-2">3R014</button>
-        <button className="h-22/100 bg-blue-400 border-2">3R012</button>
-        <button className="h-22/100 bg-blue-400 border-2">3R010</button>
-        <button className="h-12/100 bg-blue-400 border-2">3R008</button>
+        <button
+          key={"3R016"}
+          onClick={() => handleButtonClick("3R016")}
+          className={`"h-12/100  border-2" 
+          ${getButtonColorClass(colorMap["3R016"])}
+          ${getActiveButtonClass(activeButton === "3R016", colorMap["3R016"])}`}
+        >
+          3R016
+        </button>
+        <button
+          key={"3R014"}
+          onClick={() => handleButtonClick("3R014")}
+          className={`h-16/100  border-2 
+          ${getButtonColorClass(colorMap["3R014"])}
+          ${getActiveButtonClass(activeButton === "3R014", colorMap["3R014"])}`}
+        >
+          3R014
+        </button>
+        <button
+          key={"3R012"}
+          onClick={() => handleButtonClick("3R012")}
+          className={`h-22/100  border-2
+          ${getButtonColorClass(colorMap["3R012"])}
+          ${getActiveButtonClass(activeButton === "3R012", colorMap["3R012"])}`}
+        >
+          3R012
+        </button>
+        <button
+          key={"3R010"}
+          onClick={() => handleButtonClick("3R010")}
+          className={`h-22/100  border-2
+          ${getButtonColorClass(colorMap["3R010"])}
+          ${getActiveButtonClass(activeButton === "3R010", colorMap["3R010"])}`}
+        >
+          3R010
+        </button>
+        <button
+          key={"3R008"}
+          onClick={() => handleButtonClick("3R008")}
+          className={`h-12/100  border-2 
+          ${getButtonColorClass(colorMap["3R008"])}
+          ${getActiveButtonClass(activeButton === "3R008", colorMap["3R008"])}`}
+        >
+          3R008
+        </button>
       </div>
 
       <div className="w-90/100 flex flex-col">
         <div className="h-1/2 flex flex-row">
           <div className="w-4/5 flex flex-col">
             <div className="h-26/100 flex flex-row">
-              <div className="w-23/100 bg-black-400 border-2"></div>
-              <button className="w-11/100 bg-blue-400 border-2">
+              <div className="w-23/100 bg-black-100 border-2"></div>
+              <button
+                key={"3R018"}
+                onClick={() => handleButtonClick("3R018")}
+                className={`w-11/100  border-2 
+                ${getButtonColorClass(colorMap["3R018"])}
+                ${getActiveButtonClass(activeButton === "3R018", colorMap["3R018"])}`}
+              >
                 <span className="block transform -rotate-90 text-sm origin-center">
                   3R018
                 </span>
               </button>
-              <button className="w-13/100 bg-blue-400 border-2">3R020</button>
-              <button className="w-18/100 bg-blue-400 border-2">3R022</button>
-              <button className="w-18/100 bg-blue-400 border-2">3R024</button>
-              <button className="w-17/100 bg-blue-400 border-2">3R025</button>
+              <button
+                key={"3R020"}
+                onClick={() => handleButtonClick("3R020")}
+                className={`"w-13/100  border-2" 
+                ${getButtonColorClass(colorMap["3R020"])}
+                ${getActiveButtonClass(activeButton === "3R020", colorMap["3R020"])}`}
+              >
+                3R020
+              </button>
+              <button
+                key={"3R022"}
+                onClick={() => handleButtonClick("3R022")}
+                className={`"w-18/100  border-2"
+                ${getButtonColorClass(colorMap["3R022"])}
+                ${getActiveButtonClass(activeButton === "3R022", colorMap["3R022"])}`}
+              >
+                3R022
+              </button>
+              <button
+                key={"3R024"}
+                onClick={() => handleButtonClick("3R024")}
+                className={`"w-18/100  border-2"
+                ${getButtonColorClass(colorMap["3R024"])}
+                ${getActiveButtonClass(activeButton === "3R024", colorMap["3R024"])}`}
+              >
+                3R024
+              </button>
+              <button
+                key={"3R025"}
+                onClick={() => handleButtonClick("3R025")}
+                className={`"w-17/100  border-2"
+                ${getButtonColorClass(colorMap["3R025"])}
+                ${getActiveButtonClass(activeButton === "3R025", colorMap["3R025"])}`}
+              >
+                3R025
+              </button>
             </div>
 
             <div className="h-6/100"></div>
@@ -299,11 +396,36 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
 
               <div className="w-32/100 flex flex-col">
                 <div className="h-51/100 flex flex-row">
-                  <button className="w-1/2 bg-blue-400 border-2">3R017</button>
-                  <button className="w-1/2 bg-blue-400 border-2">3R019</button>
+                  <button
+                    key={"3R017"}
+                    onClick={() => handleButtonClick("3R017")}
+                    className={`w-1/2  border-2 
+                  ${getButtonColorClass(colorMap["3R017"])}
+                  ${getActiveButtonClass(activeButton === "3R017", colorMap["3R017"])}`}
+                  >
+                    3R017
+                  </button>
+                  <button
+                    key={"3R019"}
+                    onClick={() => handleButtonClick("3R019")}
+                    className={`w-1/2  border-2
+                    ${getButtonColorClass(colorMap["3R019"])}
+                    ${getActiveButtonClass(activeButton === "3R019", colorMap["3R019"])}
+                  `}
+                  >
+                    3R019
+                  </button>
                 </div>
 
-                <button className="h-36/100 bg-blue-400 border-2">3R015</button>
+                <button
+                  key={"3R015"}
+                  onClick={() => handleButtonClick("3R015")}
+                  className={`h-36/100 border-2
+                  ${getButtonColorClass(colorMap["3R015"])}
+                  ${getActiveButtonClass(activeButton === "3R015", colorMap["3R015"])}`}
+                >
+                  3R015
+                </button>
 
                 <div className="h-13/100"></div>
               </div>
@@ -311,16 +433,42 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
               <div className="w-11/100"></div>
 
               <div className="w-53/100 flex flex-row">
-                <button className="w-33/100 h-1/2 bg-blue-400 border-2">
+                <button
+                  key={"3R021"}
+                  onClick={() => handleButtonClick("3R021")}
+                  className={`w-33/100 h-1/2  border-2
+                  ${getButtonColorClass(colorMap["3R021"])}
+                  ${getActiveButtonClass(activeButton === "3R021", colorMap["3R021"])}`}
+                >
                   3R021
                 </button>
                 <div className="w-58/100 flex flex-col">
-                  <button className="h-1/2 bg-blue-400 border-2">3R023</button>
+                  <button
+                    key={"3R023"}
+                    onClick={() => handleButtonClick("3R023")}
+                    className={`h-1/2  border-2
+                  ${getButtonColorClass(colorMap["3R023"])}
+                  ${getActiveButtonClass(activeButton === "3R023", colorMap["3R023"])}`}
+                  >
+                    3R023
+                  </button>
                   <div className="h-1/2 flex flex-row">
-                    <button className="w-1/2 bg-blue-400 border-2">
+                    <button
+                      key={"3R028"}
+                      onClick={() => handleButtonClick("3R028")}
+                      className={`w-1/2  border-2 
+                    ${getButtonColorClass(colorMap["3R028"])}
+                    ${getActiveButtonClass(activeButton === "3R028", colorMap["3R028"])}`}
+                    >
                       3R028
                     </button>
-                    <button className="w-1/2 bg-blue-400 border-2">
+                    <button
+                      key={"3R027"}
+                      onClick={() => handleButtonClick("3R027")}
+                      className={`w-1/2  border-2
+                    ${getButtonColorClass(colorMap["3R027"])}
+              ${getActiveButtonClass(activeButton === "3R027", colorMap["3R027"])}`}
+                    >
                       3R027
                     </button>
                   </div>
@@ -334,16 +482,10 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
             <div className="h-66/100 bg-black-100 rounded-md"></div>
             <button
               key={"3R026"}
-              onClick={()=> handleButtonClick("3R026")}
-              className={`h-34/100 border-2 mt-auto rounded-md ${
-                colorMap["3R026"] === "green"
-                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 active:bg-primary-300 active:border-primary-600 focus:border-2 "
-                  : colorMap["3R026"] === "red"
-                    ? "bg-red-50 border border-red-400"
-                    : colorMap["3R026"] === "yellow"
-                      ? "bg-yellow-50 border border-yellow-400"
-                      : "bg-black-50"
-              } ${activeButton === "3R026" ? activeButtonStyle(colorMap["3R026"]) : ""} `} 
+              onClick={() => handleButtonClick("3R026")}
+              className={`h-34/100 border-2 mt-auto rounded-md 
+              ${getButtonColorClass(colorMap["3R026"])}
+              ${getActiveButtonClass(activeButton === "3R026", colorMap["3R026"])} `}
             >
               3R026
             </button>
@@ -355,41 +497,29 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
 
           <div className="w-13/100 flex flex-col">
             <button
-              className={`h-47/100 rounded-md ${
-                colorMap["3R013"] === "green"
-                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                  : colorMap["3R013"] === "red"
-                    ? "bg-red-50 border border-red-400"
-                    : colorMap["3R013"] === "yellow"
-                      ? "bg-yellow-50 border border-yellow-400"
-                      : "bg-black-50"
-              }`}
+              key={"3R013"}
+              onClick={() => handleButtonClick("3R013")}
+              className={`h-47/100 rounded-md 
+              ${getButtonColorClass(colorMap["3R013"])}
+              ${getActiveButtonClass(activeButton === "3R013", colorMap["3R013"])}`}
             >
               3R013
             </button>
             <button
-              className={`h-24/100 rounded-md ${
-                colorMap["3R011"] === "green"
-                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                  : colorMap["3R011"] === "red"
-                    ? "bg-red-50 border border-red-400"
-                    : colorMap["3R011"] === "yellow"
-                      ? "bg-yellow-50 border border-yellow-400"
-                      : "bg-black-50"
-              }`}
+              key={"3R011"}
+              onClick={() => handleButtonClick("3R011")}
+              className={`h-24/100 rounded-md 
+              ${getButtonColorClass(colorMap["3R011"])}
+              ${getActiveButtonClass(activeButton === "3R011", colorMap["3R011"])}`}
             >
               3R011
             </button>
             <button
-              className={`h-24/100 rounded-md ${
-                colorMap["3R009"] === "green"
-                  ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                  : colorMap["3R009"] === "red"
-                    ? "bg-red-50 border border-red-400"
-                    : colorMap["3R009"] === "yellow"
-                      ? "bg-yellow-50 border border-yellow-400"
-                      : "bg-black-50"
-              }`}
+              key={"3R009"}
+              onClick={() => handleButtonClick("3R009")}
+              className={`h-24/100 rounded-md 
+              ${getButtonColorClass(colorMap["3R009"])}
+              ${getActiveButtonClass(activeButton === "3R009", colorMap["3R009"])}`}
             >
               3R009
             </button>
@@ -403,69 +533,53 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
               <div className="w-53/100 flex flex-row">
                 <div className="w-22/100 flex flex-col">
                   <button
-                    className={`h-1/3 text-xs rounded-md ${
-                      colorMap["3R002"] === "green"
-                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                        : colorMap["3R002"] === "red"
-                          ? "bg-red-50 border border-red-400"
-                          : colorMap["3R002"] === "yellow"
-                            ? "bg-yellow-50 border border-yellow-400"
-                            : "bg-black-50"
-                    }`}
+                    key={"3R002"}
+                    onClick={() => handleButtonClick("3R002")}
+                    className={`h-1/3 text-xs rounded-md 
+                    ${getButtonColorClass(colorMap["3R002"])}
+                    ${getActiveButtonClass(activeButton === "3R002", colorMap["3R002"])}`}
                   >
                     3R002
                   </button>
                   <button
-                    className={`h-1/3 text-xs rounded-md ${
-                      colorMap["3R003"] === "green"
-                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                        : colorMap["3R003"] === "red"
-                          ? "bg-red-50 border border-red-400"
-                          : colorMap["3R003"] === "yellow"
-                            ? "bg-yellow-50 border border-yellow-400"
-                            : "bg-black-50"
-                    }`}
+                    key={"3R003"}
+                    onClick={() => handleButtonClick("3R003")}
+                    className={`h-1/3 text-xs rounded-md 
+                    ${getButtonColorClass(colorMap["3R003"])}
+                    ${getActiveButtonClass(activeButton === "3R003", colorMap["3R003"])}`}
                   >
                     3R003
                   </button>
                   <button
-                    className={`h-1/3 text-xs rounded-md ${
-                      colorMap["3R004"] === "green"
-                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                        : colorMap["3R004"] === "red"
-                          ? "bg-red-50 border border-red-400"
-                          : colorMap["3R004"] === "yellow"
-                            ? "bg-yellow-50 border border-yellow-400"
-                            : "bg-black-50"
-                    }`}
+                    key={"3R004"}
+                    onClick={() => handleButtonClick("3R004")}
+                    className={`h-1/3 text-xs rounded-md 
+                    ${getButtonColorClass(colorMap["3R004"])}
+                    ${getActiveButtonClass(activeButton === "3R004", colorMap["3R004"])}`}
                   >
                     3R004
                   </button>
                 </div>
-                <div className="w-51/100 flex flex-col mx-1">
+                <div className="w-51/100 flex flex-col mx-1 bg-white-50">
                   <div className="h-42/100 flex flex-row ">
-                    <div className="w-19/100 bg-black-100 rounded-tl-md"></div>
-                    <div className="w-46/100 bg-black-100"></div>
-                    <div className="w-19/100 bg-black-100 rounded-tr-md "></div>
+                    <div className="w-19/100 bg-black-50 rounded-tl-md"></div>
+                    <div className="w-46/100 bg-black-50"></div>
+                    <div className="w-19/100 bg-black-50 rounded-tr-md "></div>
                     <div className="w-16/100 flex flex-col">
                       <div className="h-76/100"></div>
-                      <div className="h-24/100 bg-black-100 rounded-tr-md"></div>
+                      <div className="h-24/100 bg-black-50 rounded-tr-md"></div>
                     </div>
                   </div>
-                  <div className="h-56/100 bg-black-100 rounded-bl-md rounded-br-md"></div>
+                  <div className="h-56/100 bg-black-50 rounded-bl-md rounded-br-md"></div>
                 </div>
                 <div className="w-27/100 flex flex-col">
                   <div className="h-1/3"></div>
                   <button
-                    className={`h-2/3 rounded-md text-sm ${
-                      colorMap["3R032"] === "green"
-                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                        : colorMap["3R032"] === "red"
-                          ? "bg-red-50 border border-red-400"
-                          : colorMap["3R032"] === "yellow"
-                            ? "bg-yellow-50 border border-yellow-400"
-                            : "bg-black-50"
-                    }`}
+                    key={"3R032"}
+                    onClick={() => handleButtonClick("3R032")}
+                    className={`h-2/3 rounded-md text-sm 
+                    ${getButtonColorClass(colorMap["3R032"])}
+                    ${getActiveButtonClass(activeButton === "3R032", colorMap["3R032"])}`}
                   >
                     3R032
                   </button>
@@ -478,44 +592,36 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
                 <div className="h-1/3"></div>
                 <div className="h-1/3 flex flex-row">
                   <button
-                    className={`w-36/100 rounded-md ${
-                      colorMap["3R031"] === "green"
-                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                        : colorMap["3R031"] === "red"
-                          ? "bg-red-50 border border-red-400"
-                          : colorMap["3R031"] === "yellow"
-                            ? "bg-yellow-50 border border-yellow-400"
-                            : "bg-black-50"
-                    }`}
+                    key={"3R031"}
+                    onClick={() => handleButtonClick("3R031")}
+                    className={`w-36/100 rounded-md 
+                    ${getButtonColorClass(colorMap["3R031"])}
+                    ${getActiveButtonClass(activeButton === "3R031", colorMap["3R031"])}`}
                   >
                     <span className="block transform -rotate-90 text-sm origin-center">
                       3R031
                     </span>
                   </button>
                   <button
-                    className={`w-64/100 rounded-md ${
-                      colorMap["3R030"] === "green"
-                        ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                        : colorMap["3R030"] === "red"
-                          ? "bg-red-50 border border-red-400"
-                          : colorMap["3R030"] === "yellow"
-                            ? "bg-yellow-50 border border-yellow-400"
-                            : "bg-black-50"
-                    }`}
+                    key={"3R030"}
+                    onClick={() => {
+                      handleButtonClick("3R030");
+                    }}
+                    className={`w-64/100 rounded-md
+                    ${getButtonColorClass(colorMap["3R030"])}
+                    ${getActiveButtonClass(activeButton === "3R030", colorMap["3R030"])}`}
                   >
                     3R030
                   </button>
                 </div>
                 <button
-                  className={`h-1/3 rounded-md ${
-                    colorMap["3R033"] === "green"
-                      ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                      : colorMap["3R033"] === "red"
-                        ? "bg-red-50 border border-red-400"
-                        : colorMap["3R033"] === "yellow"
-                          ? "bg-yellow-50 border border-yellow-400"
-                          : "bg-black-50"
-                  }`}
+                  key={"3R033"}
+                  onClick={() => {
+                    handleButtonClick("3R033");
+                  }}
+                  className={`h-1/3 rounded-md 
+                  ${getButtonColorClass(colorMap["3R033"])}
+                  ${getActiveButtonClass(activeButton === "3R033", colorMap["3R033"])}`}
                 >
                   3R033
                 </button>
@@ -523,49 +629,43 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
 
               <div className="w-4/100"></div>
 
-              <div className="w-10/100 bg-black-50"></div>
+              <div className="w-10/100 bg-black-100"></div>
             </div>
 
             <div className="h-25/100 flex flex-row">
               <button
-                className={`w-20/100 rounded-md ${
-                  colorMap["3R009"] === "green"
-                    ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                    : colorMap["3R009"] === "red"
-                      ? "bg-red-50 border border-red-400"
-                      : colorMap["3R009"] === "yellow"
-                        ? "bg-yellow-50 border border-yellow-400"
-                        : "bg-black-50"
-                }`}
+                key={"3R005"}
+                onClick={() => {
+                  handleButtonClick("3R005");
+                }}
+                className={`w-20/100 rounded-md 
+                ${getButtonColorClass(colorMap["3R005"])}
+                ${getActiveButtonClass(activeButton === "3R005", colorMap["3R005"])}`}
               >
                 3R005
               </button>
               <div className="w-37/100"></div>
               <button
-                className={`w-29/100 rounded-md ${
-                  colorMap["3R034"] === "green"
-                    ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                    : colorMap["3R034"] === "red"
-                      ? "bg-red-50 border border-red-400"
-                      : colorMap["3R034"] === "yellow"
-                        ? "bg-yellow-50 border border-yellow-400"
-                        : "bg-black-50"
-                } `}
+                key={"3R034"}
+                onClick={() => {
+                  handleButtonClick("3R034");
+                }}
+                className={`w-29/100 rounded-md 
+                ${getButtonColorClass(colorMap["3R034"])}
+                ${getActiveButtonClass(activeButton === "3R034", colorMap["3R034"])}`}
               >
                 3R034
               </button>
               <div className="w-14/100 flex flex-col">
                 <div className="h-28/100"></div>
                 <button
-                  className={`h-72/100 rounded-md ${
-                    colorMap["3R035"] === "green"
-                      ? "bg-primary-50 border border-primary-200 hover:bg-primary-100 focus:bg-primary-300 focus:border-primary-600 focus:border-2 focus:"
-                      : colorMap["3R035"] === "red"
-                        ? "bg-red-50 border border-red-400"
-                        : colorMap["3R035"] === "yellow"
-                          ? "bg-yellow-50 border border-yellow-400"
-                          : "bg-black-50"
-                  }`}
+                  key={"3R035"}
+                  onClick={() => {
+                    handleButtonClick("3R035");
+                  }}
+                  className={`h-72/100 rounded-md 
+                  ${getButtonColorClass(colorMap["3R035"])}
+                  ${getActiveButtonClass(activeButton === "3R035", colorMap["3R035"])}`}
                 >
                   3R035
                 </button>
@@ -580,10 +680,10 @@ const ThirdFloor = ({ fetchedData }: { fetchedData: any }) => {
   );
 };
 
-const SecondLeftWing = () => {
+const SecondLeftWing = ({ dataFromApi }: { dataFromApi: any }) => {
   return (
     <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
-      <div className="h-20/100 bg-black-50"></div>
+      <div className="h-20/100 bg-black-100"></div>
 
       <div className="h-60/100 flex flex-col">
         <div className="h-40/100 w-98/100 flex flex-row">
@@ -591,31 +691,31 @@ const SecondLeftWing = () => {
             <div className="h-73/100 bg-black-400 border-2"></div>
           </div>
 
-          <button className="w-7/100 bg-blue-400 border-2">
+          <button className="w-7/100  border-2">
             <span className="block transform -rotate-90 origin-center">
               2L011
             </span>
           </button>
 
-          <button className="w-15/100 bg-blue-400 border-2">2L010</button>
-          <button className="w-18/100 bg-blue-400 border-2">2L009</button>
-          <button className="w-36/100 bg-blue-400 border-2">2L008</button>
+          <button className="w-15/100  border-2">2L010</button>
+          <button className="w-18/100  border-2">2L009</button>
+          <button className="w-36/100  border-2">2L008</button>
 
           <div className="w-10/100 flex flex-col">
             <div className="h-46/100"></div>
 
             <div className="h-32/100 flex flex-row">
-              <button className="w-1/3 bg-blue-400 border-2">
+              <button className="w-1/3  border-2">
                 <span className="block transform -rotate-90 text-[8px] origin-center">
                   2L005
                 </span>
               </button>
-              <button className="w-1/3 bg-blue-400 border-2">
+              <button className="w-1/3  border-2">
                 <span className="block transform -rotate-90 text-[8px] origin-center">
                   2L006
                 </span>
               </button>
-              <button className="w-1/3 bg-blue-400 border-2">
+              <button className="w-1/3  border-2">
                 <span className="block transform -rotate-90 text-[8px] origin-center">
                   2L007
                 </span>
@@ -623,23 +723,23 @@ const SecondLeftWing = () => {
             </div>
 
             <div className="h-22/100 flex flex-row">
-              <button className="w-1/3 bg-blue-400 border-2 text-xs">T1</button>
+              <button className="w-1/3  border-2 text-xs">T1</button>
               <div className="w-1/3"></div>
-              <button className="w-1/3 bg-blue-400 border-2 text-xs">T2</button>
+              <button className="w-1/3  border-2 text-xs">T2</button>
             </div>
           </div>
 
           <div className="w-10/100 flex flex-col">
             <div className="h-46/100"></div>
             <div className="h-54/100 flex flex-row">
-              <button className="w-2/5 bg-blue-400 border-l-2 border-b-2 border-t-2">
+              <button className="w-2/5  border-l-2 border-b-2 border-t-2">
                 <span className="block transform -rotate-90 text-xs origin-center">
                   2L007
                 </span>
               </button>
               <div className="w-3/5 flex">
                 <button
-                  className="w-full h-full bg-blue-400 border-b-2"
+                  className="w-full h-full  border-b-2"
                   style={{ clipPath: "polygon(0 100%, 0 0, 100% 100%)" }}
                 ></button>
               </div>
@@ -665,69 +765,61 @@ const SecondLeftWing = () => {
           <div className="w-20/100 flex flex-col">
             <div className="h-62/100 flex flex-row">
               <div className="w-1/2 flex flex-col">
-                <button className="h-50/100 bg-blue-400 border-2">2L012</button>
+                <button className="h-50/100  border-2">2L012</button>
                 <div className="h-30/100 flex flex-row">
-                  <button className="w-1/2 bg-blue-400 border-2 text-[8px]">
-                    2L016
-                  </button>
-                  <button className="w-1/2 bg-blue-400 border-2 text-[8px]">
-                    2L015
-                  </button>
+                  <button className="w-1/2  border-2 text-[8px]">2L016</button>
+                  <button className="w-1/2  border-2 text-[8px]">2L015</button>
                 </div>
-                <button className="h-20/100 bg-blue-400 border-l-2 border-b-2">
-                  L
-                </button>
+                <button className="h-20/100  border-l-2 border-b-2">L</button>
               </div>
 
               <div className="w-1/2 flex flex-col">
                 <div className="h-4/5 flex flex-row">
-                  <button className="w-35/100 bg-blue-400 border-2">
+                  <button className="w-35/100  border-2">
                     <span className="block transform -rotate-90 text-xs origin-center">
                       2L014
                     </span>
                   </button>
-                  <button className="w-65/100 bg-blue-400 border-t-2 border-l-2 border-r-2">
+                  <button className="w-65/100  border-t-2 border-l-2 border-r-2">
                     <span className="block transform -rotate-90 text-xs origin-center">
                       2L013
                     </span>
                   </button>
                 </div>
-                <button className="h-1/5 bg-blue-400 border-r-2 border-b-2">
-                  L
-                </button>
+                <button className="h-1/5  border-r-2 border-b-2">L</button>
               </div>
             </div>
 
             <div className="h-38/100 flex flex-row">
-              <button className="w-1/2 bg-blue-400 border-2">2L017</button>
-              <button className="w-1/2 bg-blue-400 border-2">2L018</button>
+              <button className="w-1/2  border-2">2L017</button>
+              <button className="w-1/2  border-2">2L018</button>
             </div>
           </div>
 
-          <button className="w-15/100 bg-blue-400 border-2">2L019</button>
+          <button className="w-15/100  border-2">2L019</button>
 
-          <button className="w-10/100 bg-blue-400 border-2">2L020</button>
+          <button className="w-10/100  border-2">2L020</button>
 
           <div className="w-40/100 flex flex-row">
-            <button className="w-1/4 bg-blue-400 border-2">2L021</button>
-            <button className="w-1/4 bg-blue-400 border-2">2L022</button>
-            <button className="w-1/4 bg-blue-400 border-2">2L023</button>
-            <button className="w-1/4 bg-blue-400 border-2">2L024</button>
+            <button className="w-1/4  border-2">2L021</button>
+            <button className="w-1/4  border-2">2L022</button>
+            <button className="w-1/4  border-2">2L023</button>
+            <button className="w-1/4  border-2">2L024</button>
           </div>
 
           <div className="w-10/100"></div>
         </div>
       </div>
 
-      <div className="h-20/100 bg-black-50"></div>
+      <div className="h-20/100 bg-black-100"></div>
     </div>
   );
 };
 
-const FloorPlan = ({ fetchedData }: { fetchedData: any }) => {
-  // return SecondFloor((fetchedData = { fetchedData }));
-  return ThirdFloor((fetchedData = { fetchedData }));
-  //return SecondLeftWing()
+const FloorPlan = ({ dataFromApi }: { dataFromApi: any }) => {
+  // return SecondFloor((dataFromApi = { dataFromApi }));
+  return ThirdFloor((dataFromApi = { dataFromApi }));
+  //return SecondLeftWing((dataFromApi = { dataFromApi }))
 };
 
 export default FloorPlan;

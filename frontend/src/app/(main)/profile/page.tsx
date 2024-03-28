@@ -7,8 +7,9 @@ import { useRouter } from "next/navigation";
 import getEmailFromSessionStorage from "../../Components/CommonFunction";
 import ResetButton from "./ResetButton";
 import Link from "next/link";
-import ResetPassword from "./passwordreset/ResetPassword";
+import ResetPassword from "./ResetPassword";
 import editIcon from "../../../../public/Login-icon/edit_icon.svg";
+import Authentication from "@/app/Components/Authentication";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState<{
@@ -18,11 +19,11 @@ const Profile = () => {
   const router = useRouter();
   const email = getEmailFromSessionStorage() || null;
   const [showResetPassword, setShowResetPassword] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
   const getUserInfo = async () => {
     try {
-      console.log;
       const response = await fetch(
         "http://localhost:8000/get_profile_details/",
         {
@@ -49,32 +50,44 @@ const Profile = () => {
     // }
   }, []);
 
+  //Handles OTP Authentication
+  const handleSuccessAuth = () => {
+    setShowAuth(false);
+    setShowResetPassword(true);
+  };
+  const handleFailedAuth = () => {
+    setShowAuth(false);
+    window.alert("Authentication failed");
+  };
+  const handleCancelAuth = () => {
+    setShowAuth(false);
+  };
+
   const handleLogout = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/logout/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user_id: email }),
-      });
-      if (response.ok) {
-        if (typeof sessionStorage !== "undefined") {
+    if (typeof sessionStorage !== "undefined") {
+      try {
+        const response = await fetch("http://localhost:8000/logout/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user_id: email }),
+        });
+        if (response.ok) {
           localStorage.clear();
           sessionStorage.clear();
           setUserInfo(null);
-          window.history.pushState(null, "", "/");
-          // Clear the history stack to prevent going back
-          window.history.go(-(window.history.length - 1));
-          console.log("Email removed from session storage");
+          window.location.href = "/";
+          window.history.replaceState({}, "", "/");
         } else {
-          console.error("Session storage is not supported in this browser.");
+          console.error("Error logging out");
         }
-      } else {
-        console.error("Error logging out");
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
+      console.log("Email removed from session storage");
+    } else {
+      console.error("Session storage is not supported in this browser.");
     }
   };
   const handleEditProfileClick = () => {
@@ -125,19 +138,32 @@ const Profile = () => {
             />
             <UserInfo label="Role" type="text" value={(userInfo as any).role} />
             <UserInfo label="Password" type="password" value="********">
-              <ResetButton setShowResetPassword={setShowResetPassword} />
+              <ResetButton setShowAuth={setShowAuth} />
             </UserInfo>
           </div>
         )}
         <button
           type="submit"
-          onClick={handleLogout}
+          onClick={() => handleLogout()}
           className="w-1/4 text-white-50 px-5 py-3 text-sm bg-blue-400 hover:bg-blue-500 font-bold rounded-lg"
         >
           Log out
         </button>
+        {showResetPassword && (
+          <div className="fixed inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
+            <ResetPassword setShowResetPassword={setShowResetPassword} />
+          </div>
+        )}
+        {showAuth && (
+          <div className="fixed inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
+            <Authentication
+              handleSuccessAuth={handleSuccessAuth}
+              handleFailedAuth={handleFailedAuth}
+              handleCancelAuth={handleCancelAuth}
+            />
+          </div>
+        )}
       </div>
-      // {showResetPassword && <ResetPassword />}
     )
   );
 };

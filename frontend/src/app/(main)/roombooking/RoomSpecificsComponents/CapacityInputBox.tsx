@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 
-const CapacityInput: React.FC = () => {
+interface CapacityInputProps {
+  setCapacity: (capacity: number) => void;
+}
+
+const CapacityInput:React.FC<CapacityInputProps> = ({setCapacity}) => {
+
+  const[capacityValue, setCapacityValue] = useState('');
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCapacityValue(event.target.value);
+    setCapacity(parseInt(event.target.value) || 30);
+  };
+  
   return (
     <div className="">
       <label className="font-semibold">Capacity: </label>
@@ -11,6 +23,8 @@ const CapacityInput: React.FC = () => {
         max={100} // Set the maximum value allowed
         step={1} // Set the step for increment/decrement
         placeholder="Number"
+        value={capacityValue}
+        onChange={handleInputChange}
       />
     </div>
   );

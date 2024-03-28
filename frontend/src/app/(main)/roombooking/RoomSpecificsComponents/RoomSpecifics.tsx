@@ -4,7 +4,14 @@ import CapacityInput from "./CapacityInputBox";
 import LargeTextbox from "./LargeTextBox";
 import { FORM_CONTAINER, FormHeader } from "../ComponentFormat";
 import roomspecificlogo from "/public/Components-icon/Room Specifics Logo.svg";
-const RoomSpecifics = () => {
+
+interface RoomSpecificsProps {
+  setCapacity: (capacity: number) => void;
+  setSpecifics: (capacity: string) => void;
+}
+
+
+const RoomSpecifics: React.FC<RoomSpecificsProps> = ({setCapacity, setSpecifics}) => {
   return (
     <div className={FORM_CONTAINER}>
       <FormHeader
@@ -23,7 +30,7 @@ const RoomSpecifics = () => {
         </div>
 
         <div className="w-1/2 mt-5 flex flex-col">
-          <CapacityInput />
+          <CapacityInput setCapacity={setCapacity} />
 
           <div className="mt-16 flex flex-col">
             <RectangularCheckbox label="Others" />

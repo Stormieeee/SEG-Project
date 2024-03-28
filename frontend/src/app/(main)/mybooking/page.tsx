@@ -13,7 +13,7 @@ const MyBookingPage = () => {
 
   const getBookings = async () => {
     try {
-      const response = await fetch("https://your-api-endpoint/get_bookings", {
+      const response = await fetch("http://localhost:8000/get_bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,9 +41,9 @@ const MyBookingPage = () => {
       ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
     ]);
     setPastBookings([
-      ["4", "Room 4", "2021-08-01", "14:00", "16:00", "Approved"],
-      ["5", "Room 5", "2021-08-02", "14:00", "16:00", "Pending"],
-      ["6", "Room 6", "2021-08-03", "14:00", "16:00", "Rejected"],
+      ["4", "Room 4", "2021-08-01", "14:00", "16:00", "Completed"],
+      ["5", "Room 5", "2021-08-02", "14:00", "16:00", "Completed"],
+      ["6", "Room 6", "2021-08-03", "14:00", "16:00", "Completed"],
     ]);
   }, []);
 

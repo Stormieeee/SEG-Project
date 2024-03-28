@@ -42,7 +42,7 @@ const DetailsBar = ({
     if (confirmed) {
       try {
         const response = await fetch(
-          "https://your-api-endpoint/approve_reject_request",
+          "https://localhost:8000/handle_booking",
           {
             method: "POST",
             headers: {

@@ -11,18 +11,19 @@ const BookingRequestPage = () => {
   const getRequestData = async () => {
     try {
       const response = await fetch(
-        "https://your-api-endpoint/get_booking_requests",
+        "http://localhost:8000/get_booking_requests_accepter/",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ user_id: getEmailFromSessionStorage() }),
+          body: JSON.stringify({ UserID: getEmailFromSessionStorage() }),
         }
       );
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data)
         setRequests(data);
       }
     } catch (error) {
