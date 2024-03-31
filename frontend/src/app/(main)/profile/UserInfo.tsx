@@ -21,7 +21,7 @@ const UserInfoField = ({
       </div>
       <input
         type={type}
-        className="w-[800px] h-[55px] border border-gray-300 focus:outline-none rounded-md px-2 mt-2 mb-10 block width-500 pointer-events-none"
+        className="w-full h-[55px] border border-gray-300 rounded-md px-2 mt-2 mb-10 block pointer-events-none"
         value={value}
         readOnly
       />

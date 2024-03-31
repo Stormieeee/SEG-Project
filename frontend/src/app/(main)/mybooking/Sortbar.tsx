@@ -65,7 +65,7 @@ const Sortbar = ({
         id="sortColumn"
         value={sortColumn}
         onChange={(e) => handleSelectChange(e)}
-        className="mx-2 py-1 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+        className="mx-2 py-1 border rounded-md"
       >
         <option value="" disabled={disableSelect}>
           Any

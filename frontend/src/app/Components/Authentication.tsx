@@ -15,6 +15,7 @@ const Authentication = ({
   handleFailedAuth,
   handleCancelAuth,
 }: AuthenticationProps) => {
+  const email = getEmailFromSessionStorage();
   const [otp, setOtp] = useState("");
   const [disableResend, setDisableResend] = useState(false);
   const [countdown, setCountdown] = useState(10); // Countdown in seconds
@@ -45,7 +46,7 @@ const Authentication = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: getEmailFromSessionStorage(),
+          user_id: email,
           key: otp,
         }),
       });
@@ -71,12 +72,12 @@ const Authentication = ({
     if (!disableResend) {
       try {
         // Send request to resend OTP
-        const response = await fetch("/api/resend-otp", {
+        const response = await fetch("http://localhost:8000/SendOTP/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          // Include any necessary data in the request body
+          body: JSON.stringify({ user_id: email }),
         });
 
         if (response.ok) {
@@ -113,8 +114,8 @@ const Authentication = ({
                 OTP Authentication
               </div>
               <div className="text-sm dark:text-slate-300">
-                An OTP has been sent to {getEmailFromSessionStorage()}. Please
-                enter the OTP code to continue.
+                An OTP has been sent to {email}. Please enter the OTP code to
+                continue.
               </div>
             </div>
 
@@ -138,17 +139,17 @@ const Authentication = ({
               </div>
               <div className="flex w-full justify-center">
                 <button
-                  type="submit"
-                  className="w-1/3 text-white-50 bg-blue-400 mr-5 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Verify
-                </button>
-                <button
                   type="button"
                   onClick={handleCancelAuth}
-                  className="w-1/3 text-white-50 bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-1/3 text-white-50 bg-gray-400 mr-5 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="w-1/3 text-white-50 bg-blue-400 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
+                  Verify
                 </button>
               </div>
               <div className="text-center mt-2">

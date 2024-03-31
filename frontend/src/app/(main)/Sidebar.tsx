@@ -1,6 +1,5 @@
 "use client";
 
-
 import roomBookingLight from "../../../public/Sidebar-icon/Room Booking Light.svg";
 import roomBookingDark from "../../../public/Sidebar-icon/Room Booking Dark.svg";
 import myBookingDark from "../../../public/Sidebar-icon/My Booking Dark.svg";
@@ -24,7 +23,6 @@ const Sidebar = () => {
     isMyBookingActive,
     isProfileActive,
     isBookingRequestActive,
-    
   } = useNavigation();
   const checkRole = async () => {
     try {
@@ -41,7 +39,6 @@ const Sidebar = () => {
       if (response.ok) {
         const data = await response.json();
         setIsAdmin(data);
-        console.log("Role:", data);
       } else {
         console.error("Failed to get role");
       }

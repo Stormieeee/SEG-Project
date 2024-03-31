@@ -38,7 +38,7 @@ const RequestTable = ({
 
       if (response.ok) {
         const data = await response.json();
-        setRequestDetails({ index, ...data });
+        setRequestDetails({ index, bookingId, ...data });
       }
     } catch (error) {
       console.error("Error fetching booking request details: ", error);

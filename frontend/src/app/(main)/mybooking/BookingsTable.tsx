@@ -84,7 +84,10 @@ const BookingsTable = ({
     <div className="flex flex-1 flex-col">
       <div className="flex justify-between items-center bg-white-200 border border-black-100 rounded-md">
         {header.map((item, index) => (
-          <div key={index} className="flex-1 py-3 text-center font-semibold">
+          <div
+            key={index}
+            className={`flex-1 py-3 text-center font-semibold ${index === header.length - 1 ? `max-w-[140px] mx-5` : ""}`}
+          >
             {item}
           </div>
         ))}
@@ -110,7 +113,7 @@ const BookingsTable = ({
             {rowData.map((cellData, cellIndex) => (
               <div
                 key={cellIndex}
-                className={`mx-8 flex-1 py-[0.7rem] font-xl text-center ${cellIndex === header.length - 1 ? `rounded-xl ${getStatusColor(cellData)}` : ""}`}
+                className={`flex-1 py-[0.7rem] font-xl text-center ${cellIndex === header.length - 1 ? `rounded-xl max-w-[140px] mx-5 ${getStatusColor(cellData)}` : ""}`}
               >
                 {cellData}
               </div>
