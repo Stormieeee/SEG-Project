@@ -23,6 +23,10 @@ export default function RoomBooking() {
   const [capacity, setCapacity] = useState(30);
   const [specifics, setSpecifics] = useState("");
 
+
+  
+
+
   const convertHourToHHMM = (hour: number): [number, number] => {
     const minute = 0; // Since we're converting from HH to HH:MM, minute will be 0
     return [hour, minute];

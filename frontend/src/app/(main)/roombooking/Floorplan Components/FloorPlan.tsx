@@ -266,7 +266,6 @@ const ThirdFloor = ({ dataFromApi }: { dataFromApi: any }) => {
   // Function to handle button click
   const handleButtonClick = (buttonKey: string) => {
     setActiveButton(buttonKey === activeButton ? null : buttonKey);
-    console.log(buttonKey);
   };
 
   return (

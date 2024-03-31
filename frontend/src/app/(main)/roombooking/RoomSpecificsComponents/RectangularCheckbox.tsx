@@ -2,29 +2,35 @@
 
 import React, { useState } from "react";
 
-const RectangularCheckbox: React.FC<{ label: string }> = ({ label }) => {
-  const [isChecked, setIsChecked] = useState(false);
 
-  const handleCheckboxChange = () => {
-    setIsChecked((prev) => !prev);
+interface RectangularCheckboxProps {
+  label: string;
+  checked: boolean;
+  onChange: () => void;
+}
+
+const RectangularCheckbox: React.FC<RectangularCheckboxProps> = ( { label, checked, onChange }) => {
+
+  const handleClick = () => {
+    onChange();
   };
 
   return (
-    <div className="flex items-center relative space-x-2 rounded-[5px] border border-blue-400 text-blue-600 my-3 p-3 w-56 h-12">
+    <div className="flex items-center relative space-x-2 rounded-[5px] border my-3 ml-2 mr-24 py-5 px-5 border-gray-300 text-black-500 font-medium">
       <label>{label}</label>
       <div
         className={`w-6 h-6 border border-gray-300 rounded cursor-pointer flex right-4 absolute ${
-          isChecked ? "bg-blue-500 border-blue-500" : ""
+          checked ? "bg-blue-500 border-blue-500" : ""
         }`}
-        onClick={handleCheckboxChange}
+        onClick={handleClick}
       >
-        {isChecked && (
+        {checked && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke="white"
-            className="w-4 h-4"
+            className="w-6 h-6"
           >
             <path
               stroke-linecap="round"

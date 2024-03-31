@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
-const LargeTextbox: React.FC = () => {
+interface LargeTextboxProps {
+  setOtherSpecific: (value: string) => void;
+}
+
+const LargeTextbox: React.FC<LargeTextboxProps> = ({setOtherSpecific} : any) => {
+  const [text, setText] = useState("");
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(event.target.value);
+    setOtherSpecific(event.target.value);
+  };
   return (
     <div>
       <textarea
-        className="w-full h-40 bg-black-50 rounded-lg p-4 focus:bg-white-50 focus:placeholder-white-50"
+        value={text}
+        onChange={handleChange}
+        className="w-full h-40 bg-gray-100 rounded-lg p-4 focus:bg-white-50 focus:placeholder-white-50 text-black-500"
         placeholder="Enter text here..."
       ></textarea>
     </div>
