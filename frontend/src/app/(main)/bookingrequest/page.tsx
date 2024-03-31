@@ -23,7 +23,6 @@ const BookingRequestPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
         setRequests(data);
       }
     } catch (error) {
@@ -38,7 +37,7 @@ const BookingRequestPage = () => {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="ml-10">
+      <div className="ml-10 h-10 flex items-center">
         <Sortbar
           requests={requests}
           setRequests={setRequests}

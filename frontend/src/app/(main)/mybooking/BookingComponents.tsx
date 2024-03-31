@@ -29,7 +29,7 @@ const BookingComponents = ({
   return (
     <div className="flex">
       <div
-        className={`flex ml-10 mr-5 overflow-y-auto h-[550px] transition-all transform ease-in duration-500 ${isSelected ? "transform transition-all ease-in duration-500 w-2/3 " : "w-full"}`}
+        className={`flex ml-10 mr-5 mt-5 overflow-y-auto h-[550px] transition-all transform ease-in duration-500 ${isSelected ? "transform transition-all ease-in duration-500 w-2/3 " : "w-full"}`}
       >
         <BookingsTable
           bookings={bookings}

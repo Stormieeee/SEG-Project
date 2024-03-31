@@ -41,27 +41,27 @@ const DetailsBar = ({
     );
     if (confirmed) {
       try {
-        const response = await fetch(
-          "https://localhost:8000/handle_booking",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              action: action,
-              booking_id: bookingId,
-              comment: comment,
-            }),
-          }
-        );
+        const response = await fetch("http://localhost:8000/handle_booking/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: action,
+            bookingID: bookingId,
+            comment: comment,
+          }),
+        });
+        const data = await response.json();
 
         if (response.ok) {
-          if (selectedRowIndex >= 0 && requests) {
-            handleRemoveItem(selectedRowIndex);
-            if (selectedRowIndex === requests.length - 1) {
-              setSelectedRowIndex(selectedRowIndex - 1);
-            }
+          if (data[0] === "Collision") {
+            alert("Collision detected! Please decline this booking request.");
+            return;
+          }
+          handleRemoveItem(selectedRowIndex);
+          if (selectedRowIndex === requests.length - 1) {
+            setSelectedRowIndex(selectedRowIndex - 1);
           }
         }
       } catch (error) {
