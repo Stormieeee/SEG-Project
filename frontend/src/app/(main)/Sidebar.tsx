@@ -53,43 +53,51 @@ const Sidebar = () => {
     checkRole();
   }, []);
 
+  const buttonActiveStyle = "flex flex-row py-1.5 bg-primary-200 rounded-md items-center";
+  const buttonInactiveStyle =  "flex flex-row py-1.5 rounded-md items-center";
+
+  const textActiveStyle = "text-md items-center text-gray-800 float-left font-normal font-Inter ";
+  const textInactiveStyle = "text-md items-center text-gray-500 float-left font-normal font-Inter";
+
+  const iconStyle = "mx-2 w-7 justify-center p-0.5"
+
   return (
     <>
-      <div className=" relative top-0 flex flex-col h-screen bg-white-50 border-zinc-200 ">
+      <div className=" relative top-0 flex flex-col h-screen bg-white-50 ">
         <Link href="https://www.southampton.ac.uk/my/index.page">
           <Image
             src={companylogo}
             alt="Company Logo"
-            className="object-contain w-25 pt-[30px] px-[30px] pb-[10px] flex items-center"
+            className="object-contain w-25 pt-[20px] px-[30px] pb-[20px] flex items-center"
             width={0}
             height={0}
           />
         </Link>
-        <div className="bg-white-600 mx-2.5 h-[1px] mb-16"></div>
+        <div className="bg-white-600 mx-2.5 h-[1px] mb-4"></div>
         <div className="justify-items-center flex flex-col">
           <Link
             href="/roombooking"
-            className=" space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+            className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
           >
             {isRoomBookingActive ? (
-              <div className="flex flex-row py-2 bg-primary-200 rounded-md">
+              <div className={`${buttonActiveStyle}`}>
                 <Image
                   src={roomBookingDark}
                   alt="Room Booking Dark"
-                  className="mx-2 w-10 justify-center p-0.5 animate-vote duration-200"
+                  className={`${iconStyle} animate-vote duration-200`}
                 />
-                <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
+                <span className={`${textActiveStyle}`}>
                   Room Booking
                 </span>
               </div>
             ) : (
-              <div className="flex flex-row py-2 rounded-md">
+              <div className={`${buttonInactiveStyle}`}>
                 <Image
                   src={roomBookingLight}
                   alt="Room Booking Light"
-                  className="mx-2 w-10 justify-center p-0.5"
+                  className={`${iconStyle}`}
                 />
-                <span className="text-lg items-center text-stone-500 float-left font-normal font-Inter">
+                <span className={`${textInactiveStyle}`}>
                   Room Booking
                 </span>
               </div>
@@ -100,24 +108,24 @@ const Sidebar = () => {
             className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
           >
             {isMyBookingActive ? (
-              <div className="flex flex-row py-2 bg-primary-200 rounded-md">
+              <div className={`${buttonActiveStyle}`}>
                 <Image
                   src={myBookingDark}
                   alt="My Booking Dark"
-                  className="mx-2 w-10 justify-center p-0.5 animate-vote duration-200"
+                  className={`${iconStyle}`}
                 />
-                <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
+                <span className={`${textActiveStyle}`}>
                   My Booking
                 </span>
               </div>
             ) : (
-              <div className="flex flex-row py-2 rounded-md">
+              <div className={`${buttonInactiveStyle}`}>
                 <Image
                   src={myBookingLight}
                   alt="My Booking Light"
-                  className="mx-2 w-10 justify-center p-0.5"
+                  className={`${iconStyle}`}
                 />
-                <span className="text-lg  items-center text-stone-500 float-left font-normal font-Inter">
+                <span className={`${textInactiveStyle}`}>
                   My Booking
                 </span>
               </div>
@@ -129,24 +137,24 @@ const Sidebar = () => {
               className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
             >
               {isBookingRequestActive ? (
-                <div className="flex flex-row py-2 bg-primary-200 rounded-md">
+                <div className= {`${buttonActiveStyle}`}>
                   <Image
                     src={bookingRequestDark}
                     alt="Booking Request Dark"
-                    className="mx-2 w-10 justify-center p-0.5 animate-vote duration-200"
+                    className={`${iconStyle} h-7`}
                   />
-                  <span className=" text-lg items-center text-zinc-800 float-left font-normal font-Inter ">
+                  <span className={`${textActiveStyle}`}>
                     Booking Request
                   </span>
                 </div>
               ) : (
-                <div className="flex flex-row py-2 rounded-md">
+                <div className= {`${buttonInactiveStyle}`}>
                   <Image
                     src={bookingRequestLight}
                     alt="Booking Request Light"
-                    className="mx-2 w-10 justify-center p-0.5"
+                    className={`${iconStyle} h-7 `}
                   />
-                  <span className="text-lg items-center text-stone-500 float-left font-normal font-Inter">
+                  <span className={`${textInactiveStyle}`}>
                     Booking Request
                   </span>
                 </div>
@@ -155,31 +163,31 @@ const Sidebar = () => {
           )}
         </div>
 
-        <div className=" bottom-0 w-full flex flex-col absolute">
-          <div className="flex flex-col bg-white-600 mx-2.5 h-[2px]"></div>
+        <div className=" bottom-4 w-full flex flex-col absolute">
+          <div className="flex flex-col bg-white-600 mx-4 h-[1px]"></div>
           <Link
             href="/profile"
-            className=" static bottom-0 space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+            className=" static bottom-0 space-x-2 mx-3 m-2 pt-2 duration-200 hover:shadow-lg rounded-md"
           >
             {isProfileActive ? (
-              <div className="flex flex-row py-1.5 bg-primary-200 rounded-md items-center">
+              <div className={`${buttonActiveStyle}`}>
                 <Image
                   src={profileDark}
                   alt="Profile Dark"
-                  className="mx-1 ml-2 w-10 justify-center p-0.5 animate-vote duration-200"
+                  className={`${iconStyle}`}
                 />
-                <span className=" text-lg items-center justify-center text-zinc-800 float-left font-normal font-Inter ">
+                <span className={`${textActiveStyle}`}>
                   Profile
                 </span>
               </div>
             ) : (
-              <div className="flex flex-row py-1.5 rounded-md items-center">
+              <div className= {`${buttonInactiveStyle}`}>
                 <Image
                   src={profileLight}
                   alt="Profile Light"
-                  className="mx-1 ml-2 w-10 justify-center p-0.5"
+                  className={`${iconStyle}`}
                 />
-                <span className="text-lg items-center text-stone-500 float-left font-normal font-Inter">
+                <span className={`${textInactiveStyle}`}>
                   Profile
                 </span>
               </div>

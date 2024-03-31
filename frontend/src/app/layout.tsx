@@ -25,11 +25,6 @@ export default function RootLayout({
           
           <main className="flex-1 flex">
             {children}
-            {/* <MarginWidthWrapper>
-            <Sidebar />
-              <Header />
-              <PageWrapper>{children}</PageWrapper>
-            </MarginWidthWrapper> */}
           </main>
         </div></body>
     </html>

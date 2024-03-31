@@ -65,7 +65,7 @@ const BookingsTable = ({
       case "Pending":
         return "bg-yellow-50 text-orange-400";
       case "Approved":
-        return "bg-sky-400 text-white-100";
+        return "bg-primary-500 text-white-100";
       case "Completed":
         return "bg-green-500";
       default:
@@ -110,7 +110,7 @@ const BookingsTable = ({
             {rowData.map((cellData, cellIndex) => (
               <div
                 key={cellIndex}
-                className={`mx-8 flex-1 py-[0.7rem] font-xl text-center ${cellIndex === header.length - 1 ? `rounded-xl ${getStatusColor(cellData)}` : ""}`}
+                className={`mx-8 flex-1 py-[0.125rem] text-base text-center ${cellIndex === header.length - 1 ? `rounded-lg font-semibold text-sm py-[0.3rem] ${getStatusColor(cellData)}` : ""}`}
               >
                 {cellData}
               </div>

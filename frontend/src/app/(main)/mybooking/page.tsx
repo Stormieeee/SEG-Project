@@ -49,7 +49,7 @@ const MyBookingPage = () => {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="relative flex-1 flex items-center">
+      <div className="relative flex-auto flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <BookingSwitcher
             isCurrentBooking={isCurrentBooking}

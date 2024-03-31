@@ -22,7 +22,7 @@ const BookingSwitcher = ({
       >
         {"<"}
       </button>
-      <div className="flex w-[180px] py-2 justify-center text-xl border-y">
+      <div className="flex w-[180px] py-2 justify-center text-lg font-medium border-y">
         {isCurrentBooking ? "Current Booking" : "Past Booking"}
       </div>
       <button

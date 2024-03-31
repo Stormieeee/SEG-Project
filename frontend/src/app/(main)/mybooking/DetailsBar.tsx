@@ -75,19 +75,20 @@ const DetailsBar = ({
     }
   };
 
+  const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3"
   return (
     <div className="flex flex-1 flex-col">
-      <div className="border-neutral-400 justify-start text-2xl font-bold">
+      <div className="justify-start text-2xl font-bold text-stone-900">
         Request Details
       </div>
       <div className="border-neutral-400 flex-1 flex-col justify-start inline-flex">
-        <div className="text-xl font-bold">From:</div>
-        <div className="text-l mt-1">
+        <div className={`${subHeadingStyle}`}>From:</div>
+        <div className=" text-base font-medium text-stone-700">
           {user_id} ({"student"})
         </div>
 
-        <div className="text-xl font-bold mt-5">Booking Specific:</div>
-        <ul className="list-decimal pl-5 space-y-3 mt-1 text-l">
+        <div className={`${subHeadingStyle}`}>Booking Specific:</div>
+        <ul className="pl-1 space-y-2 mt-2 text-base font-medium text-stone-700">
           <li>Room Capacity: {room_capacity}</li>
           <li>Request Capacity: {request_capacity}</li>
           <li>Purpose:</li>
@@ -96,8 +97,8 @@ const DetailsBar = ({
           </ul>
         </ul>
 
-        <div className="text-xl font-bold mt-5">Comment:</div>
-        <ul className="space-y-3 mt-1 text-l leading-tight italic text-justify">
+        <div className={`${subHeadingStyle}`}>Comment:</div>
+        <ul className="space-y-3 mt-1 text-l leading-tight italic text-justify font-medium text-stone-700">
           <li>{comment ? comment : "None"}</li>
         </ul>
         {isCurrentBooking &&
