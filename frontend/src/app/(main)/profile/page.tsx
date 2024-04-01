@@ -132,7 +132,7 @@ const Profile = () => {
     setShowEditIcon(false);
   };
   return (
-    <div className="flex relative flex-col items-center">
+    <div className="flex flex-col items-center">
       <div
         className="relative"
         onMouseEnter={() => setShowEditIcon(true)}

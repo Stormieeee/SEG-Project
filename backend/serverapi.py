@@ -655,6 +655,8 @@ def accept_booking(db_connection, cursor, requestID, comment):
           "Please view the Room Booking System Website for further details"
     send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
 
+    return True
+
 
 def decline_booking(db_connection, cursor, requestID, comment):
 

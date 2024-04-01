@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface RequestTableProps {
+  searchTerm: string;
   requests: string[][];
   setRequestDetails: React.Dispatch<
     React.SetStateAction<{
@@ -12,12 +13,17 @@ interface RequestTableProps {
       description: string;
     } | null>
   >;
+  filteredRequests: string[][];
+  setFilteredRequests: React.Dispatch<React.SetStateAction<string[][]>>;
   selectedRowIndex: number;
   setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 const RequestTable = ({
+  searchTerm,
   requests,
   setRequestDetails,
+  filteredRequests,
+  setFilteredRequests,
   selectedRowIndex,
   setSelectedRowIndex,
 }: RequestTableProps) => {
@@ -48,9 +54,31 @@ const RequestTable = ({
 
   useEffect(() => {
     if (selectedRowIndex >= 0 && requests) {
-      getRequestDetails(requests[selectedRowIndex][0], selectedRowIndex);
+      getRequestDetails(
+        filteredRequests[selectedRowIndex][0],
+        selectedRowIndex
+      );
     }
-  }, [requests]);
+  }, [filteredRequests]);
+  useEffect(() => {
+    if (requests && searchTerm) {
+      const filtered = requests.filter(
+        (request) =>
+          request[0].toLowerCase().includes(searchTerm.toLowerCase()) ||
+          request[1].toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredRequests(filtered);
+      if (filtered.length === 0) {
+        setSelectedRowIndex(-1);
+      } else {
+        if (selectedRowIndex !== -1) {
+          setSelectedRowIndex(0);
+        }
+      }
+    } else {
+      setFilteredRequests(requests);
+    }
+  }, [requests, searchTerm]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -61,11 +89,11 @@ const RequestTable = ({
           </div>
         ))}
       </div>
-      {requests.length > 0 ? (
-        requests.map((rowData: any[], rowIndex: number) => (
+      {filteredRequests.length > 0 ? (
+        filteredRequests.map((rowData: any[], rowIndex: number) => (
           <button
             key={rowIndex}
-            className={`flex h-[50px] flex-shrink-0 justify-between items-center border border-primary-400 rounded-md ${
+            className={`flex h-[50px] flex-shrink-0 justify-between mt-1 items-center border border-primary-400 rounded-md ${
               selectedRowIndex === rowIndex
                 ? "bg-primary-300"
                 : "bg-primary-50 hover:bg-primary-100 hover:border-primary-300 cursor-pointer transition duration-300 ease-in-out"

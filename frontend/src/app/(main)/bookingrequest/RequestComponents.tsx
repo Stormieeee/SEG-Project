@@ -4,16 +4,22 @@ import RequestTable from "./RequestTable";
 import DetailsBar from "./DetailsBar";
 
 interface RequestComponentsProps {
+  searchTerm: string;
   selectedRowIndex: number;
   setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
   requests: string[][];
   setRequests: React.Dispatch<React.SetStateAction<string[][]>>;
+  filteredRequests: string[][];
+  setFilteredRequests: React.Dispatch<React.SetStateAction<string[][]>>;
 }
 const RequestComponents = ({
+  searchTerm,
   selectedRowIndex,
   setSelectedRowIndex,
   requests,
   setRequests,
+  filteredRequests,
+  setFilteredRequests,
 }: RequestComponentsProps) => {
   const isSelected = selectedRowIndex >= 0;
   const [requestDetails, setRequestDetails] = useState<{
@@ -31,8 +37,11 @@ const RequestComponents = ({
         className={`flex ml-10 mr-5 mt-5 overflow-y h-[550px] transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
       >
         <RequestTable
+          searchTerm={searchTerm}
           requests={requests}
           setRequestDetails={setRequestDetails}
+          filteredRequests={filteredRequests}
+          setFilteredRequests={setFilteredRequests}
           selectedRowIndex={selectedRowIndex}
           setSelectedRowIndex={setSelectedRowIndex}
         />

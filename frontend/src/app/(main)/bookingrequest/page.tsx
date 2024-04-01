@@ -1,12 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Sortbar from "./Sortbar";
+import SearchBar from "./SearchBar";
 import RequestComponents from "./RequestComponents";
 import getEmailFromSessionStorage from "../../Components/CommonFunction";
 
 const BookingRequestPage = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [requests, setRequests] = useState<string[][]>([]);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
+  const [filteredRequests, setFilteredRequests] = useState<string[][]>([]);
 
   const getRequestData = async () => {
     try {
@@ -37,16 +40,20 @@ const BookingRequestPage = () => {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="ml-10 h-10 flex items-center">
+      <div className="h-10 flex mt-3 items-center justify-center relative">
         <Sortbar
-          requests={requests}
-          setRequests={setRequests}
+          filteredRequests={filteredRequests}
+          setFilteredRequests={setFilteredRequests}
           setSelectedRowIndex={setSelectedRowIndex}
         />
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
       <RequestComponents
+        searchTerm={searchTerm}
         requests={requests}
         setRequests={setRequests}
+        filteredRequests={filteredRequests}
+        setFilteredRequests={setFilteredRequests}
         selectedRowIndex={selectedRowIndex}
         setSelectedRowIndex={setSelectedRowIndex}
       />

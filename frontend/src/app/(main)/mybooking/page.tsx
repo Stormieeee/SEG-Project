@@ -49,15 +49,8 @@ const MyBookingPage = () => {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="relative flex-auto flex items-center">
-        <div className="absolute left-1/2 transform -translate-x-1/2">
-          <BookingSwitcher
-            isCurrentBooking={isCurrentBooking}
-            setIsCurrentBooking={setIsCurrentBooking}
-            setSelectedRowIndex={setSelectedRowIndex}
-          />
-        </div>
-        <div className="absolute left-10">
+      <div className="relative flex h-10 mt-3 items-center justify-center">
+        <div className="absolute inset-x-10">
           <Sortbar
             bookings={isCurrentBooking ? currentBookings : pastBookings}
             setBookings={

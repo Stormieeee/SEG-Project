@@ -20,7 +20,7 @@ const EmailInput = ({ email, setEmail, error }: EmailInputProps) => {
         name="email"
         id="email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value.trim())}
         className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-slate-500 dark:text-slate-200 dark:focus:border-blue-500 sm:text-sm focus:placeholder-gray-700"
         placeholder="username@soton.ac.uk"
         required
