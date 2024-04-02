@@ -146,7 +146,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
             </div>
 
             <div className="flex flex-col w-1/3 ml-auto">
-              <button className="relative h-[40px] w-full mt-auto  border-2">
+              <button className="relative h-[40px] w-full mt-auto border-2">
                 <span className="text-[10px] origin-center">2R009</span>
               </button>
 
@@ -296,7 +296,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
             <button
               key={"3R041"}
               onClick={() => handleButtonClick("3R041")}
-              className={`"w-1/2  border-2"
+              className={`w-1/2 rounded-md
               ${getButtonColorClass(colorMap["3R041"])}
               ${getActiveButtonClass(activeButton === "3R041", colorMap["3R041"])}
               `}
@@ -311,7 +311,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
           <button
             key={"3R016"}
             onClick={() => handleButtonClick("3R016")}
-            className={`h-12/100  border-2 
+            className={`h-12/100 rounded-md border-2
             ${getButtonColorClass(colorMap["3R016"])}
             ${getActiveButtonClass(activeButton === "3R016", colorMap["3R016"])}`}
             disabled={getButtonDisabledState(colorMap["3R016"])}
@@ -321,7 +321,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
           <button
             key={"3R014"}
             onClick={() => handleButtonClick("3R014")}
-            className={`h-16/100  border-2 
+            className={`h-16/100 rounded-md 
             ${getButtonColorClass(colorMap["3R014"])}
             ${getActiveButtonClass(activeButton === "3R014", colorMap["3R014"])}`}
             disabled={getButtonDisabledState(colorMap["3R014"])}
@@ -331,7 +331,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
           <button
             key={"3R012"}
             onClick={() => handleButtonClick("3R012")}
-            className={`h-22/100  border-2
+            className={`h-22/100 rounded-md 
             ${getButtonColorClass(colorMap["3R012"])}
             ${getActiveButtonClass(activeButton === "3R012", colorMap["3R012"])}`}
             disabled={getButtonDisabledState(colorMap["3R012"])}
@@ -341,7 +341,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
           <button
             key={"3R010"}
             onClick={() => handleButtonClick("3R010")}
-            className={`h-22/100  border-2
+            className={`h-22/100 rounded-md 
             ${getButtonColorClass(colorMap["3R010"])}
             ${getActiveButtonClass(activeButton === "3R010", colorMap["3R010"])}`}
             disabled={getButtonDisabledState(colorMap["3R010"])}
@@ -351,7 +351,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
           <button
             key={"3R008"}
             onClick={() => handleButtonClick("3R008")}
-            className={`h-12/100  border-2 
+            className={`h-12/100 rounded-md  
             ${getButtonColorClass(colorMap["3R008"])}
             ${getActiveButtonClass(activeButton === "3R008", colorMap["3R008"])}`}
             disabled={getButtonDisabledState(colorMap["3R008"])}
@@ -364,11 +364,11 @@ const FloorPlan: React.FC<FloorPlanProps> = (
           <div className="h-1/2 flex flex-row">
             <div className="w-4/5 flex flex-col">
               <div className="h-26/100 flex flex-row">
-                <div className="w-23/100 bg-black-100 border-2"></div>
+                <div className="w-23/100 bg-black-100"></div>
                 <button
                   key={"3R018"}
                   onClick={() => handleButtonClick("3R018")}
-                  className={`w-11/100  border-2 
+                  className={`w-11/100 rounded-md 
                   ${getButtonColorClass(colorMap["3R018"])}
                   ${getActiveButtonClass(activeButton === "3R018", colorMap["3R018"])}`}
                   disabled={getButtonDisabledState(colorMap["3R018"])}
@@ -380,7 +380,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                 <button
                   key={"3R020"}
                   onClick={() => handleButtonClick("3R020")}
-                  className={`"w-13/100  border-2" 
+                  className={`w-13/100 rounded-md 
                   ${getButtonColorClass(colorMap["3R020"])}
                   ${getActiveButtonClass(activeButton === "3R020", colorMap["3R020"])}`}
                   disabled={getButtonDisabledState(colorMap["3R020"])}
@@ -390,7 +390,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                 <button
                   key={"3R022"}
                   onClick={() => handleButtonClick("3R022")}
-                  className={`"w-18/100  border-2"
+                  className={`w-18/100 rounded-md 
                   ${getButtonColorClass(colorMap["3R022"])}
                   ${getActiveButtonClass(activeButton === "3R022", colorMap["3R022"])}`}
                   disabled={getButtonDisabledState(colorMap["3R022"])}
@@ -400,7 +400,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                 <button
                   key={"3R024"}
                   onClick={() => handleButtonClick("3R024")}
-                  className={`"w-18/100  border-2"
+                  className={`w-18/100 rounded-md 
                   ${getButtonColorClass(colorMap["3R024"])}
                   ${getActiveButtonClass(activeButton === "3R024", colorMap["3R024"])}`}
                   disabled={getButtonDisabledState(colorMap["3R024"])}
@@ -410,7 +410,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                 <button
                   key={"3R025"}
                   onClick={() => handleButtonClick("3R025")}
-                  className={`"w-17/100  border-2"
+                  className={`w-17/100 rounded-md 
                   ${getButtonColorClass(colorMap["3R025"])}
                   ${getActiveButtonClass(activeButton === "3R025", colorMap["3R025"])}`}
                   disabled={getButtonDisabledState(colorMap["3R025"])}
@@ -429,7 +429,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                     <button
                       key={"3R017"}
                       onClick={() => handleButtonClick("3R017")}
-                      className={`w-1/2  border-2 
+                      className={`w-1/2 rounded-md 
                     ${getButtonColorClass(colorMap["3R017"])}
                     ${getActiveButtonClass(activeButton === "3R017", colorMap["3R017"])}`}
                       disabled={getButtonDisabledState(colorMap["3R017"])}
@@ -439,7 +439,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                     <button
                       key={"3R019"}
                       onClick={() => handleButtonClick("3R019")}
-                      className={`w-1/2  border-2
+                      className={`w-1/2 rounded-md 
                       ${getButtonColorClass(colorMap["3R019"])}
                       ${getActiveButtonClass(activeButton === "3R019", colorMap["3R019"])}
                     `}
@@ -452,7 +452,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                   <button
                     key={"3R015"}
                     onClick={() => handleButtonClick("3R015")}
-                    className={`h-36/100 border-2
+                    className={`h-36/100 rounded-md 
                     ${getButtonColorClass(colorMap["3R015"])}
                     ${getActiveButtonClass(activeButton === "3R015", colorMap["3R015"])}`}
                     disabled={getButtonDisabledState(colorMap["3R015"])}
@@ -469,7 +469,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                   <button
                     key={"3R021"}
                     onClick={() => handleButtonClick("3R021")}
-                    className={`w-33/100 h-1/2  border-2
+                    className={`w-33/100 h-1/2 rounded-md 
                     ${getButtonColorClass(colorMap["3R021"])}
                     ${getActiveButtonClass(activeButton === "3R021", colorMap["3R021"])}`}
                     disabled={getButtonDisabledState(colorMap["3R021"])}
@@ -480,7 +480,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                     <button
                       key={"3R023"}
                       onClick={() => handleButtonClick("3R023")}
-                      className={`h-1/2  border-2
+                      className={`h-1/2 rounded-md 
                     ${getButtonColorClass(colorMap["3R023"])}
                     ${getActiveButtonClass(activeButton === "3R023", colorMap["3R023"])}`}
                       disabled={getButtonDisabledState(colorMap["3R023"])}
@@ -491,7 +491,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                       <button
                         key={"3R028"}
                         onClick={() => handleButtonClick("3R028")}
-                        className={`w-1/2  border-2 
+                        className={`w-1/2 rounded-md 
                       ${getButtonColorClass(colorMap["3R028"])}
                       ${getActiveButtonClass(activeButton === "3R028", colorMap["3R028"])}`}
                         disabled={getButtonDisabledState(colorMap["3R028"])}
@@ -501,7 +501,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
                       <button
                         key={"3R027"}
                         onClick={() => handleButtonClick("3R027")}
-                        className={`w-1/2  border-2
+                        className={`w-1/2 rounded-md 
                       ${getButtonColorClass(colorMap["3R027"])}
                       ${getActiveButtonClass(activeButton === "3R027", colorMap["3R027"])}`}
                         disabled={getButtonDisabledState(colorMap["3R027"])}
@@ -520,7 +520,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
               <button
                 key={"3R026"}
                 onClick={() => handleButtonClick("3R026")}
-                className={`h-34/100 border-2 mt-auto rounded-md 
+                className={`h-34/100 mt-auto rounded-md 
                 ${getButtonColorClass(colorMap["3R026"])}
                 ${getActiveButtonClass(activeButton === "3R026", colorMap["3R026"])} `}
                 disabled={getButtonDisabledState(colorMap["3R026"])}
@@ -742,31 +742,31 @@ const FloorPlan: React.FC<FloorPlanProps> = (
               <div className="h-73/100 bg-black-400 border-2"></div>
             </div>
 
-            <button className="w-7/100  border-2">
+            <button className="w-7/100 rounded-md">
               <span className="block transform -rotate-90 origin-center">
                 2L011
               </span>
             </button>
 
-            <button className="w-15/100  border-2">2L010</button>
-            <button className="w-18/100  border-2">2L009</button>
-            <button className="w-36/100  border-2">2L008</button>
+            <button className="w-15/100 rounded-md">2L010</button>
+            <button className="w-18/100 rounded-md">2L009</button>
+            <button className="w-36/100 rounded-md">2L008</button>
 
             <div className="w-10/100 flex flex-col">
               <div className="h-46/100"></div>
 
               <div className="h-32/100 flex flex-row">
-                <button className="w-1/3  border-2">
+                <button className="w-1/3 rounded-md">
                   <span className="block transform -rotate-90 text-[8px] origin-center">
                     2L005
                   </span>
                 </button>
-                <button className="w-1/3  border-2">
+                <button className="w-1/3 rounded-md">
                   <span className="block transform -rotate-90 text-[8px] origin-center">
                     2L006
                   </span>
                 </button>
-                <button className="w-1/3  border-2">
+                <button className="w-1/3 rounded-md">
                   <span className="block transform -rotate-90 text-[8px] origin-center">
                     2L007
                   </span>
@@ -774,16 +774,16 @@ const FloorPlan: React.FC<FloorPlanProps> = (
               </div>
 
               <div className="h-22/100 flex flex-row">
-                <button className="w-1/3  border-2 text-xs">T1</button>
+                <button className="w-1/3 rounded-md text-xs">T1</button>
                 <div className="w-1/3"></div>
-                <button className="w-1/3  border-2 text-xs">T2</button>
+                <button className="w-1/3 rounded-md text-xs">T2</button>
               </div>
             </div>
 
             <div className="w-10/100 flex flex-col">
               <div className="h-46/100"></div>
               <div className="h-54/100 flex flex-row">
-                <button className="w-2/5  border-l-2 border-b-2 border-t-2">
+                <button className="w-2/5 rounded-md">
                   <span className="block transform -rotate-90 text-xs origin-center">
                     2L007
                   </span>
@@ -805,61 +805,61 @@ const FloorPlan: React.FC<FloorPlanProps> = (
               <div className="h-2/3 flex flex-row">
                 <div className="w-2/3 flex flex-col">
                   <div className="h-20/100"></div>
-                  <div className="h-30/100 bg-black-400 border-2"></div>
-                  <div className="h-50/100 bg-black-400 border-2"></div>
+                  <div className="h-30/100 bg-black-400 rounded-md"></div>
+                  <div className="h-50/100 bg-black-400 rounded-md"></div>
                 </div>
                 <div className="w-1/3"></div>
               </div>
-              <div className="h-1/3 bg-black-400 border-2"></div>
+              <div className="h-1/3 bg-black-400 rounded-md"></div>
             </div>
 
             <div className="w-20/100 flex flex-col">
               <div className="h-62/100 flex flex-row">
                 <div className="w-1/2 flex flex-col">
-                  <button className="h-50/100  border-2">2L012</button>
+                  <button className="h-50/100 rounded-md">2L012</button>
                   <div className="h-30/100 flex flex-row">
-                    <button className="w-1/2  border-2 text-[8px]">
+                    <button className="w-1/2 rounded-md text-[8px]">
                       2L016
                     </button>
-                    <button className="w-1/2  border-2 text-[8px]">
+                    <button className="w-1/2 rounded-md text-[8px]">
                       2L015
                     </button>
                   </div>
-                  <button className="h-20/100  border-l-2 border-b-2">L</button>
+                  <button className="h-20/100 rounded-md">L</button>
                 </div>
 
                 <div className="w-1/2 flex flex-col">
                   <div className="h-4/5 flex flex-row">
-                    <button className="w-35/100  border-2">
+                    <button className="w-35/100 rounded-md">
                       <span className="block transform -rotate-90 text-xs origin-center">
                         2L014
                       </span>
                     </button>
-                    <button className="w-65/100  border-t-2 border-l-2 border-r-2">
+                    <button className="w-65/100 rounded-md">
                       <span className="block transform -rotate-90 text-xs origin-center">
                         2L013
                       </span>
                     </button>
                   </div>
-                  <button className="h-1/5  border-r-2 border-b-2">L</button>
+                  <button className="h-1/5 rounded-md">L</button>
                 </div>
               </div>
 
               <div className="h-38/100 flex flex-row">
-                <button className="w-1/2  border-2">2L017</button>
-                <button className="w-1/2  border-2">2L018</button>
+                <button className="w-1/2 rounded-md">2L017</button>
+                <button className="w-1/2 rounded-md">2L018</button>
               </div>
             </div>
 
-            <button className="w-15/100  border-2">2L019</button>
+            <button className="w-15/100 rounded-md">2L019</button>
 
-            <button className="w-10/100  border-2">2L020</button>
+            <button className="w-10/100 rounded-md">2L020</button>
 
             <div className="w-40/100 flex flex-row">
-              <button className="w-1/4  border-2">2L021</button>
-              <button className="w-1/4  border-2">2L022</button>
-              <button className="w-1/4  border-2">2L023</button>
-              <button className="w-1/4  border-2">2L024</button>
+              <button className="w-1/4 rounded-md">2L021</button>
+              <button className="w-1/4 rounded-md">2L022</button>
+              <button className="w-1/4 rounded-md">2L023</button>
+              <button className="w-1/4 rounded-md">2L024</button>
             </div>
 
             <div className="w-10/100"></div>

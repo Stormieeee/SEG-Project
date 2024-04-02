@@ -109,8 +109,10 @@ const Login = ({ handleSuccessLogin }: LoginProps) => {
                 setShowPassword={setShowPassword}
                 error={passwordError}
               />
-              <LoginButton />
-              {loading && <LoadingSpinner />}
+              {/* <div className="flex"> */}
+
+              {loading ? <LoadingSpinner /> : <LoginButton />}
+              {/* </div> */}
             </form>
           </div>
         </div>

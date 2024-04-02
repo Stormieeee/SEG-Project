@@ -7,6 +7,7 @@ interface ResetButtonProps {
 const ResetButton = ({ setShowAuth }: ResetButtonProps) => {
   const handleReset = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    setShowAuth(true);
     try {
       // Send request to resend OTP
       const response = await fetch("http://localhost:8000/SendOTP/", {
@@ -17,9 +18,7 @@ const ResetButton = ({ setShowAuth }: ResetButtonProps) => {
         body: JSON.stringify({ user_id: getEmailFromSessionStorage() }),
       });
 
-      if (response.ok) {
-        setShowAuth(true);
-      } else {
+      if (!response.ok) {
         // Handle error response
         console.error("Failed to send OTP");
       }

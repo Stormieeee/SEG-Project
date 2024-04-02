@@ -2,10 +2,10 @@ import React from "react";
 import { FORM_CONTAINER } from "../ComponentFormat";
 
 const STATUS = [
-  { name: "Available", color: "bg-cyan-500" },
-  { name: "Not suitable", color: "bg-yellow-400" },
-  { name: "Fully Booked", color: "bg-red-600" },
-  { name: "Unavailable", color: "bg-gray-200" }
+  { name: "Available", color: "bg-primary-100" },
+  { name: "Not suitable", color: "bg-red-100" },
+  { name: "Fully Booked", color: "bg-yellow-100" },
+  { name: "Unavailable", color: "bg-black-100" },
 ];
 
 const STATUS_COLOR = "w-5 h-5 rounded-full ml-auto";
