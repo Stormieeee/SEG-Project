@@ -57,7 +57,17 @@
 // export default FloorPlan;
 
 import React, { useEffect, useState } from "react";
-const FloorPlan = ({ dataFromApi }: { dataFromApi: any }) => {
+
+interface FloorPlanProps {
+  setRoomID: (RoomID: string) => void;
+  dataFromApi: any;
+}
+
+const FloorPlan: React.FC<FloorPlanProps> = (
+  { dataFromApi }: { dataFromApi: any },
+  { setRoomID }: { setRoomID: any }
+) => {
+
   const fetchData = dataFromApi;
   const roomStatus = fetchData.dataFromApi.available;
   console.log(roomStatus);
@@ -68,6 +78,7 @@ const FloorPlan = ({ dataFromApi }: { dataFromApi: any }) => {
   // Function to handle button click
   const handleButtonClick = (buttonKey: string) => {
     setActiveButton(buttonKey === activeButton ? null : buttonKey);
+    setRoomID(buttonKey === activeButton ? null : buttonKey);
   };
   const getButtonColorClass = (color: string) => {
     switch (color) {
@@ -300,7 +311,7 @@ const FloorPlan = ({ dataFromApi }: { dataFromApi: any }) => {
           <button
             key={"3R016"}
             onClick={() => handleButtonClick("3R016")}
-            className={`"h-12/100  border-2" 
+            className={`h-12/100  border-2 
             ${getButtonColorClass(colorMap["3R016"])}
             ${getActiveButtonClass(activeButton === "3R016", colorMap["3R016"])}`}
             disabled={getButtonDisabledState(colorMap["3R016"])}

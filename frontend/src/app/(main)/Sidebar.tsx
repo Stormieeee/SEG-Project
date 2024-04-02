@@ -50,13 +50,16 @@ const Sidebar = () => {
     checkRole();
   }, []);
 
-  const buttonActiveStyle = "flex flex-row py-1.5 bg-primary-200 rounded-md items-center";
-  const buttonInactiveStyle =  "flex flex-row py-1.5 rounded-md items-center";
+  const buttonActiveStyle =
+    "flex flex-row py-1.5 bg-primary-200 rounded-md items-center";
+  const buttonInactiveStyle = "flex flex-row py-1.5 rounded-md items-center";
 
-  const textActiveStyle = "text-md items-center text-gray-800 float-left font-normal font-Inter ";
-  const textInactiveStyle = "text-md items-center text-gray-500 float-left font-normal font-Inter";
+  const textActiveStyle =
+    "text-md items-center text-gray-800 float-left font-normal font-Inter ";
+  const textInactiveStyle =
+    "text-md items-center text-gray-500 float-left font-normal font-Inter";
 
-  const iconStyle = "mx-2 w-7 justify-center p-0.5"
+  const iconStyle = "mx-2 w-7 justify-center p-0.5";
 
   return (
     <>
@@ -65,7 +68,7 @@ const Sidebar = () => {
           <Image
             src={companylogo}
             alt="Company Logo"
-            className="object-contain w-25 pt-[20px] px-[30px] pb-[20px] flex items-center"
+            className="object-contain pt-[20px] px-5 pb-[20px] flex items-center"
             width={0}
             height={0}
           />
@@ -83,9 +86,7 @@ const Sidebar = () => {
                   alt="Room Booking Dark"
                   className={`${iconStyle} animate-vote duration-200`}
                 />
-                <span className={`${textActiveStyle}`}>
-                  Room Booking
-                </span>
+                <span className={`${textActiveStyle}`}>Room Booking</span>
               </div>
             ) : (
               <div className={`${buttonInactiveStyle}`}>
@@ -94,9 +95,7 @@ const Sidebar = () => {
                   alt="Room Booking Light"
                   className={`${iconStyle}`}
                 />
-                <span className={`${textInactiveStyle}`}>
-                  Room Booking
-                </span>
+                <span className={`${textInactiveStyle}`}>Room Booking</span>
               </div>
             )}
           </Link>
@@ -111,9 +110,7 @@ const Sidebar = () => {
                   alt="My Booking Dark"
                   className={`${iconStyle}`}
                 />
-                <span className={`${textActiveStyle}`}>
-                  My Booking
-                </span>
+                <span className={`${textActiveStyle}`}>My Booking</span>
               </div>
             ) : (
               <div className={`${buttonInactiveStyle}`}>
@@ -122,9 +119,7 @@ const Sidebar = () => {
                   alt="My Booking Light"
                   className={`${iconStyle}`}
                 />
-                <span className={`${textInactiveStyle}`}>
-                  My Booking
-                </span>
+                <span className={`${textInactiveStyle}`}>My Booking</span>
               </div>
             )}
           </Link>
@@ -134,18 +129,16 @@ const Sidebar = () => {
               className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
             >
               {isBookingRequestActive ? (
-                <div className= {`${buttonActiveStyle}`}>
+                <div className={`${buttonActiveStyle}`}>
                   <Image
                     src={bookingRequestDark}
                     alt="Booking Request Dark"
                     className={`${iconStyle} h-7`}
                   />
-                  <span className={`${textActiveStyle}`}>
-                    Booking Request
-                  </span>
+                  <span className={`${textActiveStyle}`}>Booking Request</span>
                 </div>
               ) : (
-                <div className= {`${buttonInactiveStyle}`}>
+                <div className={`${buttonInactiveStyle}`}>
                   <Image
                     src={bookingRequestLight}
                     alt="Booking Request Light"
@@ -173,20 +166,16 @@ const Sidebar = () => {
                   alt="Profile Dark"
                   className={`${iconStyle}`}
                 />
-                <span className={`${textActiveStyle}`}>
-                  Profile
-                </span>
+                <span className={`${textActiveStyle}`}>Profile</span>
               </div>
             ) : (
-              <div className= {`${buttonInactiveStyle}`}>
+              <div className={`${buttonInactiveStyle}`}>
                 <Image
                   src={profileLight}
                   alt="Profile Light"
                   className={`${iconStyle}`}
                 />
-                <span className={`${textInactiveStyle}`}>
-                  Profile
-                </span>
+                <span className={`${textInactiveStyle}`}>Profile</span>
               </div>
             )}
           </Link>

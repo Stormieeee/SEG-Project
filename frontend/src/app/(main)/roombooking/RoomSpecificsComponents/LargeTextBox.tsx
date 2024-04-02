@@ -14,9 +14,10 @@ const LargeTextbox: React.FC<LargeTextboxProps> = ({setOtherSpecific} : any) => 
   return (
     <div>
       <textarea
+      
         value={text}
         onChange={handleChange}
-        className="w-full h-40 bg-gray-100 rounded-lg p-4 focus:bg-white-50 focus:placeholder-white-50 text-black-500"
+        className="w-full bg-gray-100 rounded-lg p-4 focus:bg-white-50 focus:placeholder-white-50 text-black-500 resize-none"
         placeholder="Enter text here..."
       ></textarea>
     </div>

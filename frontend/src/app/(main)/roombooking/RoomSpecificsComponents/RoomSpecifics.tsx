@@ -16,7 +16,7 @@ const RoomSpecifics: React.FC<RoomSpecificsProps> = ({
 }) => {
   const [selectedCheckbox, setSelectedCheckbox] = useState<string | null>(null);
   const [othersChecked, setOthersChecked] = useState(false);
-  const [otherSpecific, setOtherSpecific] = useState('');
+  const [otherSpecific, setOtherSpecific] = useState("");
 
   const handleCheckboxChange = (label: string) => {
     if (label === "Others") {
@@ -35,14 +35,17 @@ const RoomSpecifics: React.FC<RoomSpecificsProps> = ({
 
   return (
     <div className={FORM_CONTAINER}>
-      <FormHeader
-        id="2"
-        title="Room Specifics"
-        imgPath={roomspecificlogo}
-        imgAlt="Room Specific Logo"
-      />
+      <div className="flex items-center flex-row mt-2">
+        <FormHeader
+          id="2"
+          title="Room Specifics"
+          imgPath={roomspecificlogo}
+          imgAlt="Room Specific Logo"
+        />
+      </div>
+
       <div className="flex">
-        <div className="w-1/2 mt-2 flex flex-col">
+        <div className="w-1/2 flex flex-col mt-4">
           {["Lecture", "Study", "Presentation", "Events", "Meetings"].map(
             (label) => (
               <RectangularCheckbox
@@ -64,7 +67,9 @@ const RoomSpecifics: React.FC<RoomSpecificsProps> = ({
               checked={othersChecked}
               onChange={() => handleCheckboxChange("Others")}
             />
-            {othersChecked && <LargeTextbox setOtherSpecific = {setOtherSpecific}/>}
+            {othersChecked && (
+              <LargeTextbox setOtherSpecific={setOtherSpecific} />
+            )}
           </div>
         </div>
       </div>

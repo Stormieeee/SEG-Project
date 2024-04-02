@@ -133,7 +133,7 @@ const Authentication = ({
                   id="otp"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-slate-500 dark:text-slate-200 dark:focus:border-blue-500 sm:text-sm"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-slate-500 dark:text-slate-200 sm:text-sm"
                   required
                 />
               </div>
@@ -141,13 +141,13 @@ const Authentication = ({
                 <button
                   type="button"
                   onClick={handleCancelAuth}
-                  className="w-1/3 text-white-50 bg-gray-400 mr-5 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-1/3 text-white-500 bg-gray-400 mr-5 hover:bg-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-slate-600 dark:hover:bg-slate-700 active:scale-95 active:duration-75"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="w-1/3 text-white-50 bg-blue-400 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-1/3 text-white-500 bg-blue-400 hover:bg-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 active:scale-95 active:duration-75 "
                 >
                   Verify
                 </button>
