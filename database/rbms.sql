@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2024 at 03:34 PM
+-- Generation Time: Apr 02, 2024 at 03:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -57,7 +57,9 @@ INSERT INTO `booking id description` (`Booking ID`, `Description`, `Date`, `Star
 ('H4K8O', 'Group work', '2024-03-29', '09:00:00', '11:59:00', 40, NULL),
 ('UzYRO', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
 ('hHYCP', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
-('7vP1g', 'zoom call', '2024-03-26', '14:00:00', '20:59:00', 5, 'This is a test');
+('7vP1g', 'zoom call', '2024-03-26', '14:00:00', '20:59:00', 5, 'This is a test'),
+('ViWib', 'Study', '2024-05-13', '15:00:00', '15:59:00', 15, 'Accepted as a test'),
+('Igkg9', 'This should accept', '2024-03-31', '13:00:00', '14:59:00', 20, 'can i approve this');
 
 -- --------------------------------------------------------
 
@@ -84,6 +86,7 @@ INSERT INTO `booking list` (`Booking ID`, `User ID`, `Room ID`) VALUES
 ('H4K8O', 'cht1c22@soton.ac.uk', '3R018'),
 ('hHYCP', 'ap1a21@soton.ac.uk', '3R022'),
 ('I1T3J', 'cht1c22@soton.ac.uk', '3R017'),
+('Igkg9', 'ap1a21@soton.ac.uk', '3R017'),
 ('K1ET2', 'zzy1a21@soton.ac.uk', '3R009'),
 ('N4XI6', 'jyi1n21@soton.ac.uk', '3R006'),
 ('P7L9C', 'psbs1a21@soton.ac.uk', '3R012'),
@@ -91,7 +94,50 @@ INSERT INTO `booking list` (`Booking ID`, `User ID`, `Room ID`) VALUES
 ('U9F5H', 'jyi1n21@soton.ac.uk', '3R015'),
 ('UzYRO', 'ap1a21@soton.ac.uk', '3R006'),
 ('V2G6Y', 'jyi1n21@soton.ac.uk', '3R016'),
+('ViWib', 'ap1a21@soton.ac.uk', '3R023'),
 ('Z5WQ9', 'psbs1a21@soton.ac.uk', '3R011');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking rejects`
+--
+
+CREATE TABLE `booking rejects` (
+  `Reject ID` varchar(255) NOT NULL,
+  `User ID` varchar(255) DEFAULT NULL,
+  `Room ID` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking rejects`
+--
+
+INSERT INTO `booking rejects` (`Reject ID`, `User ID`, `Room ID`) VALUES
+('S4Wvr', 'ap1a21@soton.ac.uk', '3R011');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking rejects description`
+--
+
+CREATE TABLE `booking rejects description` (
+  `Reject ID` varchar(255) DEFAULT NULL,
+  `Description` varchar(255) DEFAULT NULL,
+  `Date` date DEFAULT NULL,
+  `Start Time` time DEFAULT NULL,
+  `End Time` time DEFAULT NULL,
+  `Capacity` int(11) DEFAULT NULL,
+  `Comment` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking rejects description`
+--
+
+INSERT INTO `booking rejects description` (`Reject ID`, `Description`, `Date`, `Start Time`, `End Time`, `Capacity`, `Comment`) VALUES
+('S4Wvr', 'Test case', '2024-03-21', '13:00:00', '14:59:00', 40, 'Dont feel like it');
 
 -- --------------------------------------------------------
 
@@ -110,7 +156,7 @@ CREATE TABLE `booking request` (
 --
 
 INSERT INTO `booking request` (`Request ID`, `User ID`, `Room ID`) VALUES
-('1XUrT', 'ap1a21@soton.ac.uk', '3R023');
+('UMl6m', 'ap1a21@soton.ac.uk', '3R026');
 
 -- --------------------------------------------------------
 
@@ -132,7 +178,7 @@ CREATE TABLE `booking request description` (
 --
 
 INSERT INTO `booking request description` (`Request ID`, `Description`, `Date`, `Start Time`, `End Time`, `capacity`) VALUES
-('1XUrT', 'Study', '2024-05-13', '15:00:00', '15:59:00', 15);
+('UMl6m', 'Meeting for SEG', '2024-03-20', '13:00:00', '13:59:00', 15);
 
 -- --------------------------------------------------------
 
@@ -226,7 +272,7 @@ CREATE TABLE `user login` (
 --
 
 INSERT INTO `user login` (`User ID`, `Password`, `OTPKey`, `LoggedIn`) VALUES
-('ap1a21@soton.ac.uk', 'password1', 30486, 1),
+('ap1a21@soton.ac.uk', 'password1', 57782, 1),
 ('cht1c22@soton.ac.uk', 'password5', NULL, 0),
 ('jyi1n21@soton.ac.uk', 'password2', NULL, 0),
 ('psbs1a21@soton.ac.uk', 'password3', NULL, 0),
@@ -293,6 +339,20 @@ ALTER TABLE `booking list`
   ADD PRIMARY KEY (`Booking ID`),
   ADD KEY `User ID` (`User ID`),
   ADD KEY `Room ID` (`Room ID`);
+
+--
+-- Indexes for table `booking rejects`
+--
+ALTER TABLE `booking rejects`
+  ADD PRIMARY KEY (`Reject ID`),
+  ADD KEY `User ID` (`User ID`),
+  ADD KEY `Room ID` (`Room ID`);
+
+--
+-- Indexes for table `booking rejects description`
+--
+ALTER TABLE `booking rejects description`
+  ADD KEY `Reject ID` (`Reject ID`);
 
 --
 -- Indexes for table `booking request`
@@ -362,6 +422,19 @@ ALTER TABLE `booking id description`
 ALTER TABLE `booking list`
   ADD CONSTRAINT `booking list_ibfk_1` FOREIGN KEY (`User ID`) REFERENCES `users` (`User ID`),
   ADD CONSTRAINT `booking list_ibfk_2` FOREIGN KEY (`Room ID`) REFERENCES `room` (`Room ID`);
+
+--
+-- Constraints for table `booking rejects`
+--
+ALTER TABLE `booking rejects`
+  ADD CONSTRAINT `booking rejects_ibfk_1` FOREIGN KEY (`User ID`) REFERENCES `users` (`User ID`),
+  ADD CONSTRAINT `booking rejects_ibfk_2` FOREIGN KEY (`Room ID`) REFERENCES `room` (`Room ID`);
+
+--
+-- Constraints for table `booking rejects description`
+--
+ALTER TABLE `booking rejects description`
+  ADD CONSTRAINT `booking rejects description_ibfk_1` FOREIGN KEY (`Reject ID`) REFERENCES `booking rejects` (`Reject ID`);
 
 --
 -- Constraints for table `booking request`

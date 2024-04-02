@@ -29,7 +29,7 @@ app.add_middleware(
 # Define database connection settings
 MYSQL_CONFIG = {
     "host": "127.0.0.1",
-    "port": 8111,
+    "port": 3307,
     "user": "root",
     "password": "",
     "database": "rbms"
@@ -470,6 +470,8 @@ def get_booking_r(db_connection, cursor, userID):
     for row in result:
         formatted_row = list(row)
         formatted_row[3] = str(row[3])
+        if formatted_row[3] == "9:00:00":
+            formatted_row[3] == "09:00:00"
         formatted_row[4] = str(row[4])
         formatted_result.append(formatted_row)
 
@@ -655,17 +657,61 @@ def accept_booking(db_connection, cursor, requestID, comment):
           "Please view the Room Booking System Website for further details"
     send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
 
+    return True
+
 
 def decline_booking(db_connection, cursor, requestID, comment):
 
-    #Getting the data from the main tables for emailing  purposes
+    #Has to create a new Reject ID which is unique.
+    while True:
+        # Generate a new bookingRequestID
+        NewbookingID = generate_random_string()
+
+        # Checking if the ID is pre-existing
+        RejectIDCheck = "SELECT `Reject ID` FROM `booking rejects`"
+        cursor.execute(RejectIDCheck)
+        currentRejectIDS = cursor.fetchall()
+
+        # Check if the bookingRequestID is in the currentRoomIDS
+        if any(NewbookingID in row for row in currentRejectIDS):
+            print("Booking ID is in the current IDs. Generating a new ID.")     #Test print
+        else:
+            print("Booking ID is not in the current IDs.")                      #Test print
+            break
+
+    #New unique Booking ID named NewbookingID
+    print (NewbookingID)        #Test print
+
+    #Getting the data from the main tables for primary key purposes
     getDetails1 = ("""
-        SELECT `User ID`
+        SELECT `User ID`, `Room ID`
         FROM `booking request`
         WHERE `Request ID` = %s;""")
 
     cursor.execute(getDetails1,(requestID,))
     details1 = cursor.fetchone()
+
+    # Insert data into Booking List table
+    insertDetails1 = ("""
+        INSERT INTO `booking rejects` (`Reject ID`, `User ID`, `Room ID`)
+        VALUES (%s, %s, %s);""")
+    cursor.execute(insertDetails1,(NewbookingID, details1[0], details1[1]))
+
+    # Commit the transaction
+    db_connection.commit()
+
+
+    #Getting the dependant data from booking request description
+    getDetails2 = ("""SELECT * FROM `booking request description` WHERE `Request ID` = %s;""")
+    cursor.execute(getDetails2,(requestID,))
+    details2 = cursor.fetchone()
+
+    # Insert the data into booking id description
+    insertDetails2 = ("""
+        INSERT INTO `booking rejects description` (`Reject ID`, `Description`, `Date`, `Start Time`, `End Time` , `Capacity`, `Comment`)
+        VALUES (%s, %s, %s, %s, %s, %s, %s);""")
+
+    cursor.execute(insertDetails2,(NewbookingID, details2[1], details2[2], details2[3], details2[4], details2[5], comment))
 
     #Remove the data from Booking Requests as already handled
     delete1 = """
@@ -684,6 +730,7 @@ def decline_booking(db_connection, cursor, requestID, comment):
     db_connection.commit()
     
     msg = "The booking request " + str(requestID) + " has been declined.\n" \
+          "The booking is now rejected, with ID: " + str(NewbookingID) + ". \n" \
           "The reason for the booking declined is: \n" + comment + "\n" \
           "Please view the Room Booking System Website for further details"
     send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
@@ -697,7 +744,7 @@ def handle_booking(handling: HandleBooking, db_connection: mysql.connector.conne
     action = handling.action
 
     if action == "approve":
-        if accept_booking(db_connection, cursor, handling.bookingID, handling.comment):
+        if accept_booking(db_connection, cursor, handling.bookingID, handling.comment) == True:
             return {"Approval Complete"}
         else:
             return {"Collision"}
@@ -710,15 +757,139 @@ def handle_booking(handling: HandleBooking, db_connection: mysql.connector.conne
 
 
 ####################################TO BE COMPLETED
+class HandleRequests(BaseModel):
+    UserID: str
+    checkType: str      #action is either "current" or "past"
 
-#Uses userClass
+
+#Supposed to take userID and return the current or past requests based on todays date. Current is > todays date, past is < todays date
+def get_user_requests(b_connection, cursor, UserID, checkType):
+    #Get todays date for checking
+    today = datetime.date.today()
+    formatted_date = today.strftime("%Y-%m-%d")
+
+    print (formatted_date)
+
+    if checkType == "current":
+        sql_query1 = """
+            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
+                   `booking request description`.`Date`,
+                   `booking request description`.`Start Time`,
+                   `booking request description`.`End Time`
+            FROM `booking request`
+            JOIN `booking request description`
+            ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+            WHERE `booking request description`.`Date` > %s
+            AND `booking request`.`User ID` = %s
+        """
+
+        sql_query2 = """
+            SELECT `booking list`.`Booking ID`, `booking list`.`Room ID`,
+                   `booking id description`.`Date`,
+                   `booking id description`.`Start Time`,
+                   `booking id description`.`End Time`
+            FROM `booking list`
+            JOIN `booking id description`
+            ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+            WHERE `booking id description`.`Date` > %s
+            AND `booking list`.`User ID` = %s
+        """
+
+        sql_query3 = """
+            SELECT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
+                   `booking rejects description`.`Date`,
+                   `booking rejects description`.`Start Time`,
+                   `booking rejects description`.`End Time`
+            FROM `booking rejects`
+            JOIN `booking rejects description`
+            ON `booking rejects`.`Reject ID` = `booking rejects description`.`Reject ID`
+            WHERE `booking rejects description`.`Date` > %s
+            AND `booking rejects`.`User ID` = %s
+        """
+
+    else:
+        sql_query1 = """
+            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
+                   `booking request description`.`Date`,
+                   `booking request description`.`Start Time`,
+                   `booking request description`.`End Time`
+            FROM `booking request`
+            JOIN `booking request description`
+            ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+            WHERE `booking request description`.`Date` < %s
+            AND `booking request`.`User ID` = %s
+        """
+
+        sql_query2 = """
+            SELECT `booking list`.`Booking ID`, `booking list`.`Room ID`,
+                   `booking id description`.`Date`,
+                   `booking id description`.`Start Time`,
+                   `booking id description`.`End Time`
+            FROM `booking list`
+            JOIN `booking id description`
+            ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+            WHERE `booking id description`.`Date` < %s
+            AND `booking list`.`User ID` = %s
+        """
+
+        sql_query3 = """
+            SELECT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
+                   `booking rejects description`.`Date`,
+                   `booking rejects description`.`Start Time`,
+                   `booking rejects description`.`End Time`
+            FROM `booking rejects`
+            JOIN `booking rejects description`
+            ON `booking rejects`.`Reject ID` = `booking rejects description`.`Reject ID`
+            WHERE `booking rejects description`.`Date` < %s
+            AND `booking rejects`.`User ID` = %s
+        """        
+
+    cursor.execute(sql_query1, (formatted_date,UserID))
+    results1 = cursor.fetchall()
+    results1_labeled = [row + ("Pending",) for row in results1]
+
+    cursor.execute(sql_query2, (formatted_date,UserID))
+    results2 = cursor.fetchall()
+    results2_labeled = [row + ("Approved",)  for row in results2]
+
+    cursor.execute(sql_query3, (formatted_date,UserID))
+    results3 = cursor.fetchall()
+    results3_labeled = [row + ("Rejected",)  for row in results3]    
+
+    results = results1_labeled + results2_labeled + results3_labeled
+
+    formatted_result = []
+
+    for row in results:
+        formatted_row = list(row)
+        formatted_row[3] = str(row[3])
+        if formatted_row[3] == "9:00:00":
+            formatted_row[3] == "09:00:00"
+        formatted_row[4] = str(row[4])
+        formatted_result.append(formatted_row)
+
+    return formatted_result
+
+@app.post("/get_booking_requests_users/")
+def get_booking_requests_users(handling: HandleRequests, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    check = get_user_requests(
+            db_connection,
+            cursor,
+            UserID=handling.UserID,
+            checkType=handling.checkType
+            )
+    return check
+
+
+
 
 ##def get_booking_r(db_connection, cursor, userID):
 ##    # Assuming get_profile_details is imported or defined in the same module
 ##    profile = get_profile_details(db_connection, cursor, userID)
 ##    role = profile[1]
 ##
-##    if role == "Property Manager":
+##    
 ##        sql_query = """
 ##            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
 ##                   `booking request description`.`Date`,
