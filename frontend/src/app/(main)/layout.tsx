@@ -7,6 +7,8 @@ import Topbar from "./Topbar";
 
 import dynamic from "next/dynamic";
 
+import { StateProvider } from "./StateContext";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
 
 // !!!!! This is the original export layout function !!!!!
 
-// export default function layout({   
+// export default function layout({
 //   children,
 // }: Readonly<{
 //   children: React.ReactNode;
@@ -35,31 +37,32 @@ export const metadata: Metadata = {
 //     </html>
 //   );
 
-const layout = ({children,} : Readonly<{children: React.ReactNode}>) => { // This is an attempt to fix hydration error
+const layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+  // This is an attempt to fix hydration error
   return (
     <html lang="en">
       <body className={inter.className}>
         <div className="flex">
           <Sidebar />
           <div className="flex flex-col flex-grow bg-[#F8F8F8]">
-            <Topbar />
-            {children}
+            <StateProvider>
+              <Topbar />
+              {children}
+            </StateProvider>
           </div>
         </div>
       </body>
     </html>
   );
-  
-}
+};
 
-export default dynamic (() => Promise.resolve(layout), {ssr: false})  // This is an attempt to fix hydration error
+export default dynamic(() => Promise.resolve(layout), { ssr: false }); // This is an attempt to fix hydration error
 
-  // return (
-  //   <html lang="en">
-  //     <body className={inter.className}>{children}</body>
-  //   </html>
-  // );
-
+// return (
+//   <html lang="en">
+//     <body className={inter.className}>{children}</body>
+//   </html>
+// );
 
 // import type { Metadata } from "next";
 // import { Inter } from "next/font/google";
