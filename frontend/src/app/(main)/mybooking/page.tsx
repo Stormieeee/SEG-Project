@@ -66,13 +66,6 @@ const MyBookingPage = () => {
             setSelectedRowIndex={setSelectedRowIndex}
           />
         </div>
-        <div className="z-10">
-          <BookingSwitcher
-            isCurrentBooking={isCurrentBooking}
-            setIsCurrentBooking={setIsCurrentBooking}
-            setSelectedRowIndex={setSelectedRowIndex}
-          />
-        </div>
       </div>
       <BookingComponents
         selectedRowIndex={selectedRowIndex}
