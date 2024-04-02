@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import {
   FORM_CONTAINER,
@@ -9,75 +8,54 @@ import {
 } from "../ComponentFormat";
 
 import datetimeLogo from "../../../../../public/Components-icon/Datetime Logo.svg";
-import { User } from "../../../types/types";
-
+import { getCurrentDate, formatHour } from "../utils/commonFunction";
+import { useStateContext } from "../../StateContext";
 interface Option {
   value: number;
   label: string;
 }
 
-const DateTime = ({
-  fetchData,
-  onSelectStartTime,
-  onSelectEndTime,
-  onSetDate,
-}: any) => {
-  const [date, setDate] = useState("");
+const DateTime = ({ fetchData }: any) => {
   const [startOptions, setStartOptions] = useState<Option[]>([]);
   const [endOptions, setEndOptions] = useState<Option[]>([]);
-  const [startValue, setStartValue] = useState<number>(9); // Initialize with 9am
-  const [endValue, setEndValue] = useState<number>(23);
   const [disabled, setDisabled] = useState(false);
 
+  const { date, setDate, startTime, setStartTime, endTime, setEndTime } =
+    useStateContext();
+
   useEffect(() => {
-    const currentTime = new Date().getHours();
-    setStartValue(currentTime);
-
     const generateOptions = () => {
-      const availableOptions = [];
+      const currentTime = new Date().getHours(); //current time
+      const isCurrentDate = date === getCurrentDate(); //boolean for if date selected is same as current date
+      const isOutOfRange = currentTime < 9 || currentTime > 23; //boolean for current time is < 9 or > 23
 
-      // Generate options starting from the current local time
-      for (let i = currentTime; i <= 23; i++) {
-        availableOptions.push({ value: i, label: `${i}:00` });
+      if (!isOutOfRange || !isCurrentDate) {
+        const availableOptions: Option[] = [];
+        for (let i = currentTime; i <= 23; i++) {
+          availableOptions.push({ value: i, label: `${i}:00` });
+        }
+        setStartOptions(availableOptions);
+        setEndOptions(availableOptions.slice(1));
       }
 
-      setStartOptions(availableOptions);
-
-      // Adjust the end time options based on the new start time
-      const initialEndOptions = availableOptions.filter(
-        (option) => option.value > currentTime
-      );
-      setEndOptions(availableOptions.slice(1));
-
-      // Check if current time is outside the allowed range
-      if (currentTime < 9 || currentTime > 23) {
-        setDisabled(true);
-      }
+      setDisabled(isOutOfRange && isCurrentDate);
     };
 
     generateOptions();
-
     const interval = setInterval(generateOptions, 60000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [date]);
 
-  //convert time from HH to HH:MM form in string
-  const formatHour = (value: number): string => {
-    // Pad single-digit hours with leading zero and return as HH:00
-    return value.toString().padStart(2, "0") + ":00";
-  };
   //Change Date
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDate = event.target.value; // Assuming the input type is "date" and value is in "YYYY-MM-DD" format
+    const selectedDate = event.target.value;
 
-    // Set the selected date directly if it's not today's date
-    if (selectedDate !== new Date().toISOString().slice(0, 10)) {
-      setStartValue(9);
-      setEndValue(23);
+    if (selectedDate !== getCurrentDate()) {
+      setStartTime(9);
+      setEndTime(23);
 
-      // Generate options starting from 9am to 11pm
-      const availableOptions = [];
+      const availableOptions: Option[] = [];
       for (let i = 9; i <= 23; i++) {
         availableOptions.push({ value: i, label: `${i}:00` });
       }
@@ -85,47 +63,37 @@ const DateTime = ({
       setEndOptions(availableOptions.slice(1));
     } else {
       const currentTime = new Date().getHours();
-
-      // Generate options starting from the current local time
-      const availableOptions = [];
+      const availableOptions: Option[] = [];
       for (let i = currentTime; i <= 23; i++) {
         availableOptions.push({ value: i, label: `${i}:00` });
       }
       setStartOptions(availableOptions);
       setEndOptions(availableOptions.slice(1));
-
-      // Set the start and end values to the current local time
-      setStartValue(currentTime);
-      setEndValue(currentTime);
+      setStartTime(currentTime);
+      setEndTime(currentTime);
     }
 
     setDate(selectedDate);
-    onSetDate(selectedDate);
   };
 
   //Update Start time value
   const handleStartChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
-    onSelectStartTime(newValue);
-    setStartValue(newValue); // Added here *
+    setStartTime(newValue);
 
-    if (endValue < newValue) {
-      setEndValue(newValue);
+    if (endTime < newValue) {
+      setEndTime(newValue);
     }
 
-    // Update end time options based on the new start time
     const newEndOptions = startOptions.filter(
       (option) => option.value > newValue
     );
     setEndOptions(newEndOptions);
   };
-  //Update End time Value
+
   const handleEndChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(e.target.value, 10);
-    onSelectEndTime(newValue);
-    setEndValue(newValue); // Added here *
-    onSelectEndTime(newValue);
-    setEndValue(newValue); // Added here *
+    setEndTime(newValue);
   };
 
   return (
@@ -140,14 +108,15 @@ const DateTime = ({
           />
           <form
             onSubmit={(event) => {
-              event.preventDefault(); // Prevent default form submission
-              fetchData(date, startValue, endValue); // Call fetchData when form is submitted
+              event.preventDefault();
+              fetchData(date, startTime, endTime);
             }}
             className="ml-auto"
           >
             <button
               className="bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm  my-2 items-center justify-center flex p-2 rounded-md"
               type="submit"
+              disabled={disabled}
             >
               Check Availability
             </button>
@@ -172,13 +141,13 @@ const DateTime = ({
             <label className={FORM_LABEL}>Start Time</label>
             <select
               className={FORM_INPUT}
-              value={startValue}
+              value={startTime}
               onChange={handleStartChange}
-              disabled={disabled}
+              disabled={disabled} // Disable input when disabled
             >
               {startOptions.map((option, index) => (
                 <option key={index} value={option.value}>
-                  {formatHour(option.value)} {/* Display only HH */}
+                  {option.value + ":" + "00"}
                 </option>
               ))}
             </select>
@@ -189,13 +158,13 @@ const DateTime = ({
             <label className={FORM_LABEL}>End Time</label>
             <select
               className={FORM_INPUT}
-              value={endValue}
+              value={endTime}
               onChange={handleEndChange}
               disabled={disabled}
             >
               {endOptions.map((option, index) => (
                 <option key={index} value={option.value}>
-                  {formatHour(option.value)} {/* Display only HH */}
+                  {option.value + ":" + "00"}
                 </option>
               ))}
             </select>

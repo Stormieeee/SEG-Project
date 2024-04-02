@@ -63,11 +63,7 @@ interface FloorPlanProps {
   dataFromApi: any;
 }
 
-const FloorPlan: React.FC<FloorPlanProps> = (
-  { dataFromApi }: { dataFromApi: any },
-  { setRoomID }: { setRoomID: any }
-) => {
-
+const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
   const fetchData = dataFromApi;
   const roomStatus = fetchData.dataFromApi.available;
   console.log(roomStatus);
@@ -78,7 +74,7 @@ const FloorPlan: React.FC<FloorPlanProps> = (
   // Function to handle button click
   const handleButtonClick = (buttonKey: string) => {
     setActiveButton(buttonKey === activeButton ? null : buttonKey);
-    setRoomID(buttonKey === activeButton ? null : buttonKey);
+    setRoomID(buttonKey === activeButton ? "" : buttonKey);
   };
   const getButtonColorClass = (color: string) => {
     switch (color) {

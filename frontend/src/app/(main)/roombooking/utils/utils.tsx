@@ -50,3 +50,60 @@ export async function getDataFromServer(
     };
   }
 }
+
+export async function handleRoomBooking(
+  roomID: string,
+  capacity: number,
+  description: string,
+  date: string,
+  startTime: string,
+  endTime: string,
+) {
+  if (!roomID || !capacity || !description || !date || !startTime || !endTime) {
+    console.log("One or more parameters is empty");
+    return; // Exit the function if any parameter is empty
+  } else {
+    try {
+      const userEmail = sessionStorage.getItem("userEmail");
+      if (!userEmail) {
+        throw new Error("User email is not available in session storage");
+      }
+
+      const response = await fetch(
+        "http://localhost:8000/booking_request/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: userEmail,
+            room_id: roomID,
+            capacity: capacity,
+            description: description,
+            date: date,
+            start_time: startTime,
+            end_time: endTime,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Room Booking succeeded:", data);
+        return data;
+      } else {
+        console.log("Room Booking Failed");
+        throw new Error("Failed to book the room");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return {
+        error: error,
+        currentDate: date,
+        startTime,
+        endTime,
+      };
+    }
+  }
+}
