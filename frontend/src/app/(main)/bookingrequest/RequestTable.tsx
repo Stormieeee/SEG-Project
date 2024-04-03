@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useStateContext } from "./RequestContext";
 
 interface RequestTableProps {
-  searchTerm: string;
-  requests: string[][];
   setRequestDetails: React.Dispatch<
     React.SetStateAction<{
       bookingId: string;
@@ -13,20 +12,18 @@ interface RequestTableProps {
       description: string;
     } | null>
   >;
-  filteredRequests: string[][];
-  setFilteredRequests: React.Dispatch<React.SetStateAction<string[][]>>;
-  selectedRowIndex: number;
-  setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
 }
-const RequestTable = ({
-  searchTerm,
-  requests,
-  setRequestDetails,
-  filteredRequests,
-  setFilteredRequests,
-  selectedRowIndex,
-  setSelectedRowIndex,
-}: RequestTableProps) => {
+const RequestTable = ({ setRequestDetails }: RequestTableProps) => {
+  const {
+    filteredRequests,
+    displayedRequests,
+    setDisplayedRequests,
+    selectedRowIndex,
+    setSelectedRowIndex,
+    rowsPerPage,
+    currentPage,
+    setCurrentPage,
+  } = useStateContext();
   const header = ["Booking ID", "Room", "Date", "Start Time", "End Time"];
 
   const getRequestDetails = async (bookingId: string, index: number) => {
@@ -52,45 +49,66 @@ const RequestTable = ({
     }
   };
 
+  const refreshTable = () => {
+    if (filteredRequests && filteredRequests.length >= 0) {
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      setDisplayedRequests(filteredRequests.slice(start, end));
+    }
+  };
+
+  // Refresh table when page or rows per page changes
   useEffect(() => {
-    if (selectedRowIndex >= 0 && requests) {
+    if (selectedRowIndex >= 0) {
+      setSelectedRowIndex(0);
+    }
+    refreshTable();
+  }, [currentPage, rowsPerPage]);
+
+  // Refresh table when filtered requests change
+  useEffect(() => {
+    console.log("filteredRequests", filteredRequests);
+    refreshTable();
+  }, [filteredRequests]);
+
+  // Reset selected row index when requests changed (e.g. after approving/rejecting)
+  useEffect(() => {
+    if (displayedRequests.length === 0) {
+      if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+        if (selectedRowIndex >= 0) {
+          setSelectedRowIndex(rowsPerPage - 1);
+        }
+      } else {
+        setSelectedRowIndex(-1);
+      }
+    } else {
+      console.log("selectedRowIndex", selectedRowIndex);
+      console.log("displayedRequests", displayedRequests);
+    }
+  }, [displayedRequests]);
+  // Get request details when selected row changes
+  useEffect(() => {
+    if (selectedRowIndex >= 0 && displayedRequests.length > 0) {
+      console.log(displayedRequests[selectedRowIndex][0], selectedRowIndex);
       getRequestDetails(
-        filteredRequests[selectedRowIndex][0],
+        displayedRequests[selectedRowIndex][0],
         selectedRowIndex
       );
     }
-  }, [filteredRequests]);
-  useEffect(() => {
-    if (requests && searchTerm) {
-      const filtered = requests.filter(
-        (request) =>
-          request[0].toLowerCase().includes(searchTerm.toLowerCase()) ||
-          request[1].toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredRequests(filtered);
-      if (filtered.length === 0) {
-        setSelectedRowIndex(-1);
-      } else {
-        if (selectedRowIndex !== -1) {
-          setSelectedRowIndex(0);
-        }
-      }
-    } else {
-      setFilteredRequests(requests);
-    }
-  }, [requests, searchTerm]);
+  }, [displayedRequests, selectedRowIndex]);
 
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="flex justify-between bg-white-200 border border-black-100 rounded-md">
+    <div className="flex flex-col overflow-y-auto">
+      <div className="flex justify-between bg-white-200 border border-black-100 rounded-md sticky top-0">
         {header.map((item, index) => (
           <div key={index} className="flex-1 py-3 text-center font-semibold">
             {item}
           </div>
         ))}
       </div>
-      {filteredRequests.length > 0 ? (
-        filteredRequests.map((rowData: any[], rowIndex: number) => (
+      {displayedRequests.length > 0 ? (
+        displayedRequests.map((rowData: string[], rowIndex: number) => (
           <button
             key={rowIndex}
             className={`flex h-[50px] flex-shrink-0 justify-between mt-1 items-center border border-primary-400 rounded-md ${

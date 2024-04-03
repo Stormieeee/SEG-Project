@@ -1,13 +1,43 @@
-// SearchBar.tsx
-
 "use client";
+import { useStateContext } from "./RequestContext";
+import { useEffect } from "react";
 
-interface SearchBarProps {
-  searchTerm: string;
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
-}
+const SearchBar = () => {
+  const {
+    requests,
+    setFilteredRequests,
+    selectedRowIndex,
+    setSelectedRowIndex,
+    setCurrentPage,
+    searchTerm,
+    setSearchTerm,
+    setShouldSort,
+  } = useStateContext();
+  // Get new filtered requests when search term changes
+  useEffect(() => {
+    console.log(searchTerm);
+    if (requests && searchTerm) {
+      const filtered = requests.filter(
+        (request) =>
+          request[0].toLowerCase().includes(searchTerm.toLowerCase()) ||
+          request[1].toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      console.log(filtered);
+      setFilteredRequests(filtered);
 
-const SearchBar = ({ searchTerm, setSearchTerm }: SearchBarProps) => {
+      if (filtered.length === 0) {
+        setSelectedRowIndex(-1);
+      } else {
+        if (selectedRowIndex >= 0) {
+          setSelectedRowIndex(0);
+        }
+      }
+    } else {
+      setFilteredRequests(requests);
+    }
+    setCurrentPage(1);
+    setShouldSort(true);
+  }, [searchTerm]);
   return (
     <input
       type="text"

@@ -1,10 +1,8 @@
 "use client";
 import React, { useState } from "react";
+import { useStateContext } from "./RequestContext";
+import RectangularCheckbox from "./RectangularCheckbox";
 interface DetailsBarProps {
-  requests: string[][];
-  setRequests: React.Dispatch<React.SetStateAction<string[][]>>;
-  selectedRowIndex: number;
-  setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
   bookingId?: string;
   user_id?: string;
   user_role?: string;
@@ -14,10 +12,6 @@ interface DetailsBarProps {
 }
 
 const DetailsBar = ({
-  requests,
-  setRequests,
-  selectedRowIndex,
-  setSelectedRowIndex,
   bookingId,
   user_id,
   user_role,
@@ -26,17 +20,26 @@ const DetailsBar = ({
   description,
 }: DetailsBarProps) => {
   const [comment, setComment] = useState("");
-
+  const [checked, setChecked] = useState(false);
+  const {
+    setRequests,
+    selectedRowIndex,
+    setSelectedRowIndex,
+    displayedRequests,
+    setFilteredRequests,
+  } = useStateContext();
   // Remove request from table after approving/rejecting
-  const handleRemoveItem = (indexToRemove: number) => {
-    const newRequests = requests.filter((_, index) => index !== indexToRemove);
-    setRequests(newRequests);
+  const handleRemoveItem = (bookingId: string) => {
+    setRequests((prev) => prev.filter((request) => request[0] !== bookingId));
+    setFilteredRequests((prev) =>
+      prev.filter((request) => request[0] !== bookingId)
+    );
   };
 
   const handleSubmit = async (action: string) => {
     const confirmed = window.confirm(
       action === "approve"
-        ? "Are you sure you want to approve this booking?"
+        ? "Are you sure you want to approve booking ?"
         : "Are you sure you want to reject this booking?"
     );
     if (confirmed) {
@@ -59,8 +62,8 @@ const DetailsBar = ({
             alert("Collision detected! Please decline this booking request.");
             return;
           }
-          handleRemoveItem(selectedRowIndex);
-          if (selectedRowIndex === requests.length - 1) {
+          handleRemoveItem(bookingId ? bookingId : "");
+          if (selectedRowIndex === displayedRequests.length - 1) {
             setSelectedRowIndex(selectedRowIndex - 1);
           }
         }
@@ -95,16 +98,24 @@ const DetailsBar = ({
             )}
           </ul>
         </ul>
-
-        <div className="text-xl font-bold mt-5">Comment:</div>
-        <textarea
-          className="h-[100px] leading-tight text-[12px] flex-shrink-0 bg-black-50 rounded-lg p-4 focus:bg-white-50 focus:placeholder-white-50"
-          placeholder="Enter comment here..."
-          value={comment}
-          onChange={(e) => {
-            setComment(e.target.value);
+        <RectangularCheckbox
+          label={"Comment"}
+          checked={checked}
+          onChange={() => {
+            setChecked(!checked);
+            setComment("");
           }}
         />
+        {checked && (
+          <textarea
+            className="h-[100px] leading-tight text-[12px] resize-none flex-shrink-0 bg-black-50 rounded-lg p-4 mr-1 focus:bg-white-50 focus:placeholder-white-50"
+            placeholder="Enter comment here..."
+            value={comment}
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
+          />
+        )}
 
         <div className="flex justify-between mt-5 mb-5">
           <button

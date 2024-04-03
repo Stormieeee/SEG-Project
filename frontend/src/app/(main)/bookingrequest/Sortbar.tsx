@@ -1,36 +1,23 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { useStateContext } from "./RequestContext";
 
-interface SortbarProps {
-  filteredRequests: string[][];
-  setFilteredRequests: React.Dispatch<React.SetStateAction<string[][]>>;
-  setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
-}
-
-const Sortbar = ({
-  filteredRequests,
-  setFilteredRequests,
-  setSelectedRowIndex,
-}: SortbarProps) => {
+const Sortbar = () => {
   const [sortColumn, setSortColumn] = useState<string>("");
   const [disableSelect] = useState<boolean>(false);
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const previousColumnIndexRef = useRef<number>(-1);
-
-  const handleSort = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-    selectedColumn: number,
-    columnType: string
-  ) => {
-    setSortColumn(event.target.value);
-    if (selectedColumn === previousColumnIndexRef.current) {
-      setOrder(order === "asc" ? "desc" : "asc");
-    } else {
-      // Reset the order when a different column is selected
-      setOrder("asc");
-    }
-    previousColumnIndexRef.current = selectedColumn;
-
+  const [selectedColumn, setSelectedColumn] = useState<number>(-1);
+  const [columnType, setColumnType] = useState<string>("");
+  const {
+    requests,
+    filteredRequests,
+    setFilteredRequests,
+    setSelectedRowIndex,
+    setCurrentPage,
+    shouldSort,
+    setShouldSort,
+  } = useStateContext();
+  const handleSort = () => {
     // Sort the bookings based on the selected column
+    console.log(sortColumn);
     const sortedBookings = filteredRequests ? [...filteredRequests] : [];
     sortedBookings.sort((a, b) => {
       // Compare the values in the selected column
@@ -48,11 +35,10 @@ const Sortbar = ({
         // Fallback comparison
         comparisonResult = columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
       }
-      return order === "asc" ? comparisonResult : -comparisonResult;
+      return comparisonResult;
     });
 
     setFilteredRequests(sortedBookings);
-    setSelectedRowIndex(-1);
   };
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
@@ -62,12 +48,27 @@ const Sortbar = ({
         e.target.querySelector('option[value=""]') as HTMLOptionElement
       ).disabled = true;
     }
+    setSelectedColumn(parseInt(selectedValue.split(",")[0]));
+    setColumnType(selectedValue.split(",")[1]);
     setSortColumn(selectedValue);
-
-    // Extract selected column and column type
-    const [selectedColumn, columnType] = selectedValue.split(",");
-    handleSort(e, parseInt(selectedColumn), columnType);
   };
+
+  useEffect(() => {
+    handleSort();
+    console.log(filteredRequests);
+  }, [requests]);
+
+  useEffect(() => {
+    handleSort();
+    setCurrentPage(1);
+    setSelectedRowIndex(-1);
+  }, [sortColumn]);
+  useEffect(() => {
+    if (shouldSort) {
+      handleSort();
+      setShouldSort(false); // Reset the flag after sorting
+    }
+  }, [filteredRequests, sortColumn, shouldSort]);
 
   return (
     <div className="absolute inset-x-10">

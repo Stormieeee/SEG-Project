@@ -15,6 +15,7 @@ interface BookingsTableProps {
   >;
   selectedRowIndex: number;
   setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedBookingId: React.Dispatch<React.SetStateAction<string>>;
 }
 const BookingsTable = ({
   bookings,
@@ -22,6 +23,7 @@ const BookingsTable = ({
   setBookingDetails,
   selectedRowIndex,
   setSelectedRowIndex,
+  setSelectedBookingId,
 }: BookingsTableProps) => {
   const header = [
     "Booking ID",
@@ -37,6 +39,7 @@ const BookingsTable = ({
     bookingStatus: string,
     index: number
   ) => {
+    setSelectedBookingId(bookingId);
     setBookingStatus(bookingStatus);
     setSelectedRowIndex(index);
     try {
@@ -65,7 +68,7 @@ const BookingsTable = ({
       case "Pending":
         return "bg-yellow-50 text-orange-400";
       case "Approved":
-        return "bg-primary-500 text-white-100";
+        return "bg-sky-400 text-white-100";
       case "Completed":
         return "bg-green-500";
       default:
@@ -81,8 +84,8 @@ const BookingsTable = ({
   }, [bookings]);
 
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="flex justify-between items-center bg-white-200 border border-black-100 rounded-md">
+    <div className="flex flex-col overflow-y-auto">
+      <div className="flex justify-between bg-white-200 border border-black-100 rounded-md sticky top-0">
         {header.map((item, index) => (
           <div
             key={index}
@@ -113,7 +116,7 @@ const BookingsTable = ({
             {rowData.map((cellData, cellIndex) => (
               <div
                 key={cellIndex}
-                className={`mx-8 flex-1 py-[0.125rem] text-base text-center ${cellIndex === header.length - 1 ? `rounded-lg font-semibold text-sm py-[0.3rem] ${getStatusColor(cellData)}` : ""}`}
+                className={`flex-1 py-[0.7rem] font-xl text-center ${cellIndex === header.length - 1 ? `rounded-xl max-w-[140px] mx-5 ${getStatusColor(cellData)}` : ""}`}
               >
                 {cellData}
               </div>
