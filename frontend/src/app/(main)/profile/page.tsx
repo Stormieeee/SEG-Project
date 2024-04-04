@@ -8,9 +8,9 @@ import getEmailFromSessionStorage from "../../Components/CommonFunction";
 import ResetButton from "./ResetButton";
 import Link from "next/link";
 import ResetPassword from "./ResetPassword";
-import editIcon from "../../../../public/Login-icon/edit_icon.svg";
+// import editIcon from "../../../../public/Login-icon/edit_icon.svg";
 import Authentication from "@/app/Components/Authentication";
-import ProfilePictureForm from "./ProfilePictureForm";
+// import ProfilePictureForm from "./ProfilePictureForm";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState<{
@@ -21,9 +21,9 @@ const Profile = () => {
   let email = "";
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
-  const [showEditIcon, setShowEditIcon] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
-  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  // const [showEditIcon, setShowEditIcon] = useState(false);
+  // const [showEditForm, setShowEditForm] = useState(false);
+  // const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
   const getUserInfo = async () => {
     try {
@@ -90,57 +90,58 @@ const Profile = () => {
       console.error("Session storage is not supported in this browser.");
     }
   };
-  const handleEditProfileClick = () => {
-    // document.getElementById("profile-picture-input")?.click();
-    setShowEditForm(true);
-  };
+  // const handleEditProfileClick = () => {
+  //   // document.getElementById("profile-picture-input")?.click();
+  //   setShowEditForm(true);
+  // };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setProfilePicture(file);
-    }
-  };
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     setProfilePicture(file);
+  //   }
+  // };
+  // const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
 
-    if (!profilePicture) {
-      return;
-    }
+  //   if (!profilePicture) {
+  //     return;
+  //   }
 
-    const formData = new FormData();
-    formData.append("profile_picture", profilePicture);
+  //   const formData = new FormData();
+  //   formData.append("profile_picture", profilePicture);
 
-    // try {
-    //   const response = await fetch(
-    //     "http://localhost:8000/update_profile_picture/",
-    //     {
-    //       method: "POST",
-    //       body: formData,
-    //     }
-    //   );
+  // try {
+  //   const response = await fetch(
+  //     "http://localhost:8000/update_profile_picture/",
+  //     {
+  //       method: "POST",
+  //       body: formData,
+  //     }
+  //   );
 
-    //   if (response.ok) {
-    //     getUserInfo();
-    //     setShowEdit(false);
-    //   } else {
-    //     console.error("Error updating profile picture");
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
-    setShowEditIcon(false);
-  };
+  //   if (response.ok) {
+  //     getUserInfo();
+  //     setShowEdit(false);
+  //   } else {
+  //     console.error("Error updating profile picture");
+  //   }
+  // } catch (error) {
+  //   console.error("Error:", error);
+  // }
+  //   setShowEditIcon(false);
+  // };
   return (
     <div className="h-full flex-col flex justify-center">
       <div className="flex flex-col w-full items-center ">
         <div
           className="relative"
-          onMouseEnter={() => setShowEditIcon(true)}
-          onMouseLeave={() => setShowEditIcon(false)}
+          // onMouseEnter={() => setShowEditIcon(true)}
+          // onMouseLeave={() => setShowEditIcon(false)}
         >
           <Image
-            src={profilePicture ? URL.createObjectURL(profilePicture) : profile}
+            src={profile}
+            // src={profilePicture ? URL.createObjectURL(profilePicture) : profile}
             alt="profile"
             className="w-40 h-40 rounded-full bg-gray-300"
             width={0}
@@ -199,7 +200,7 @@ const Profile = () => {
             />
           </div>
         )}
-        <div
+        {/* <div
           className="fixed inset-0 z-50 flex bg-black-100 bg-opacity-50 justify-end"
           style={{
             visibility: showEditForm ? "visible" : "hidden",
@@ -213,7 +214,7 @@ const Profile = () => {
             handleFormSubmit={handleFormSubmit}
             handleFileChange={handleFileChange}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
