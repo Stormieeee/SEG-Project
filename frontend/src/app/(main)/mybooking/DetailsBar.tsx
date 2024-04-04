@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 interface DetailsBarProps {
   bookings: string[][];
   setBookings: React.Dispatch<React.SetStateAction<string[][]>>;
@@ -12,6 +12,7 @@ interface DetailsBarProps {
   room_capacity?: number;
   description?: string;
   comment?: string;
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DetailsBar = ({
@@ -26,11 +27,13 @@ const DetailsBar = ({
   room_capacity,
   description,
   comment,
+  setShowForm,
 }: DetailsBarProps) => {
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (indexToRemove: number) => {
-    const newData = bookings.filter((_, index) => index !== indexToRemove);
-    setBookings(newData);
+    setBookings((bookings) =>
+      bookings.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const handleSubmit = async () => {
@@ -75,7 +78,7 @@ const DetailsBar = ({
     }
   };
 
-  const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3"
+  const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3";
   return (
     <div className="flex flex-1 flex-col">
       <div className="justify-start text-2xl font-bold text-stone-900">
@@ -101,17 +104,27 @@ const DetailsBar = ({
         <ul className="space-y-3 mt-1 text-l leading-tight italic text-justify font-medium text-stone-700">
           <li>{comment ? comment : "None"}</li>
         </ul>
-        {isCurrentBooking &&
-          (bookingStatus === "Approved" || bookingStatus === "Pending") && (
-            <div className="flex justify-center mt-5">
-              <button
-                className="bg-red-500 w-[150px] h-[50px] hover:bg-red-700 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
-                onClick={() => handleSubmit()}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
+        {isCurrentBooking
+          ? (bookingStatus === "Approved" || bookingStatus === "Pending") && (
+              <div className="flex justify-center mt-5">
+                <button
+                  className="bg-red-500 w-[150px] h-[50px] hover:bg-red-700 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
+                  onClick={handleSubmit}
+                >
+                  Cancel
+                </button>
+              </div>
+            )
+          : bookingStatus === "Completed" && (
+              <div className="flex justify-center mt-5">
+                <button
+                  className="bg-primary-400 w-[150px] h-[50px] hover:bg-primary-600 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
+                  onClick={() => setShowForm(true)}
+                >
+                  Add Feedback
+                </button>
+              </div>
+            )}
       </div>
     </div>
   );

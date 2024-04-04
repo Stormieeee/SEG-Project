@@ -2,25 +2,11 @@
 import React, { useState } from "react";
 import RequestTable from "./RequestTable";
 import DetailsBar from "./DetailsBar";
+import TableFooter from "./TablePager";
+import { useStateContext } from "./RequestContext";
 
-interface RequestComponentsProps {
-  searchTerm: string;
-  selectedRowIndex: number;
-  setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
-  requests: string[][];
-  setRequests: React.Dispatch<React.SetStateAction<string[][]>>;
-  filteredRequests: string[][];
-  setFilteredRequests: React.Dispatch<React.SetStateAction<string[][]>>;
-}
-const RequestComponents = ({
-  searchTerm,
-  selectedRowIndex,
-  setSelectedRowIndex,
-  requests,
-  setRequests,
-  filteredRequests,
-  setFilteredRequests,
-}: RequestComponentsProps) => {
+const RequestComponents = () => {
+  const { selectedRowIndex } = useStateContext();
   const isSelected = selectedRowIndex >= 0;
   const [requestDetails, setRequestDetails] = useState<{
     bookingId: string;
@@ -32,32 +18,17 @@ const RequestComponents = ({
   } | null>(null);
 
   return (
-    <div className="flex">
+    <div className="flex" style={{ maxHeight: "70vh" }}>
       <div
-        className={`flex ml-10 mr-5 mt-5 overflow-y h-[550px] transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
+        className={`flex flex-col ml-10 mr-5 mt-5 transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
       >
-        <RequestTable
-          searchTerm={searchTerm}
-          requests={requests}
-          setRequestDetails={setRequestDetails}
-          filteredRequests={filteredRequests}
-          setFilteredRequests={setFilteredRequests}
-          selectedRowIndex={selectedRowIndex}
-          setSelectedRowIndex={setSelectedRowIndex}
-        />
+        <TableFooter />
+        <RequestTable setRequestDetails={setRequestDetails} />
       </div>
       <div
-        className={`flex pl-5 mt-5 overflow-y flex-shrink-0 border-l border-black-100 h-[550px] transform transition-transform duration-500 ${isSelected ? "translate-x-0 mr-5 w-1/3" : "translate-x-full"}`}
+        className={`flex pl-5 mt-5 overflow-y-auto flex-shrink-0 border-l border-black-100 transform transition-transform duration-500 ${isSelected ? "translate-x-0 mr-5 w-1/3" : "translate-x-full"}`}
       >
-        {isSelected && (
-          <DetailsBar
-            requests={requests}
-            setRequests={setRequests}
-            selectedRowIndex={selectedRowIndex}
-            setSelectedRowIndex={setSelectedRowIndex}
-            {...requestDetails}
-          />
-        )}
+        {isSelected && <DetailsBar {...requestDetails} />}
       </div>
     </div>
   );

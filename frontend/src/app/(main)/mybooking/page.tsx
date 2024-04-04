@@ -4,28 +4,35 @@ import BookingSwitcher from "./BookingSwitcher";
 import Sortbar from "./Sortbar";
 import BookingComponents from "./BookingComponents";
 import getEmailFromSessionStorage from "../../Components/CommonFunction";
+import FeedbackForm from "./FeedbackForm";
 
 const MyBookingPage = () => {
   const [isCurrentBooking, setIsCurrentBooking] = useState<boolean>(true);
   const [currentBookings, setCurrentBookings] = useState<string[][]>([]);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
   const [pastBookings, setPastBookings] = useState<string[][]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState<string>("");
 
-  const getBookings = async () => {
+  const getBookings = async (type: string) => {
     try {
-      const response = await fetch("http://localhost:8000/get_bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user_id: getEmailFromSessionStorage() }),
-      });
+      const response = await fetch(
+        "http://localhost:8000/get_booking_requests_users/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            UserID: getEmailFromSessionStorage(),
+            checkType: type,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
-        const { currentBookings, pastBookings } = data;
-        setCurrentBookings(currentBookings);
-        setPastBookings(pastBookings);
+        return data;
       }
     } catch (error) {
       console.error("Error fetching booking requests: ", error);
@@ -34,8 +41,31 @@ const MyBookingPage = () => {
   };
 
   useEffect(() => {
-    // getBookings();
+    // (async () => {
+    //   try {
+    //     const currentBookingsResult = await getBookings("current");
+    //     if (currentBookingsResult) {
+    //       setCurrentBookings(currentBookingsResult);
+    //     }
+
+    //     const pastBookingsResult = await getBookings("past");
+    //     if (pastBookingsResult) {
+    //       setPastBookings(pastBookingsResult);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching booking requests: ", error);
+    //   }
+    // })();
     setCurrentBookings([
+      ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
+      ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
+      ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
+      ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
+      ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
+      ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
+      ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
+      ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
+      ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
       ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
       ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
       ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
@@ -48,8 +78,8 @@ const MyBookingPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="relative flex h-10 mt-3 items-center justify-center">
+    <div className="flex w-full h-full flex-col">
+      <div className="relative flex h-10 mt-3 mb-5 items-center justify-center">
         <div className="absolute inset-x-10">
           <Sortbar
             bookings={isCurrentBooking ? currentBookings : pastBookings}
@@ -59,14 +89,32 @@ const MyBookingPage = () => {
             setSelectedRowIndex={setSelectedRowIndex}
           />
         </div>
+        <div className="z-10">
+          <BookingSwitcher
+            isCurrentBooking={isCurrentBooking}
+            setIsCurrentBooking={setIsCurrentBooking}
+            setSelectedRowIndex={setSelectedRowIndex}
+          />
+        </div>
       </div>
-      <BookingComponents
-        selectedRowIndex={selectedRowIndex}
-        setSelectedRowIndex={setSelectedRowIndex}
-        isCurrentBooking={isCurrentBooking}
-        bookings={isCurrentBooking ? currentBookings : pastBookings}
-        setBookings={isCurrentBooking ? setCurrentBookings : setPastBookings}
-      />
+      <div className="h-full">
+        <BookingComponents
+          selectedRowIndex={selectedRowIndex}
+          setSelectedRowIndex={setSelectedRowIndex}
+          isCurrentBooking={isCurrentBooking}
+          bookings={isCurrentBooking ? currentBookings : pastBookings}
+          setBookings={isCurrentBooking ? setCurrentBookings : setPastBookings}
+          setShowForm={setShowForm}
+          setSelectedBookingId={setSelectedBookingId}
+        />
+      </div>
+      {showForm && (
+        <FeedbackForm
+          showForm={showForm}
+          setShowForm={setShowForm}
+          selectedBookingId={selectedBookingId}
+        />
+      )}
     </div>
   );
 };
