@@ -68,7 +68,7 @@ export default function RoomBooking() {
           {dataFromApi ? (
             <FloorPlan dataFromApi={dataFromApi} setRoomID={setRoomID} />
           ) : (
-            <div>Loading... </div>
+            <div className="justify-center items-center flex">Loading... </div>
           )}
         </div>
         <div className="flex flex-1 grow">

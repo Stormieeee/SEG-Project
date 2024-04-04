@@ -5,8 +5,9 @@ import random
 import logging
 import string
 from pydantic import BaseModel
-from datetime import date, time
-import datetime
+#from datetime import date, time
+#import datetime
+from datetime import datetime, date, time, timedelta
 
 import smtplib
 from email.mime.text import MIMEText
@@ -29,7 +30,7 @@ app.add_middleware(
 # Define database connection settings
 MYSQL_CONFIG = {
     "host": "127.0.0.1",
-    "port": 3306,
+    "port": 3307,
     "user": "root",
     "password": "",
     "database": "rbms"
@@ -471,7 +472,7 @@ def get_booking_r(db_connection, cursor, userID):
         formatted_row = list(row)
         formatted_row[3] = str(row[3])
         if formatted_row[3] == "9:00:00":
-            formatted_row[3] == "09:00:00"
+            formatted_row[3] = "09:00:00"
         formatted_row[4] = str(row[4])
         formatted_result.append(formatted_row)
 
@@ -756,7 +757,8 @@ def handle_booking(handling: HandleBooking, db_connection: mysql.connector.conne
 
 
 
-####################################TO BE COMPLETED
+#################################### TO BE TESTED
+    
 class HandleRequests(BaseModel):
     UserID: str
     checkType: str      #action is either "current" or "past"
@@ -764,6 +766,7 @@ class HandleRequests(BaseModel):
 
 #Supposed to take userID and return the current or past requests based on todays date. Current is > todays date, past is < todays date
 def get_user_requests(b_connection, cursor, UserID, checkType):
+    import datetime
     #Get todays date for checking
     today = datetime.date.today()
     formatted_date = today.strftime("%Y-%m-%d")
@@ -850,7 +853,7 @@ def get_user_requests(b_connection, cursor, UserID, checkType):
 
     cursor.execute(sql_query2, (formatted_date,UserID))
     results2 = cursor.fetchall()
-    results2_labeled = [row + ("Approved",)  for row in results2]
+    results2_labeled = [row + ("Completed",)  for row in results2]
 
     cursor.execute(sql_query3, (formatted_date,UserID))
     results3 = cursor.fetchall()
@@ -864,7 +867,7 @@ def get_user_requests(b_connection, cursor, UserID, checkType):
         formatted_row = list(row)
         formatted_row[3] = str(row[3])
         if formatted_row[3] == "9:00:00":
-            formatted_row[3] == "09:00:00"
+            formatted_row[3] = "09:00:00"
         formatted_row[4] = str(row[4])
         formatted_result.append(formatted_row)
 
@@ -882,61 +885,32 @@ def get_booking_requests_users(handling: HandleRequests, db_connection: mysql.co
     return check
 
 
+#################################### TO BE COMPLETED & TESTED
 
+	
+def daily_bookingsR_clear(db_connection, cursor):
+    # Get todays date and save locally for the clear
+    today = datetime.now().date()
 
-##def get_booking_r(db_connection, cursor, userID):
-##    # Assuming get_profile_details is imported or defined in the same module
-##    profile = get_profile_details(db_connection, cursor, userID)
-##    role = profile[1]
-##
-##    
-##        sql_query = """
-##            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
-##                   `booking request description`.`Date`,
-##                   `booking request description`.`Start Time`,
-##                   `booking request description`.`End Time`
-##            FROM `booking request`
-##            JOIN `booking request description`
-##                ON `booking request`.`Request ID` = `booking request description`.`Request ID`
-##            WHERE `booking request description`.`End Time` > '17:00:00'
-##        """
-##    else:
-##        sql_query = """
-##            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
-##                   `booking request description`.`Date`,
-##                   `booking request description`.`Start Time`,
-##                   `booking request description`.`End Time`
-##            FROM `booking request`
-##            JOIN `booking request description`
-##                ON `booking request`.`Request ID` = `booking request description`.`Request ID`
-##            WHERE `booking request description`.`End Time` < '17:00:00'
-##        """
-##
-##    cursor.execute(sql_query)
-##
-##    # Fetch all rows of the result
-##    result = cursor.fetchall()
-##     # Convert start and end times to formatted time strings
-##    formatted_result = []
-##    for row in result:
-##        formatted_row = list(row)
-##        formatted_row[3] = str(row[3])
-##        formatted_row[4] = str(row[4])
-##        formatted_result.append(formatted_row)
-##
-##    return formatted_result
-##
-##
-##
-##@app.post("/get_booking_requests_users/")
-##def get_booking_requests_users(username: userClass, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
-##    cursor = db_connection.cursor()
-##    check =  get_booking_r(
-##            db_connection,
-##            cursor,
-##            userID=username.UserID
-##            )
-##    return check
+    # Calculate one day prior
+    one_day_prior = today - timedelta(days=1)
+    one_day_prior_str = one_day_prior.strftime('%Y-%m-%d')
+    
+    query = "SELECT `Request ID` FROM `booking request description` WHERE `Date` = %s"
+    cursor.execute(query, (one_day_prior_str,))
+    bookings_today = cursor.fetchall()  
+    print (bookings_today)
+    
+    if bookings_today is not None:
+        #Loop through and decline it 
+        for request_id in bookings_today:
+            decline_booking(db_connection, cursor, request_id[0], "Booking declined automatically as it's past the scheduled date.")
+
+@app.post("/daily_bookingsR_clear/")
+def get_booking_requests_users(db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    daily_bookingsR_clear(db_connection,cursor)
+    return {"Complete clearing"}
 
 #Alt 3 for comment, Alt 4 for uncomment
 
