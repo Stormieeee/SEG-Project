@@ -57,7 +57,7 @@ export async function handleRoomBooking(
   description: string,
   date: string,
   startTime: string,
-  endTime: string,
+  endTime: string
 ) {
   if (!roomID || !capacity || !description || !date || !startTime || !endTime) {
     console.log("One or more parameters is empty");
@@ -69,24 +69,21 @@ export async function handleRoomBooking(
         throw new Error("User email is not available in session storage");
       }
 
-      const response = await fetch(
-        "http://localhost:8000/booking_request/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_id: userEmail,
-            room_id: roomID,
-            capacity: capacity,
-            description: description,
-            date: date,
-            start_time: startTime,
-            end_time: endTime,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:8000/booking_request/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userEmail,
+          room_id: roomID,
+          capacity: capacity,
+          description: description,
+          date: date,
+          start_time: startTime,
+          end_time: endTime,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();

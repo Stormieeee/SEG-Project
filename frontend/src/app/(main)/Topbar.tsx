@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import { useStateContext } from "./StateContext";
 import { handleRoomBooking } from "./roombooking/utils/utils";
 import { formatHour, adjustTime } from "./roombooking/utils/commonFunction";
+import { useState } from "react";
+import LoadingSpinner from "../Components/LoadingSpinner";
 const getPageTitle = (path: string): string => {
   switch (path) {
     case "/roombooking":
@@ -20,6 +22,7 @@ const getPageTitle = (path: string): string => {
 };
 
 const Topbar = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { roomID, capacity, description, date, startTime, endTime } =
     useStateContext();
 
@@ -31,6 +34,7 @@ const Topbar = () => {
     startTime: any,
     endTime: any
   ) => {
+    setIsLoading(true);
     try {
       const status = handleRoomBooking(
         roomID,
@@ -40,10 +44,11 @@ const Topbar = () => {
         formatHour(startTime),
         adjustTime(endTime)
       );
-      console.log("Booking successful" + status);
+      alert("Booking successful");
     } catch (error) {
       console.log("handle room booking failure: " + error);
     }
+    setIsLoading(false);
   };
 
   const pathname = usePathname();
@@ -55,18 +60,24 @@ const Topbar = () => {
           {pageTitle}
         </h1>
         {pathname === "/roombooking" && (
-          <ConfirmButton
-            onClick={() =>
-              handleButtonPress(
-                roomID,
-                capacity,
-                description,
-                date,
-                startTime,
-                endTime
-              )
-            }
-          />
+          <>
+            {isLoading ? (
+              <LoadingSpinner />
+            ) : (
+              <ConfirmButton
+                onClick={() =>
+                  handleButtonPress(
+                    roomID,
+                    capacity,
+                    description,
+                    date,
+                    startTime,
+                    endTime
+                  )
+                }
+              />
+            )}
+          </>
         )}
       </div>
     </div>
