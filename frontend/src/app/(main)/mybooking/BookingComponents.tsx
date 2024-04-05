@@ -24,14 +24,13 @@ const BookingComponents = ({
   const [bookingStatus, setBookingStatus] = useState<string>(""); // ["Pending", "Approved", "Rejected", "Completed"]
   const [bookingDetails, setBookingDetails] = useState<{
     index: number;
-    user_id: string;
-    request_capacity: number;
-    room_capacity: number;
+    request_capacity: string;
+    room_capacity: string;
     description: string;
-    comment: string;
+    comment?: string;
   } | null>(null);
   return (
-    <div className="flex h-full" style={{ maxHeight: "70vh" }}>
+    <div className="flex h-full" style={{ maxHeight: "75vh" }}>
       <div
         className={`flex flex-col ml-10 mr-5 h-full transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
       >

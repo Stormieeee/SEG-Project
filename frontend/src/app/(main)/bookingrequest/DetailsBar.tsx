@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useStateContext } from "./RequestContext";
 import RectangularCheckbox from "./RectangularCheckbox";
+import LoadingSpinner from "@/app/Components/LoadingSpinner";
 interface DetailsBarProps {
   bookingId?: string;
   user_id?: string;
@@ -21,6 +22,7 @@ const DetailsBar = ({
 }: DetailsBarProps) => {
   const [comment, setComment] = useState("");
   const [checked, setChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     setRequests,
     selectedRowIndex,
@@ -43,6 +45,7 @@ const DetailsBar = ({
         : "Are you sure you want to reject this booking?"
     );
     if (confirmed) {
+      setIsLoading(true);
       try {
         const response = await fetch("http://localhost:8000/handle_booking/", {
           method: "POST",
@@ -71,6 +74,8 @@ const DetailsBar = ({
         console.error("Error approving/rejecting request:", error);
         throw error;
       }
+      setChecked(false);
+      setIsLoading(false);
     }
   };
 
@@ -116,21 +121,24 @@ const DetailsBar = ({
             }}
           />
         )}
-
-        <div className="flex justify-between mt-5 mb-5">
-          <button
-            className="bg-green-500 w-[150px] h-[50px] hover:bg-green-700 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
-            onClick={() => handleSubmit("approve")}
-          >
-            Approve
-          </button>
-          <button
-            className="bg-red-500 w-[150px] h-[50px] hover:bg-red-800 text-white-50 rounded-md py-2 px-4 ml-3 transition duration-200 ease-in-out"
-            onClick={() => handleSubmit("reject")}
-          >
-            Reject
-          </button>
-        </div>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="flex justify-between mt-5 mb-5">
+            <button
+              className="bg-green-500 w-[150px] h-[50px] hover:bg-green-700 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
+              onClick={() => handleSubmit("approve")}
+            >
+              Approve
+            </button>
+            <button
+              className="bg-red-500 w-[150px] h-[50px] hover:bg-red-800 text-white-50 rounded-md py-2 px-4 ml-3 transition duration-200 ease-in-out"
+              onClick={() => handleSubmit("reject")}
+            >
+              Reject
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const FeedbackForm = ({
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // TODO: Handle form submission
-    console.log(feedback);
+    setShowForm(false);
     setFeedback("");
   };
 

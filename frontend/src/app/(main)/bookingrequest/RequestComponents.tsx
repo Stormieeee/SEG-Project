@@ -18,7 +18,7 @@ const RequestComponents = () => {
   } | null>(null);
 
   return (
-    <div className="flex" style={{ maxHeight: "70vh" }}>
+    <div className="flex h-full" style={{ maxHeight: "75vh" }}>
       <div
         className={`flex flex-col ml-10 mr-5 mt-5 transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
       >

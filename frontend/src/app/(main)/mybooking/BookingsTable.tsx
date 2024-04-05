@@ -6,11 +6,10 @@ interface BookingsTableProps {
   setBookingDetails: React.Dispatch<
     React.SetStateAction<{
       index: number;
-      user_id: string;
-      request_capacity: number;
-      room_capacity: number;
+      request_capacity: string;
+      room_capacity: string;
       description: string;
-      comment: string;
+      comment?: string;
     } | null>
   >;
   selectedRowIndex: number;
@@ -39,18 +38,20 @@ const BookingsTable = ({
     bookingStatus: string,
     index: number
   ) => {
+    const status = bookingStatus === "Accepted" ? "Approved" : bookingStatus;
     setSelectedBookingId(bookingId);
-    setBookingStatus(bookingStatus);
+    setBookingStatus(status);
     setSelectedRowIndex(index);
     try {
+      console.log(bookingId, bookingStatus);
       const response = await fetch(
-        "http://localhost:8000/get_booking_details",
+        "http://localhost:8000/get_booking_details_users/",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ booking_id: bookingId }),
+          body: JSON.stringify({ ID: bookingId, checkType: status }),
         }
       );
 
@@ -67,7 +68,7 @@ const BookingsTable = ({
     switch (cellData) {
       case "Pending":
         return "bg-yellow-50 text-orange-400";
-      case "Approved":
+      case "Accepted":
         return "bg-sky-400 text-white-100";
       case "Completed":
         return "bg-green-500";

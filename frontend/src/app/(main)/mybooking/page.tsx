@@ -41,40 +41,40 @@ const MyBookingPage = () => {
   };
 
   useEffect(() => {
-    // (async () => {
-    //   try {
-    //     const currentBookingsResult = await getBookings("current");
-    //     if (currentBookingsResult) {
-    //       setCurrentBookings(currentBookingsResult);
-    //     }
+    (async () => {
+      try {
+        const currentBookingsResult = await getBookings("current");
+        if (currentBookingsResult) {
+          setCurrentBookings(currentBookingsResult);
+        }
 
-    //     const pastBookingsResult = await getBookings("past");
-    //     if (pastBookingsResult) {
-    //       setPastBookings(pastBookingsResult);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching booking requests: ", error);
-    //   }
-    // })();
-    setCurrentBookings([
-      ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
-      ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
-      ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
-      ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
-      ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
-      ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
-      ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
-      ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
-      ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
-      ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
-      ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
-      ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
-    ]);
-    setPastBookings([
-      ["4", "Room 4", "2021-08-01", "14:00", "16:00", "Completed"],
-      ["5", "Room 5", "2021-08-02", "14:00", "16:00", "Completed"],
-      ["6", "Room 6", "2021-08-03", "14:00", "16:00", "Completed"],
-    ]);
+        const pastBookingsResult = await getBookings("past");
+        if (pastBookingsResult) {
+          setPastBookings(pastBookingsResult);
+        }
+      } catch (error) {
+        console.error("Error fetching booking requests: ", error);
+      }
+    })();
+    // setCurrentBookings([
+    //   ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
+    //   ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
+    //   ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
+    //   ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
+    //   ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
+    //   ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
+    //   ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
+    //   ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
+    //   ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
+    //   ["1", "Room 1", "2021-09-01", "14:00", "16:00", "Approved"],
+    //   ["2", "Room 2", "2021-09-02", "14:00", "16:00", "Pending"],
+    //   ["3", "Room 3", "2021-09-03", "14:00", "16:00", "Rejected"],
+    // ]);
+    // setPastBookings([
+    //   ["4", "Room 4", "2021-08-01", "14:00", "16:00", "Completed"],
+    //   ["5", "Room 5", "2021-08-02", "14:00", "16:00", "Completed"],
+    //   ["6", "Room 6", "2021-08-03", "14:00", "16:00", "Completed"],
+    // ]);
   }, []);
 
   return (

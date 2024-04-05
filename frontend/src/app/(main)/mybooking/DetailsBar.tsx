@@ -7,9 +7,8 @@ interface DetailsBarProps {
   selectedRowIndex: number;
   setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
   isCurrentBooking: boolean;
-  user_id?: string;
-  request_capacity?: number;
-  room_capacity?: number;
+  request_capacity?: string;
+  room_capacity?: string;
   description?: string;
   comment?: string;
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +21,6 @@ const DetailsBar = ({
   selectedRowIndex,
   setSelectedRowIndex,
   isCurrentBooking,
-  user_id,
   request_capacity,
   room_capacity,
   description,
@@ -85,11 +83,6 @@ const DetailsBar = ({
         Request Details
       </div>
       <div className="border-neutral-400 flex-1 flex-col justify-start inline-flex">
-        <div className={`${subHeadingStyle}`}>From:</div>
-        <div className=" text-base font-medium text-stone-700">
-          {user_id} ({"student"})
-        </div>
-
         <div className={`${subHeadingStyle}`}>Booking Specific:</div>
         <ul className="pl-1 space-y-2 mt-2 text-base font-medium text-stone-700">
           <li>Room Capacity: {room_capacity}</li>
@@ -99,11 +92,14 @@ const DetailsBar = ({
             <li className="leading-tight text-justify">{description} </li>
           </ul>
         </ul>
-
-        <div className={`${subHeadingStyle}`}>Comment:</div>
-        <ul className="space-y-3 mt-1 text-l leading-tight italic text-justify font-medium text-stone-700">
-          <li>{comment ? comment : "None"}</li>
-        </ul>
+        {bookingStatus !== "Pending" && (
+          <>
+            <div className={`${subHeadingStyle}`}>Comment:</div>
+            <ul className="space-y-3 mt-1 text-l leading-tight italic text-justify font-medium text-stone-700">
+              <li>{comment ? comment : "None"}</li>
+            </ul>
+          </>
+        )}
         {isCurrentBooking
           ? (bookingStatus === "Approved" || bookingStatus === "Pending") && (
               <div className="flex justify-center mt-5">

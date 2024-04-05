@@ -765,7 +765,7 @@ class HandleRequests(BaseModel):
 
 
 #Supposed to take userID and return the current or past requests based on todays date. Current is > todays date, past is < todays date
-def get_user_requests(b_connection, cursor, UserID, checkType):
+def get_user_requests(db_connection, cursor, UserID, checkType):
     import datetime
     #Get todays date for checking
     today = datetime.date.today()
@@ -782,7 +782,7 @@ def get_user_requests(b_connection, cursor, UserID, checkType):
             FROM `booking request`
             JOIN `booking request description`
             ON `booking request`.`Request ID` = `booking request description`.`Request ID`
-            WHERE `booking request description`.`Date` > %s
+            WHERE `booking request description`.`Date` >= %s
             AND `booking request`.`User ID` = %s
         """
 
@@ -794,7 +794,7 @@ def get_user_requests(b_connection, cursor, UserID, checkType):
             FROM `booking list`
             JOIN `booking id description`
             ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
-            WHERE `booking id description`.`Date` > %s
+            WHERE `booking id description`.`Date` >= %s
             AND `booking list`.`User ID` = %s
         """
 
@@ -806,9 +806,21 @@ def get_user_requests(b_connection, cursor, UserID, checkType):
             FROM `booking rejects`
             JOIN `booking rejects description`
             ON `booking rejects`.`Reject ID` = `booking rejects description`.`Reject ID`
-            WHERE `booking rejects description`.`Date` > %s
+            WHERE `booking rejects description`.`Date` >= %s
             AND `booking rejects`.`User ID` = %s
         """
+
+        cursor.execute(sql_query1, (formatted_date,UserID))
+        results1 = cursor.fetchall()
+        results1_labeled = [row + ("Pending",) for row in results1]
+
+        cursor.execute(sql_query2, (formatted_date,UserID))
+        results2 = cursor.fetchall()
+        results2_labeled = [row + ("Accepted",)  for row in results2]
+
+        cursor.execute(sql_query3, (formatted_date,UserID))
+        results3 = cursor.fetchall()
+        results3_labeled = [row + ("Rejected",)  for row in results3]    
 
     else:
         sql_query1 = """
@@ -847,17 +859,18 @@ def get_user_requests(b_connection, cursor, UserID, checkType):
             AND `booking rejects`.`User ID` = %s
         """        
 
-    cursor.execute(sql_query1, (formatted_date,UserID))
-    results1 = cursor.fetchall()
-    results1_labeled = [row + ("Pending",) for row in results1]
+        cursor.execute(sql_query1, (formatted_date,UserID))
+        results1 = cursor.fetchall()
+        results1_labeled = [row + ("Pending",) for row in results1]
 
-    cursor.execute(sql_query2, (formatted_date,UserID))
-    results2 = cursor.fetchall()
-    results2_labeled = [row + ("Completed",)  for row in results2]
+        cursor.execute(sql_query2, (formatted_date,UserID))
+        results2 = cursor.fetchall()
+        results2_labeled = [row + ("Completed",)  for row in results2]
 
-    cursor.execute(sql_query3, (formatted_date,UserID))
-    results3 = cursor.fetchall()
-    results3_labeled = [row + ("Rejected",)  for row in results3]    
+        cursor.execute(sql_query3, (formatted_date,UserID))
+        results3 = cursor.fetchall()
+        results3_labeled = [row + ("Rejected",)  for row in results3]    
+
 
     results = results1_labeled + results2_labeled + results3_labeled
 
@@ -885,6 +898,112 @@ def get_booking_requests_users(handling: HandleRequests, db_connection: mysql.co
     return check
 
 
+
+
+#################################### TO BE TESTED
+
+
+class BookingDetailsUsers(BaseModel):
+    ID: str
+    checkType: str      #action is either "Approved" OR "Completed", OR "Rejected" OR "Pending"
+
+
+def get_user_booking_details(db_connection, cursor, ID, checkType):
+
+    if checkType == "Pending":  #Pending
+        
+        query = """
+            SELECT 
+                `booking request description`.`capacity` AS request_capacity,
+                `room`.`capacity` AS room_capacity,
+                `booking request description`.`Description` AS request_description
+            FROM 
+                `booking request`
+            JOIN 
+                `booking request description` ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+            JOIN 
+                `room` ON `booking request`.`Room ID` = `room`.`Room ID`
+            WHERE 
+                `booking request`.`Request ID` = %s
+            """
+
+    elif checkType == "Approved" or checkType == "Completed":   #Approved or Completed
+        
+        query = """
+            SELECT 
+                `booking id description`.`capacity` AS request_capacity,
+                `room`.`capacity` AS room_capacity,
+                `booking id description`.`Description` AS request_description,
+                `booking id description`.`Comment` AS request_comment
+            FROM 
+                `booking list`
+
+            JOIN 
+                `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+            JOIN 
+                `room` ON `booking list`.`Room ID` = `room`.`Room ID`
+            WHERE 
+                `booking list`.`Booking ID` = %s
+            """
+
+
+    else:   #Rejected
+        
+        query = """
+            SELECT 
+                `booking rejects description`.`capacity` AS request_capacity,
+                `room`.`capacity` AS room_capacity,
+                `booking rejects description`.`Description` AS request_description,
+                `booking rejects description`.`Comment` AS request_comment
+            FROM 
+                `booking rejects`
+            JOIN 
+                `booking rejects description` ON `booking rejects`.`Reject ID` = `booking rejects description`.`Reject ID`
+            JOIN 
+                `room` ON `booking rejects`.`Room ID` = `room`.`Room ID`
+            WHERE 
+                `booking rejects`.`Reject ID` = %s
+            """
+
+        
+    
+    cursor.execute(query, (ID,))
+    results = cursor.fetchone()
+
+    if  checkType == "Approved" or checkType == "Completed" or checkType == "Rejected":
+        response = {
+                "request_capacity": results[0] if results[0] is not None else "",
+                "room_capacity": results[1] if results[1] is not None else "",
+                "description": results[2] if results[2] is not None else "",
+                "comment": results[3] if results[3] is not None else ""
+            }
+    else:
+        response = {
+            "request_capacity": results[0] if results[0] is not None else "",
+            "room_capacity": results[1] if results[1] is not None else "",
+            "description": results[2] if results[2] is not None else "",
+        }
+
+
+    return response
+    
+#need room capacity, booking capacity, purpose, comment
+#        `booking id description`.`
+
+
+@app.post("/get_booking_details_users/")
+def get_booking_details_users(details: BookingDetailsUsers, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    check = get_user_booking_details(
+            db_connection,
+            cursor,
+            ID=details.ID,
+            checkType=details.checkType
+            )
+    return check
+
+
+
 #################################### TO BE COMPLETED & TESTED
 
 	
@@ -896,7 +1015,7 @@ def daily_bookingsR_clear(db_connection, cursor):
     one_day_prior = today - timedelta(days=1)
     one_day_prior_str = one_day_prior.strftime('%Y-%m-%d')
     
-    query = "SELECT `Request ID` FROM `booking request description` WHERE `Date` = %s"
+    query = "SELECT `Request ID` FROM `booking request description` WHERE `Date` < %s"
     cursor.execute(query, (one_day_prior_str,))
     bookings_today = cursor.fetchall()  
     print (bookings_today)
