@@ -49,7 +49,7 @@ export default function RoomBooking() {
 
   return (
     <div className="flex flex-row">
-      <div className="w-1/2 flex flex-col h-full">
+      <div className="w-1/2 flex flex-col">
         <div className="p-1 mt-[10px] ml-[15px]">
           <DateTime
             fetchData={fetchData}
@@ -63,7 +63,7 @@ export default function RoomBooking() {
         </div>
       </div>
 
-      <div className=" w-full flex flex-col">
+      <div className=" w-1/2 flex flex-col">
         <div className="h-4/6 p-1 mt-[10px] ml-[5px]">
           {dataFromApi ? (
             <FloorPlan dataFromApi={dataFromApi} setRoomID={setRoomID} />
@@ -71,7 +71,7 @@ export default function RoomBooking() {
             <div className="justify-center items-center flex">Loading... </div>
           )}
         </div>
-        <div className="flex flex-1 grow">
+        <div className="h-2/6 flex flex-row">
           <div className=" w-7/12 p-1 ml-[5px]">
             <Description />
           </div>
