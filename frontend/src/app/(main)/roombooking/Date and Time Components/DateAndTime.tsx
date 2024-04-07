@@ -45,34 +45,34 @@ const DateTime = ({ fetchData }: any) => {
     const interval = setInterval(generateOptions, 60000);
 
     return () => clearInterval(interval);
-  }, [date]);
+  }, []);
 
   //Change Date
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value;
-
+    
     if (selectedDate !== getCurrentDate()) {
-      setStartTime(9);
-      setEndTime(23);
 
-      const availableOptions: Option[] = [];
+      const availableOptions = [];
       for (let i = 9; i <= 23; i++) {
         availableOptions.push({ value: i, label: `${i}:00` });
       }
+      setStartTime(9); 
+      setEndTime(10);
       setStartOptions(availableOptions);
       setEndOptions(availableOptions.slice(1));
     } else {
       const currentTime = new Date().getHours();
-      const availableOptions: Option[] = [];
+      const availableOptions = [];
       for (let i = currentTime; i <= 23; i++) {
         availableOptions.push({ value: i, label: `${i}:00` });
       }
-      setStartOptions(availableOptions);
-      setEndOptions(availableOptions.slice(1));
       setStartTime(currentTime);
       setEndTime(currentTime);
+      setStartOptions(availableOptions);
+      setEndOptions(availableOptions.slice(1)); 
     }
-
+    
     setDate(selectedDate);
   };
 
