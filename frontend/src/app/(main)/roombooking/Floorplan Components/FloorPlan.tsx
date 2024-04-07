@@ -57,6 +57,11 @@
 // export default FloorPlan;
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image"
+import stairs from "../../../../../public/FloorPlan-icon/stairs.svg"
+import stairsRotate from "../../../../../public/FloorPlan-icon/stairs_rotated.svg"
+import toilet from "../../../../../public/FloorPlan-icon/toilet.svg"
+import lift from "../../../../../public/FloorPlan-icon/elevator.svg"
 
 interface FloorPlanProps {
   setRoomID: (RoomID: string) => void;
@@ -304,7 +309,13 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                   3R041
                 </span>
               </button>
-              <div className="w-full h-2/3 bg-black-100"></div>
+              <div className="flex w-full h-2/3 bg-black-100">
+                <Image 
+                  src={stairs} 
+                  alt="Stair Icon"
+                  className="flex object-cover"
+                />
+              </div>
             </div>
             <button
               key={"3R016"}
@@ -362,7 +373,13 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
             <div className="h-1/2 flex flex-row">
               <div className="w-4/5 flex flex-col">
                 <div className="h-26/100 flex flex-row">
-                  <div className="w-23/100 bg-black-100"></div>
+                  <div className="flex w-23/100 bg-white-500">
+                    <Image
+                      src={toilet}
+                      alt="Toilet Icon"
+                      className="flex w-full h-full"
+                    />
+                  </div>
                   <button
                     key={"3R018"}
                     onClick={() => handleButtonClick("3R018")}
@@ -514,7 +531,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               </div>
 
               <div className="w-1/5 flex flex-col">
-                <div className="h-66/100 bg-black-100 rounded-md"></div>
+                <div className="h-66/100 bg-white-500 rounded-md"></div>
                 <button
                   key={"3R026"}
                   onClick={() => handleButtonClick("3R026")}
@@ -675,7 +692,23 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
                   <div className="w-4/100"></div>
 
-                  <div className="w-10/100 bg-black-100"></div>
+                  <div className="w-10/100 bg-white-500">
+                    <Image
+                      src={stairsRotate}
+                      alt="Stairs Rotate Icon"
+                      className="h-[40px]"
+                    />
+                    <Image
+                      src={toilet}
+                      alt="Toilet Icon"
+                      className="w-full"
+                    />
+                    <Image
+                      src={lift}
+                      alt="LiftIcon"
+                      className="h-[35px] w-[40px] ml-2"
+                    />
+                  </div>
                 </div>
 
                 <div className="h-25/100 flex flex-row">
@@ -727,7 +760,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           </div>
         </div>
         <div className="h-10/100 flex flex-row">
-          <div className="w-13/100 bg-black-100 rounded-sm"></div>
+          <div className="w-13/100 bg-white-500 rounded-sm"></div>
           <button
             key={"3R006"}
             onClick={() => {
@@ -740,7 +773,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           >
             3R006
           </button>
-          <div className="w-76/100 bg-black-100 rounded-sm"></div>
+          <div className="w-76/100 bg-white-500 rounded-sm"></div>
         </div>
       </div>
 
