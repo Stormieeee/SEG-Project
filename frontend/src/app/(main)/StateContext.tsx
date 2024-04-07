@@ -44,8 +44,8 @@ export const StateProvider = ({ children }: any) => {
     defaultValue.description
   );
   const [date, setDate] = useState<string>(defaultValue.date);
-  const [startTime, setStartTime] = useState<number>(defaultValue.startTime);
-  const [endTime, setEndTime] = useState<number>(defaultValue.endTime);
+  const [startTime, setStartTime] = useState<number>(new Date().getHours());
+  const [endTime, setEndTime] = useState<number>(new Date().getHours() + 1);
 
   return (
     <StateContext.Provider
