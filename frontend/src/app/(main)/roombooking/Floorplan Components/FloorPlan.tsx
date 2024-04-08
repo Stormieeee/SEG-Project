@@ -309,11 +309,11 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                   3R041
                 </span>
               </button>
-              <div className="flex w-full h-2/3 bg-black-100">
+              <div className="flex w-full h-2/3 bg-white-500">
                 <Image 
                   src={stairs} 
                   alt="Stair Icon"
-                  className="flex object-cover"
+                  className="h-[35px] w-[50px]"
                 />
               </div>
             </div>
@@ -629,7 +629,13 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                           <div className="h-24/100 bg-black-50 rounded-tr-md"></div>
                         </div>
                       </div>
-                      <div className="h-56/100 bg-black-50 rounded-bl-md rounded-br-md"></div>
+                      <div className="h-56/100 bg-black-50 rounded-bl-md rounded-br-md">
+                        <Image
+                          src={stairs}
+                          alt="Stairs Icon"
+                          className="h-[50px] w-[50px] ml-10"
+                        />
+                      </div>
                     </div>
                     <div className="w-27/100 flex flex-col">
                       <div className="h-1/3"></div>
@@ -696,7 +702,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     <Image
                       src={stairsRotate}
                       alt="Stairs Rotate Icon"
-                      className="h-[40px]"
+                      className="h-[40px] w-[50px]"
                     />
                     <Image
                       src={toilet}
