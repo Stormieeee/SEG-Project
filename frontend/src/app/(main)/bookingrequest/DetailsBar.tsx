@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useStateContext } from "./RequestContext";
 import RectangularCheckbox from "./RectangularCheckbox";
 import LoadingSpinner from "@/app/Components/LoadingSpinner";
+
 interface DetailsBarProps {
   bookingId?: string;
   user_id?: string;
@@ -63,7 +64,6 @@ const DetailsBar = ({
         if (response.ok) {
           if (data[0] === "Collision") {
             alert("Collision detected! Please decline this booking request.");
-            return;
           }
           handleRemoveItem(bookingId ? bookingId : "");
           if (selectedRowIndex === displayedRequests.length - 1) {
