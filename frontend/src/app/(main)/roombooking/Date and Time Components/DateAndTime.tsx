@@ -37,20 +37,12 @@ const DateTime = ({ fetchData }: any) => {
         }
         setStartOptions(availableOptions);
         setEndOptions(availableOptions.slice(1));
+        console.log("first if")
       }else if(isOutOfTimeRange && !isCurrentDate){ //else if current time is out of range but date is not today's date then initiate option with 9am
         setDisabled(false);
         const availableOptions: Option[] = [];
         for (let i = 9; i <= 23; i++) {
           availableOptions.push({ value: i, label: ` ${i}:00 `});
-        }
-        setStartOptions(availableOptions);
-        setEndOptions(availableOptions.slice(1));
-        console.log("first if")
-      }else if(isOutOfTimeRange && !isCurrentDate){        //else if current time is out of range but date is not today's date then initiate option with 9am
-        setDisabled(false);
-        const availableOptions = [];
-        for (let i = 9; i <= 23; i++) {
-          availableOptions.push({ value: i, label: `${i}:00` });
         }
         setStartOptions(availableOptions);
         setEndOptions(availableOptions.slice(1));
