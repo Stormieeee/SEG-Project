@@ -292,9 +292,8 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
   const ThirdFloor = () => {
     return (
-
       <div className="bg-white-50 border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
-        <div className="h-90/100 flex flex-row">        
+        <div className="h-90/100 flex flex-row">
           <div className="w-10/100 flex flex-col">
             <div className="h-16/100 flex flex-row">
               <button
@@ -763,7 +762,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
                 <div className="h-5/100"></div>
               </div>
-            </div>          
+            </div>
           </div>
         </div>
         <div className="h-10/100 flex flex-row">
@@ -783,8 +782,6 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           <div className="w-76/100 bg-black-50 rounded-br-lg rounded-tr-lg"></div>
         </div>
       </div>
-
-      
     );
   };
 

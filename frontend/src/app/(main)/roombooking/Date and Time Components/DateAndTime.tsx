@@ -29,9 +29,9 @@ const DateTime = ({ fetchData }: any) => {
       const isCurrentDate = date === getCurrentDate(); //boolean for if date selected is same as current date
       const isOutOfTimeRange = currentTime < 9 || currentTime > 23; //boolean for current time is < 9 or > 23
 
-      if (!isOutOfTimeRange || !isCurrentDate) { //if both isOutofTimeRange and isCurrentDate evaluate to true then initiate option with current time
+      if (!isOutOfTimeRange && isCurrentDate) {           //if its not out of range and is today's date then initiate option with current time
         setDisabled(false);
-        const availableOptions: Option[] = [];
+        const availableOptions = [];
         for (let i = currentTime; i <= 23; i++) {
           availableOptions.push({ value: i, label: ` ${i}:00 `});
         }
@@ -45,7 +45,18 @@ const DateTime = ({ fetchData }: any) => {
         }
         setStartOptions(availableOptions);
         setEndOptions(availableOptions.slice(1));
-      }else{ //else set disabled if out of time range and today's date
+        console.log("first if")
+      }else if(isOutOfTimeRange && !isCurrentDate){        //else if current time is out of range but date is not today's date then initiate option with 9am
+        setDisabled(false);
+        const availableOptions = [];
+        for (let i = 9; i <= 23; i++) {
+          availableOptions.push({ value: i, label: `${i}:00` });
+        }
+        setStartOptions(availableOptions);
+        setEndOptions(availableOptions.slice(1));
+        console.log("second if")
+      }else{                                              //else set disabled if out of time range and today's date
+        console.log("third else")
         setDisabled(isOutOfTimeRange && isCurrentDate); 
       }
     };
@@ -63,7 +74,7 @@ const DateTime = ({ fetchData }: any) => {
     
     if (selectedDate !== getCurrentDate()) {
 
-      const availableOptions = [];
+      const availableOptions: Option[] = [];
       for (let i = 9; i <= 23; i++) {
         availableOptions.push({ value: i, label: `${i}:00` });
       }
@@ -73,7 +84,7 @@ const DateTime = ({ fetchData }: any) => {
       setEndOptions(availableOptions.slice(1));
     } else {
       const currentTime = new Date().getHours();
-      const availableOptions = [];
+      const availableOptions: Option[] = [];
       for (let i = currentTime; i <= 23; i++) {
         availableOptions.push({ value: i, label: `${i}:00` });
       }
