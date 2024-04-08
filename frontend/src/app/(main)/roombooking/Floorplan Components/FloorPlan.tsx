@@ -58,10 +58,9 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image"
-import stairs from "../../../../../public/FloorPlan-icon/stairs.svg"
-import stairsRotate from "../../../../../public/FloorPlan-icon/stairs_rotated.svg"
-import toilet from "../../../../../public/FloorPlan-icon/toilet.svg"
-import lift from "../../../../../public/FloorPlan-icon/elevator.svg"
+import stairs from "../../../../../public/FloorPlan-icon/stair-icon.svg"
+import toilet from "../../../../../public/FloorPlan-icon/wc-sign-svgrepo-com.svg"
+import lift from "../../../../../public/FloorPlan-icon/elevator-svgrepo-com.svg"
 
 interface FloorPlanProps {
   setRoomID: (RoomID: string) => void;
@@ -103,6 +102,8 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
         return true;
     }
   };
+
+  const iconStyle = `h-[2rem] w-[2rem] justify-center items-center m-1`;
 
   const getActiveButtonClass = (isActive: boolean, color: string) => {
     let backgroundColorClass = "";
@@ -309,11 +310,11 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                   3R041
                 </span>
               </button>
-              <div className="flex w-full h-2/3 bg-black-50">
+              <div className="flex w-full h-4/5 bg-zinc-500 rounded-tl-lg rounded-bl-lg justify-normal items-center">
                 <Image 
                   src={stairs} 
                   alt="Stair Icon"
-                  className="h-[35px] w-[50px]"
+                  className={`${iconStyle} p-1`}
                 />
               </div>
             </div>
@@ -373,11 +374,11 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
             <div className="h-1/2 flex flex-row">
               <div className="w-4/5 flex flex-col">
                 <div className="h-26/100 flex flex-row">
-                  <div className="flex w-23/100 bg-black-50">
+                  <div className="flex flex-auto w-23/100 bg-zinc-500 justify-center items-center rounded-tr-lg rounded-br-lg">
                     <Image
                       src={toilet}
                       alt="Toilet Icon"
-                      className="w-[40px] h-[40px] mt-1 ml-10 p-1"
+                      className={`${iconStyle} p-1 `}
                     />
                   </div>
                   <button
@@ -621,19 +622,19 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     </div>
                     <div className="w-51/100 flex flex-col mx-1 bg-white-50">
                       <div className="h-42/100 flex flex-row ">
-                        <div className="w-19/100 bg-black-50 rounded-tl-md"></div>
-                        <div className="w-46/100 bg-black-50"></div>
-                        <div className="w-19/100 bg-black-50 rounded-tr-md "></div>
+                        <div className="w-19/100 bg-zinc-500 rounded-tl-md"></div>
+                        <div className="w-46/100 bg-zinc-500"></div>
+                        <div className="w-19/100 bg-zinc-500 rounded-tr-md "></div>
                         <div className="w-16/100 flex flex-col">
                           <div className="h-76/100"></div>
-                          <div className="h-24/100 bg-black-50 rounded-tr-md"></div>
+                          <div className="h-24/100 bg-zinc-500 rounded-tr-md"></div>
                         </div>
                       </div>
-                      <div className="h-56/100 bg-black-50 rounded-bl-md rounded-br-md">
+                      <div className=" flex h-56/100 bg-zinc-500 items-top justify-center rounded-bl-md rounded-br-md">
                         <Image
                           src={stairs}
                           alt="Stairs Icon"
-                          className="h-[50px] w-[50px] ml-10"
+                          className={`${iconStyle} p-1`}
                         />
                       </div>
                     </div>
@@ -698,21 +699,21 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
                   <div className="w-4/100"></div>
 
-                  <div className="w-10/100 bg-black-50">
+                  <div className="w-10/100 bg-zinc-500 flex flex-col items-center justify-between py-1">
                     <Image
-                      src={stairsRotate}
-                      alt="Stairs Rotate Icon"
-                      className="h-[40px] w-[50px]"
+                      src={stairs}
+                      alt="Stair Icon"
+                      className={`${iconStyle} p-1`}
                     />
                     <Image
                       src={toilet}
                       alt="Toilet Icon"
-                      className="w-[40px] h-[40px] ml-1.5 mt-1 p-1"
+                      className={`${iconStyle} p-1`}
                     />
                     <Image
                       src={lift}
                       alt="LiftIcon"
-                      className="h-[35px] w-[40px] mt-1 ml-1.5"
+                      className={`${iconStyle} p-1`}
                     />
                   </div>
                 </div>
@@ -766,20 +767,20 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           </div>
         </div>
         <div className="h-10/100 flex flex-row">
-          <div className="w-13/100 bg-black-50 rounded-sm"></div>
+          <div className="w-13/100 bg-black-50 rounded-bl-lg"></div>
           <button
             key={"3R006"}
             onClick={() => {
               handleButtonClick("3R006");
             }}
-            className={`w-11/100 rounded-md 
+            className={`w-11/100 rounded-md mx-1
             ${getButtonColorClass(colorMap["3R006"])}
             ${getActiveButtonClass(activeButton === "3R006", colorMap["3R006"])}`}
             disabled={getButtonDisabledState(colorMap["3R006"])}
           >
             3R006
           </button>
-          <div className="w-76/100 bg-black-50 rounded-sm"></div>
+          <div className="w-76/100 bg-black-50 rounded-br-lg rounded-tr-lg"></div>
         </div>
       </div>
 

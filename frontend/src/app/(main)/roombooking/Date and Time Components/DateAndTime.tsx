@@ -27,19 +27,29 @@ const DateTime = ({ fetchData }: any) => {
     const generateOptions = () => {
       const currentTime = new Date().getHours(); //current time
       const isCurrentDate = date === getCurrentDate(); //boolean for if date selected is same as current date
-      const isOutOfRange = currentTime < 9 || currentTime > 23; //boolean for current time is < 9 or > 23
+      const isOutOfTimeRange = currentTime < 9 || currentTime > 23; //boolean for current time is < 9 or > 23
 
-      if (!isOutOfRange || !isCurrentDate) {
+      if (!isOutOfTimeRange || !isCurrentDate) { //if both isOutofTimeRange and isCurrentDate evaluate to true then initiate option with current time
+        setDisabled(false);
         const availableOptions: Option[] = [];
         for (let i = currentTime; i <= 23; i++) {
-          availableOptions.push({ value: i, label: `${i}:00` });
+          availableOptions.push({ value: i, label: ` ${i}:00 `});
         }
         setStartOptions(availableOptions);
         setEndOptions(availableOptions.slice(1));
+      }else if(isOutOfTimeRange && !isCurrentDate){ //else if current time is out of range but date is not today's date then initiate option with 9am
+        setDisabled(false);
+        const availableOptions: Option[] = [];
+        for (let i = 9; i <= 23; i++) {
+          availableOptions.push({ value: i, label: ` ${i}:00 `});
+        }
+        setStartOptions(availableOptions);
+        setEndOptions(availableOptions.slice(1));
+      }else{ //else set disabled if out of time range and today's date
+        setDisabled(isOutOfTimeRange && isCurrentDate); 
       }
-
-      setDisabled(isOutOfRange && isCurrentDate);
     };
+
 
     generateOptions();
     const interval = setInterval(generateOptions, 60000);
