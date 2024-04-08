@@ -377,7 +377,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     <Image
                       src={toilet}
                       alt="Toilet Icon"
-                      className="flex w-full h-full"
+                      className="w-[40px] h-[40px] mt-1 ml-10 p-1"
                     />
                   </div>
                   <button
@@ -707,12 +707,12 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     <Image
                       src={toilet}
                       alt="Toilet Icon"
-                      className="w-full"
+                      className="w-[40px] h-[40px] ml-1.5 mt-1 p-1"
                     />
                     <Image
                       src={lift}
                       alt="LiftIcon"
-                      className="h-[35px] w-[40px] ml-2"
+                      className="h-[35px] w-[40px] mt-1 ml-1.5"
                     />
                   </div>
                 </div>
