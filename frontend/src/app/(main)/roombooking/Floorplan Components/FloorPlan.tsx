@@ -70,7 +70,6 @@ interface FloorPlanProps {
 const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
   const fetchData = dataFromApi;
   const roomStatus = fetchData.dataFromApi.available;
-  console.log(roomStatus);
   // State variable to track the active button
   const [activeButton, setActiveButton] = useState<string | null>(null);
 
