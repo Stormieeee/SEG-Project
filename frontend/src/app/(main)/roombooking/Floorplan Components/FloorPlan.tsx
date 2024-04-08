@@ -309,7 +309,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                   3R041
                 </span>
               </button>
-              <div className="flex w-full h-2/3 bg-white-500">
+              <div className="flex w-full h-2/3 bg-black-50">
                 <Image 
                   src={stairs} 
                   alt="Stair Icon"
@@ -373,7 +373,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
             <div className="h-1/2 flex flex-row">
               <div className="w-4/5 flex flex-col">
                 <div className="h-26/100 flex flex-row">
-                  <div className="flex w-23/100 bg-white-500">
+                  <div className="flex w-23/100 bg-black-50">
                     <Image
                       src={toilet}
                       alt="Toilet Icon"
@@ -531,7 +531,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               </div>
 
               <div className="w-1/5 flex flex-col">
-                <div className="h-66/100 bg-white-500 rounded-md"></div>
+                <div className="h-66/100 bg-black-50 rounded-md"></div>
                 <button
                   key={"3R026"}
                   onClick={() => handleButtonClick("3R026")}
@@ -698,7 +698,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
                   <div className="w-4/100"></div>
 
-                  <div className="w-10/100 bg-white-500">
+                  <div className="w-10/100 bg-black-50">
                     <Image
                       src={stairsRotate}
                       alt="Stairs Rotate Icon"
@@ -766,7 +766,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           </div>
         </div>
         <div className="h-10/100 flex flex-row">
-          <div className="w-13/100 bg-white-500 rounded-sm"></div>
+          <div className="w-13/100 bg-black-50 rounded-sm"></div>
           <button
             key={"3R006"}
             onClick={() => {
@@ -779,7 +779,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           >
             3R006
           </button>
-          <div className="w-76/100 bg-white-500 rounded-sm"></div>
+          <div className="w-76/100 bg-black-50 rounded-sm"></div>
         </div>
       </div>
 
