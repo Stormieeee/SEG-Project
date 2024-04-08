@@ -57,10 +57,12 @@
 // export default FloorPlan;
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image"
-import stairs from "../../../../../public/FloorPlan-icon/stair-icon.svg"
-import toilet from "../../../../../public/FloorPlan-icon/wc-sign-svgrepo-com.svg"
-import lift from "../../../../../public/FloorPlan-icon/elevator-svgrepo-com.svg"
+import Image from "next/image";
+import { useStateContext } from "../../StateContext";
+
+import stairs from "../../../../../public/FloorPlan-icon/stair-icon.svg";
+import toilet from "../../../../../public/FloorPlan-icon/wc-sign-svgrepo-com.svg";
+import lift from "../../../../../public/FloorPlan-icon/elevator-svgrepo-com.svg";
 
 interface FloorPlanProps {
   setRoomID: (RoomID: string) => void;
@@ -68,6 +70,8 @@ interface FloorPlanProps {
 }
 
 const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
+  const {floor, floorSection} = useStateContext();
+
   const fetchData = dataFromApi;
   const roomStatus = fetchData.dataFromApi.available;
   // State variable to track the active button
@@ -103,6 +107,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
   };
 
   const iconStyle = `h-[2rem] w-[2rem] justify-center items-center m-1`;
+  const textStyle = "md:text-sm origin-center text-black-600";
 
   const getActiveButtonClass = (isActive: boolean, color: string) => {
     let backgroundColorClass = "";
@@ -110,7 +115,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
       switch (color) {
         case "green":
           backgroundColorClass =
-            "bg-primary-400 border-primary-600 border-2 hover:bg-primary-200";
+            " bg-primary-400 border-primary-600 border-2 hover:bg-primary-200";
           break;
         case "red":
           backgroundColorClass = "bg-red-300 border-red-600 border-2";
@@ -127,7 +132,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
     return backgroundColorClass;
   };
 
-  const SecondFloor = ({ dataFromApi }: { dataFromApi: any }) => {
+  const SecondFloor = () => {
     return (
       <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
         <div className="flex flex-row h-[130px]">
@@ -298,19 +303,17 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               <button
                 key={"3R041"}
                 onClick={() => handleButtonClick("3R041")}
-                className={`w-1/2 rounded-md
+                className={`w-full rounded-md
                 ${getButtonColorClass(colorMap["3R041"])}
                 ${getActiveButtonClass(activeButton === "3R041", colorMap["3R041"])}
                 `}
                 disabled={getButtonDisabledState(colorMap["3R041"])}
               >
-                <span className="block transform -rotate-90 text-sm origin-center">
-                  3R041
-                </span>
+                <span className={`${textStyle}`}>3R041</span>
               </button>
-              <div className="flex w-full h-4/5 bg-zinc-500 rounded-tl-lg rounded-bl-lg justify-normal items-center">
-                <Image 
-                  src={stairs} 
+              <div className="flex w-full h-3/5 bg-zinc-400 rounded-tl-lg rounded-bl-lg justify-normal items-center">
+                <Image
+                  src={stairs}
                   alt="Stair Icon"
                   className={`${iconStyle} p-1`}
                 />
@@ -320,6 +323,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               key={"3R016"}
               onClick={() => handleButtonClick("3R016")}
               className={`h-12/100 rounded-md border-2
+              ${textStyle}
               ${getButtonColorClass(colorMap["3R016"])}
               ${getActiveButtonClass(activeButton === "3R016", colorMap["3R016"])}`}
               disabled={getButtonDisabledState(colorMap["3R016"])}
@@ -330,6 +334,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               key={"3R014"}
               onClick={() => handleButtonClick("3R014")}
               className={`h-16/100 rounded-md 
+              ${textStyle}
               ${getButtonColorClass(colorMap["3R014"])}
               ${getActiveButtonClass(activeButton === "3R014", colorMap["3R014"])}`}
               disabled={getButtonDisabledState(colorMap["3R014"])}
@@ -340,6 +345,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               key={"3R012"}
               onClick={() => handleButtonClick("3R012")}
               className={`h-22/100 rounded-md 
+              ${textStyle}
               ${getButtonColorClass(colorMap["3R012"])}
               ${getActiveButtonClass(activeButton === "3R012", colorMap["3R012"])}`}
               disabled={getButtonDisabledState(colorMap["3R012"])}
@@ -350,6 +356,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               key={"3R010"}
               onClick={() => handleButtonClick("3R010")}
               className={`h-22/100 rounded-md 
+              ${textStyle}
               ${getButtonColorClass(colorMap["3R010"])}
               ${getActiveButtonClass(activeButton === "3R010", colorMap["3R010"])}`}
               disabled={getButtonDisabledState(colorMap["3R010"])}
@@ -359,7 +366,8 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
             <button
               key={"3R008"}
               onClick={() => handleButtonClick("3R008")}
-              className={`h-12/100 rounded-md  
+              className={`h-12/100 rounded-md 
+              ${textStyle} 
               ${getButtonColorClass(colorMap["3R008"])}
               ${getActiveButtonClass(activeButton === "3R008", colorMap["3R008"])}`}
               disabled={getButtonDisabledState(colorMap["3R008"])}
@@ -372,7 +380,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
             <div className="h-1/2 flex flex-row">
               <div className="w-4/5 flex flex-col">
                 <div className="h-26/100 flex flex-row">
-                  <div className="flex flex-auto w-23/100 bg-zinc-500 justify-center items-center rounded-tr-lg rounded-br-lg">
+                  <div className="flex flex-auto w-23/100 bg-zinc-400 justify-center items-center rounded-tr-lg rounded-br-lg rounded-bl-lg">
                     <Image
                       src={toilet}
                       alt="Toilet Icon"
@@ -383,18 +391,18 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     key={"3R018"}
                     onClick={() => handleButtonClick("3R018")}
                     className={`w-11/100 rounded-md 
+                    ${textStyle}
                     ${getButtonColorClass(colorMap["3R018"])}
                     ${getActiveButtonClass(activeButton === "3R018", colorMap["3R018"])}`}
                     disabled={getButtonDisabledState(colorMap["3R018"])}
                   >
-                    <span className="block transform -rotate-90 text-sm origin-center">
-                      3R018
-                    </span>
+                    <span className={`${textStyle}`}>3R018</span>
                   </button>
                   <button
                     key={"3R020"}
                     onClick={() => handleButtonClick("3R020")}
                     className={`w-13/100 rounded-md 
+                    ${textStyle}
                     ${getButtonColorClass(colorMap["3R020"])}
                     ${getActiveButtonClass(activeButton === "3R020", colorMap["3R020"])}`}
                     disabled={getButtonDisabledState(colorMap["3R020"])}
@@ -405,6 +413,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     key={"3R022"}
                     onClick={() => handleButtonClick("3R022")}
                     className={`w-18/100 rounded-md 
+                    ${textStyle}
                     ${getButtonColorClass(colorMap["3R022"])}
                     ${getActiveButtonClass(activeButton === "3R022", colorMap["3R022"])}`}
                     disabled={getButtonDisabledState(colorMap["3R022"])}
@@ -415,6 +424,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     key={"3R024"}
                     onClick={() => handleButtonClick("3R024")}
                     className={`w-18/100 rounded-md 
+                    ${textStyle}
                     ${getButtonColorClass(colorMap["3R024"])}
                     ${getActiveButtonClass(activeButton === "3R024", colorMap["3R024"])}`}
                     disabled={getButtonDisabledState(colorMap["3R024"])}
@@ -425,6 +435,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     key={"3R025"}
                     onClick={() => handleButtonClick("3R025")}
                     className={`w-17/100 rounded-md 
+                    ${textStyle}
                     ${getButtonColorClass(colorMap["3R025"])}
                     ${getActiveButtonClass(activeButton === "3R025", colorMap["3R025"])}`}
                     disabled={getButtonDisabledState(colorMap["3R025"])}
@@ -444,6 +455,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         key={"3R017"}
                         onClick={() => handleButtonClick("3R017")}
                         className={`w-1/2 rounded-md 
+                        ${textStyle}
                       ${getButtonColorClass(colorMap["3R017"])}
                       ${getActiveButtonClass(activeButton === "3R017", colorMap["3R017"])}`}
                         disabled={getButtonDisabledState(colorMap["3R017"])}
@@ -454,6 +466,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         key={"3R019"}
                         onClick={() => handleButtonClick("3R019")}
                         className={`w-1/2 rounded-md 
+                        ${textStyle}
                         ${getButtonColorClass(colorMap["3R019"])}
                         ${getActiveButtonClass(activeButton === "3R019", colorMap["3R019"])}
                       `}
@@ -467,6 +480,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                       key={"3R015"}
                       onClick={() => handleButtonClick("3R015")}
                       className={`h-36/100 rounded-md 
+                      ${textStyle}
                       ${getButtonColorClass(colorMap["3R015"])}
                       ${getActiveButtonClass(activeButton === "3R015", colorMap["3R015"])}`}
                       disabled={getButtonDisabledState(colorMap["3R015"])}
@@ -484,6 +498,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                       key={"3R021"}
                       onClick={() => handleButtonClick("3R021")}
                       className={`w-33/100 h-1/2 rounded-md 
+                      ${textStyle}
                       ${getButtonColorClass(colorMap["3R021"])}
                       ${getActiveButtonClass(activeButton === "3R021", colorMap["3R021"])}`}
                       disabled={getButtonDisabledState(colorMap["3R021"])}
@@ -495,6 +510,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         key={"3R023"}
                         onClick={() => handleButtonClick("3R023")}
                         className={`h-1/2 rounded-md 
+                        ${textStyle}
                       ${getButtonColorClass(colorMap["3R023"])}
                       ${getActiveButtonClass(activeButton === "3R023", colorMap["3R023"])}`}
                         disabled={getButtonDisabledState(colorMap["3R023"])}
@@ -506,8 +522,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                           key={"3R028"}
                           onClick={() => handleButtonClick("3R028")}
                           className={`w-1/2 rounded-md 
-                        ${getButtonColorClass(colorMap["3R028"])}
-                        ${getActiveButtonClass(activeButton === "3R028", colorMap["3R028"])}`}
+                          ${textStyle}
+                          ${getButtonColorClass(colorMap["3R028"])}
+                          ${getActiveButtonClass(activeButton === "3R028", colorMap["3R028"])}`}
                           disabled={getButtonDisabledState(colorMap["3R028"])}
                         >
                           3R028
@@ -516,8 +533,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                           key={"3R027"}
                           onClick={() => handleButtonClick("3R027")}
                           className={`w-1/2 rounded-md 
-                        ${getButtonColorClass(colorMap["3R027"])}
-                        ${getActiveButtonClass(activeButton === "3R027", colorMap["3R027"])}`}
+                          ${textStyle}
+                          ${getButtonColorClass(colorMap["3R027"])}
+                          ${getActiveButtonClass(activeButton === "3R027", colorMap["3R027"])}`}
                           disabled={getButtonDisabledState(colorMap["3R027"])}
                         >
                           3R027
@@ -535,6 +553,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                   key={"3R026"}
                   onClick={() => handleButtonClick("3R026")}
                   className={`h-34/100 mt-auto rounded-md 
+                  ${textStyle}
                   ${getButtonColorClass(colorMap["3R026"])}
                   ${getActiveButtonClass(activeButton === "3R026", colorMap["3R026"])} `}
                   disabled={getButtonDisabledState(colorMap["3R026"])}
@@ -552,6 +571,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                   key={"3R013"}
                   onClick={() => handleButtonClick("3R013")}
                   className={`h-47/100 rounded-md 
+                  ${textStyle}
                   ${getButtonColorClass(colorMap["3R013"])}
                   ${getActiveButtonClass(activeButton === "3R013", colorMap["3R013"])}`}
                   disabled={getButtonDisabledState(colorMap["3R013"])}
@@ -562,6 +582,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                   key={"3R011"}
                   onClick={() => handleButtonClick("3R011")}
                   className={`h-24/100 rounded-md 
+                  ${textStyle}
                   ${getButtonColorClass(colorMap["3R011"])}
                   ${getActiveButtonClass(activeButton === "3R011", colorMap["3R011"])}`}
                   disabled={getButtonDisabledState(colorMap["3R011"])}
@@ -572,6 +593,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                   key={"3R009"}
                   onClick={() => handleButtonClick("3R009")}
                   className={`h-24/100 rounded-md 
+                  ${textStyle}
                   ${getButtonColorClass(colorMap["3R009"])}
                   ${getActiveButtonClass(activeButton === "3R009", colorMap["3R009"])}`}
                   disabled={getButtonDisabledState(colorMap["3R009"])}
@@ -591,6 +613,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         key={"3R002"}
                         onClick={() => handleButtonClick("3R002")}
                         className={`h-1/3 text-xs rounded-md 
+                        ${textStyle}
                         ${getButtonColorClass(colorMap["3R002"])}
                         ${getActiveButtonClass(activeButton === "3R002", colorMap["3R002"])}`}
                         disabled={getButtonDisabledState(colorMap["3R002"])}
@@ -601,6 +624,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         key={"3R003"}
                         onClick={() => handleButtonClick("3R003")}
                         className={`h-1/3 text-xs rounded-md 
+                        ${textStyle}
                         ${getButtonColorClass(colorMap["3R003"])}
                         ${getActiveButtonClass(activeButton === "3R003", colorMap["3R003"])}`}
                         disabled={getButtonDisabledState(colorMap["3R003"])}
@@ -611,6 +635,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         key={"3R004"}
                         onClick={() => handleButtonClick("3R004")}
                         className={`h-1/3 text-xs rounded-md 
+                        ${textStyle}
                         ${getButtonColorClass(colorMap["3R004"])}
                         ${getActiveButtonClass(activeButton === "3R004", colorMap["3R004"])}`}
                         disabled={getButtonDisabledState(colorMap["3R004"])}
@@ -620,15 +645,15 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     </div>
                     <div className="w-51/100 flex flex-col mx-1 bg-white-50">
                       <div className="h-42/100 flex flex-row ">
-                        <div className="w-19/100 bg-zinc-500 rounded-tl-md"></div>
-                        <div className="w-46/100 bg-zinc-500"></div>
-                        <div className="w-19/100 bg-zinc-500 rounded-tr-md "></div>
+                        <div className="w-19/100 bg-zinc-400 rounded-tl-md"></div>
+                        <div className="w-46/100 bg-zinc-400"></div>
+                        <div className="w-19/100 bg-zinc-400 rounded-tr-md "></div>
                         <div className="w-16/100 flex flex-col">
                           <div className="h-76/100"></div>
-                          <div className="h-24/100 bg-zinc-500 rounded-tr-md"></div>
+                          <div className="h-24/100 bg-zinc-400 rounded-tr-md"></div>
                         </div>
                       </div>
-                      <div className=" flex h-56/100 bg-zinc-500 items-top justify-center rounded-bl-md rounded-br-md">
+                      <div className=" flex h-56/100 bg-zinc-400 items-top justify-center rounded-bl-md rounded-br-md">
                         <Image
                           src={stairs}
                           alt="Stairs Icon"
@@ -642,6 +667,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         key={"3R032"}
                         onClick={() => handleButtonClick("3R032")}
                         className={`h-2/3 rounded-md text-sm 
+                        ${textStyle}
                         ${getButtonColorClass(colorMap["3R032"])}
                         ${getActiveButtonClass(activeButton === "3R032", colorMap["3R032"])}`}
                         disabled={getButtonDisabledState(colorMap["3R032"])}
@@ -660,20 +686,20 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         key={"3R031"}
                         onClick={() => handleButtonClick("3R031")}
                         className={`w-36/100 rounded-md 
+                        ${textStyle}
                         ${getButtonColorClass(colorMap["3R031"])}
                         ${getActiveButtonClass(activeButton === "3R031", colorMap["3R031"])}`}
                         disabled={getButtonDisabledState(colorMap["3R031"])}
                       >
-                        <span className="block transform -rotate-90 text-sm origin-center">
-                          3R031
-                        </span>
+                        <span className={`${textStyle}`}>3R031</span>
                       </button>
                       <button
                         key={"3R030"}
                         onClick={() => {
                           handleButtonClick("3R030");
                         }}
-                        className={`w-64/100 rounded-md
+                        className={`w-64/100 rounded-md 
+                        ${textStyle}
                         ${getButtonColorClass(colorMap["3R030"])}
                         ${getActiveButtonClass(activeButton === "3R030", colorMap["3R030"])}`}
                         disabled={getButtonDisabledState(colorMap["3R030"])}
@@ -687,6 +713,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         handleButtonClick("3R033");
                       }}
                       className={`h-1/3 rounded-md 
+                      ${textStyle}
                       ${getButtonColorClass(colorMap["3R033"])}
                       ${getActiveButtonClass(activeButton === "3R033", colorMap["3R033"])}`}
                       disabled={getButtonDisabledState(colorMap["3R033"])}
@@ -697,7 +724,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
                   <div className="w-4/100"></div>
 
-                  <div className="w-10/100 bg-zinc-500 flex flex-col items-center justify-between py-1">
+                  <div className="w-10/100 bg-zinc-400 flex flex-col items-center justify-between py-1 rounded-lg">
                     <Image
                       src={stairs}
                       alt="Stair Icon"
@@ -723,6 +750,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                       handleButtonClick("3R005");
                     }}
                     className={`w-20/100 rounded-md 
+                    ${textStyle}
                     ${getButtonColorClass(colorMap["3R005"])}
                     ${getActiveButtonClass(activeButton === "3R005", colorMap["3R005"])}`}
                     disabled={getButtonDisabledState(colorMap["3R005"])}
@@ -736,6 +764,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                       handleButtonClick("3R034");
                     }}
                     className={`w-29/100 rounded-md 
+                    ${textStyle}
                     ${getButtonColorClass(colorMap["3R034"])}
                     ${getActiveButtonClass(activeButton === "3R034", colorMap["3R034"])}`}
                     disabled={getButtonDisabledState(colorMap["3R034"])}
@@ -743,13 +772,14 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     3R034
                   </button>
                   <div className="w-14/100 flex flex-col">
-                    <div className="h-28/100"></div>
+                    <div className="h-30/100"></div>
                     <button
                       key={"3R035"}
                       onClick={() => {
                         handleButtonClick("3R035");
                       }}
                       className={`h-72/100 rounded-md 
+                      ${textStyle}
                       ${getButtonColorClass(colorMap["3R035"])}
                       ${getActiveButtonClass(activeButton === "3R035", colorMap["3R035"])}`}
                       disabled={getButtonDisabledState(colorMap["3R035"])}
@@ -765,26 +795,27 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           </div>
         </div>
         <div className="h-10/100 flex flex-row">
-          <div className="w-13/100 bg-black-50 rounded-bl-lg"></div>
+          <div className="w-13/100 bg-black-50 rounded-lg"></div>
           <button
             key={"3R006"}
             onClick={() => {
               handleButtonClick("3R006");
             }}
             className={`w-11/100 rounded-md mx-1
+            ${textStyle}
             ${getButtonColorClass(colorMap["3R006"])}
             ${getActiveButtonClass(activeButton === "3R006", colorMap["3R006"])}`}
             disabled={getButtonDisabledState(colorMap["3R006"])}
           >
             3R006
           </button>
-          <div className="w-76/100 bg-black-50 rounded-br-lg rounded-tr-lg"></div>
+          <div className="w-76/100 bg-black-50 rounded-lg"></div>
         </div>
       </div>
     );
   };
 
-  const SecondLeftWing = ({ dataFromApi }: { dataFromApi: any }) => {
+  const SecondLeftWing = () => {
     return (
       <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
         <div className="h-20/100 bg-black-100"></div>
@@ -924,9 +955,16 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
     );
   };
 
-  // return SecondFloor((dataFromApi = { dataFromApi }));
-  return ThirdFloor();
-  //return SecondLeftWing((dataFromApi = { dataFromApi }))
+  if(floor === "3" && floorSection === "R"){
+    return ThirdFloor();
+  }
+  if(floor ==="2" && floorSection === "R"){
+    return SecondFloor();
+  }
+  if(floor ==="2" && floorSection === "L"){
+    return SecondLeftWing();
+  }
+  
 };
 
 export default FloorPlan;

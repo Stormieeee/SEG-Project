@@ -59,7 +59,9 @@ const RoomSpecifics: React.FC<RoomSpecificsProps> = ({
         </div>
 
         <div className="w-1/2 mt-5 flex flex-col">
-          <CapacityInput setCapacity={setCapacity} />
+          <div className="ml-2">
+            <CapacityInput setCapacity={setCapacity} />
+          </div>
 
           <div className="mt-16 flex flex-col">
             <RectangularCheckbox

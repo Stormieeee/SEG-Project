@@ -28,8 +28,8 @@ const CapacityInput:React.FC<CapacityInputProps> = ({setCapacity}) => {
       <label className="font-medium text-black-600">Capacity: </label>
       <input
         type="text"
-        className="rounded-lg text-center bg-blue-50 text-primary-700 w-24 h-12 mx-2 placeholder-blue-400 
-        focus:placeholder-opacity-0"
+        className="rounded-lg text-center bg-blue-50 text-primary-600 w-24 h-12 mx-2 placeholder-blue-400 
+        focus:placeholder-opacity-0 focus:outline-none"
         min={0} // Set the minimum value allowed
         max={100} // Set the maximum value allowed
         step={1} // Set the step for increment/decrement

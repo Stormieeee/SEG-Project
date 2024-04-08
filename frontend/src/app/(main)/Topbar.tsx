@@ -1,5 +1,7 @@
 "use client";
-import ConfirmButton from "./roombooking/ConfirmButton";
+import ConfirmButton from "./roombooking/TopbarComponent/ConfirmButton";
+import FloorSectorSelector from "./roombooking/TopbarComponent/FloorSectorSelector";
+
 import { usePathname } from "next/navigation";
 import { useStateContext } from "./StateContext";
 import { handleRoomBooking } from "./roombooking/utils/utils";
@@ -55,29 +57,34 @@ const Topbar = () => {
   const pageTitle = getPageTitle(pathname);
   return (
     <div className="flex w-full bg-white-50 items-center p-5 shadow-md mb-[10px]">
-      <div className="flex w-full justify-between">
+      <div className="flex flex-row w-full justify-between ">
         <h1 className="text-2xl font-bold text-stone-800 antialiased">
           {pageTitle}
         </h1>
         {pathname === "/roombooking" && (
-          <>
-            {isLoading ? (
-              <LoadingSpinner />
-            ) : (
-              <ConfirmButton
-                onClick={() =>
-                  handleButtonPress(
-                    roomID,
-                    capacity,
-                    description,
-                    date,
-                    startTime,
-                    endTime
-                  )
-                }
-              />
-            )}
-          </>
+          <div className="flex flex-auto justify-end items-center">
+
+            <FloorSectorSelector />
+
+            <div className="ml-4">
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <ConfirmButton
+                  onClick={() =>
+                    handleButtonPress(
+                      roomID,
+                      capacity,
+                      description,
+                      date,
+                      startTime,
+                      endTime
+                    )
+                  }
+                />
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>

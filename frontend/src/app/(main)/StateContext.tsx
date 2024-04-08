@@ -18,6 +18,10 @@ interface StateContextType {
   setStartTime: React.Dispatch<React.SetStateAction<number>>;
   endTime: number;
   setEndTime: React.Dispatch<React.SetStateAction<number>>;
+  floor: string;
+  setFloor: React.Dispatch<React.SetStateAction<string>>;
+  floorSection: string;
+  setFloorSection: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const defaultValue: StateContextType = {
@@ -33,6 +37,10 @@ const defaultValue: StateContextType = {
   setStartTime: () => {},
   endTime: new Date().getHours() + 1,
   setEndTime: () => {},
+  floor: "3",
+  setFloor: () =>{},
+  floorSection: "R",
+  setFloorSection: () =>{},
 };
 
 const StateContext = createContext<StateContextType>(defaultValue);
@@ -46,6 +54,8 @@ export const StateProvider = ({ children }: any) => {
   const [date, setDate] = useState<string>(defaultValue.date);
   const [startTime, setStartTime] = useState<number>(new Date().getHours());
   const [endTime, setEndTime] = useState<number>(new Date().getHours() + 1);
+  const [floor, setFloor] = useState<string>("3");
+  const [floorSection, setFloorSection] = useState<string>("R");
 
   return (
     <StateContext.Provider
@@ -62,6 +72,10 @@ export const StateProvider = ({ children }: any) => {
         setStartTime,
         endTime,
         setEndTime,
+        floor,
+        setFloor,
+        floorSection,
+        setFloorSection
       }}
     >
       {children}
