@@ -35,7 +35,7 @@ const RoomSpecifics: React.FC<RoomSpecificsProps> = ({
 
   return (
     <div className={FORM_CONTAINER}>
-      <div className="flex items-center flex-row mt-2">
+      <div className="flex items-center flex-row mt-4">
         <FormHeader
           id="2"
           title="Room Specifics"

@@ -8,6 +8,8 @@ import { handleRoomBooking } from "./roombooking/utils/utils";
 import { formatHour, adjustTime } from "./roombooking/utils/commonFunction";
 import { useState } from "react";
 import LoadingSpinner from "../Components/LoadingSpinner";
+import { TopbarStyle } from "./style/MainStyle";
+
 const getPageTitle = (path: string): string => {
   switch (path) {
     case "/roombooking":
@@ -56,15 +58,18 @@ const Topbar = () => {
   const pathname = usePathname();
   const pageTitle = getPageTitle(pathname);
   return (
-    <div className="flex w-full bg-white-50 items-center p-5 shadow-md mb-[10px]">
+    <div className={`${TopbarStyle}`}>
       <div className="flex flex-row w-full justify-between ">
-        <h1 className="text-2xl font-bold text-stone-800 antialiased">
-          {pageTitle}
-        </h1>
+        <div className="bg-white-400/10 mx-3 px-3 py-4 rounded-lg">
+          <h1 className="text-2xl font-semibold text-gray-800 antialiased">
+            {pageTitle}
+          </h1>
+        </div>
+
         {pathname === "/roombooking" && (
           <div className="flex flex-auto justify-end items-center">
 
-            <FloorSectorSelector />
+            <FloorSectorSelector /> {/* Floor Selector Component*/}
 
             <div className="ml-4">
               {isLoading ? (

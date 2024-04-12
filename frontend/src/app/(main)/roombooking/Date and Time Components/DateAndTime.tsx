@@ -37,7 +37,6 @@ const DateTime = ({ fetchData }: any) => {
         }
         setStartOptions(availableOptions);
         setEndOptions(availableOptions.slice(1));
-        console.log("first if")
       }else if(!isCurrentDate){ //else if date is not today's date then initiate option with 9am
         setDisabled(false);
         const availableOptions = [];
@@ -46,9 +45,7 @@ const DateTime = ({ fetchData }: any) => {
         }
         setStartOptions(availableOptions);
         setEndOptions(availableOptions.slice(1));
-        console.log("second if")
       }else{                                              //else set disabled if out of time range and today's date
-        console.log("third else")
         setDisabled(true); 
       }
     };
@@ -110,7 +107,7 @@ const DateTime = ({ fetchData }: any) => {
   };
 
   return (
-    <div className={FORM_CONTAINER}>
+    <div className={`${FORM_CONTAINER}`}>
       <div className="flex-col flex-grow h-full justify-center">
         <div className="flex items-center flex-row grow">
           <FormHeader
@@ -127,7 +124,7 @@ const DateTime = ({ fetchData }: any) => {
             className="ml-auto"
           >
             <button
-              className="bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm  my-2 items-center justify-center flex p-2 rounded-md"
+              className="bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm my-2 items-center justify-center flex p-2 rounded-md flex-auto "
               type="submit"
               disabled={disabled}
             >

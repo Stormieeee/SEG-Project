@@ -63,7 +63,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="relative top-0 flex flex-col h-screen bg-white-50 ">
+      <div className="relative top-0 flex flex-col h-screen bg-[#fefefe] ">
         <Link href="https://www.southampton.ac.uk/my/index.page">
           <Image
             src={companylogo}

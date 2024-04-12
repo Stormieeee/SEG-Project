@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import getEmailFromSessionStorage from "../Components/CommonFunction";
+import { backgroundStyle, cancelButtonStyle, inputFormat, loginButtonStyle } from "./componentStyle";
 
 type AuthenticationProps = {
   handleSuccessAuth: () => void;
@@ -96,7 +97,7 @@ const Authentication = ({
 
   //Return UI
   return (
-    <section className="flex flex-auto bg-white-500 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-50">
+    <section className={`${backgroundStyle}`}>
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -110,10 +111,10 @@ const Authentication = ({
               />
             </div>
             <div className="md:space-y-1">
-              <div className="text-xl font-bold dark:text-slate-300">
+              <div className="text-xl font-bold dark:text-slate-200">
                 OTP Authentication
               </div>
-              <div className="text-sm dark:text-slate-300">
+              <div className="text-sm dark:text-slate-400">
                 An OTP has been sent to {email}. Please enter the OTP code to
                 continue.
               </div>
@@ -124,7 +125,7 @@ const Authentication = ({
               onSubmit={handleAuth}
             >
               <div className="w-full">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white-50">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-slate-300">
                   OTP Code
                 </label>
                 <input
@@ -133,21 +134,21 @@ const Authentication = ({
                   id="otp"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.trim())}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-slate-500 dark:text-slate-200 sm:text-sm"
+                  className={`${inputFormat}`}
                   required
                 />
               </div>
-              <div className="flex w-full justify-center">
+              <div className="flex w-full justify-center items-center space-x-10">
                 <button
                   type="button"
                   onClick={handleCancelAuth}
-                  className="w-1/3 text-white-500 bg-gray-400 mr-5 hover:bg-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-slate-600 dark:hover:bg-slate-700 active:scale-95 active:duration-75"
+                  className={`${cancelButtonStyle}`}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="w-1/3 text-white-500 bg-blue-400 hover:bg-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 active:scale-95 active:duration-75 "
+                  className={`{${loginButtonStyle}}`}
                 >
                   Verify
                 </button>

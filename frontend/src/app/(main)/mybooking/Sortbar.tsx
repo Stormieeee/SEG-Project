@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { buttonStyle } from "../style/MainStyle";
 interface SortbarProps {
   bookings: string[][];
   setBookings: React.Dispatch<React.SetStateAction<string[][]>>;
@@ -59,13 +59,13 @@ const Sortbar = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-row items-center space-x-2">
       <label htmlFor="sortColumn text-gray-700">Sort by:</label>
       <select
         id="sortColumn"
         value={sortColumn}
         onChange={(e) => handleSelectChange(e)}
-        className="mx-2 py-1 border rounded-md"
+        className={` ${buttonStyle} text-black-600 h-8  text-sm w-20`}
       >
         <option value="" disabled={disableSelect}>
           Any

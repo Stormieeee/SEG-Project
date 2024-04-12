@@ -1,5 +1,6 @@
 import React from "react";
 
+import { inputFormat } from "./componentStyle";
 interface EmailInputProps {
   email: string;
   setEmail: (email: string) => void;
@@ -11,17 +12,18 @@ const EmailInput = ({ email, setEmail, error }: EmailInputProps) => {
     <div className=" w-full">
       <label
         htmlFor="email"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-slate-500"
+        className="block mb-2 text-sm font-medium text-gray-900 dark:text-slate-400"
       >
         Your email
       </label>
       <input
+        autoComplete="false"
         type="email"
         name="email"
         id="email"
         value={email}
         onChange={(e) => setEmail(e.target.value.trim())}
-        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-slate-500 dark:text-slate-200 dark:focus:border-blue-500 sm:text-sm focus:placeholder-gray-700"
+        className={`${inputFormat}`}
         placeholder="username@soton.ac.uk"
         required
       />

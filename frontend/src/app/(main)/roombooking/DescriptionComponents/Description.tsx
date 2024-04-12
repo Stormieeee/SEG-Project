@@ -3,22 +3,18 @@ import CapacityLabel from "./CapacityLabel";
 import EquipmentLabel from "./EquipmentLabel";
 import descriptionLogo from "../../../../../public/Components-icon/Description Logo.svg"
 import Image from "next/image";
+import { FORM_CONTAINER, FormHeader } from "../ComponentFormat";
 
 const Description = () => {
   return (
-    <div className="bg-white-50 border border-neutral-400 rounded-2xl h-full px-5 py-4 flex flex-col">
+    <div className={FORM_CONTAINER}>
       <div className="flex">
       <div className="flex items-center flex-row">
-          <span className="text-zinc-800 font-medium text-xl px-2 items-center ">
-            3
-          </span>
-          <span className="text-zinc-600 font-medium text-xl items-center flex pr-2">
-            Description
-          </span>
-          <Image
-            src={descriptionLogo}
-            alt="Date Time Logo"
-            className="flex w-6 h-6"
+      <FormHeader
+            id="3"
+            title="Description"
+            imgPath={descriptionLogo}
+            imgAlt="Description Logo"
           />
         </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useStateContext } from "./RequestContext";
+import { buttonStyle } from "../style/MainStyle";
 
 const Sortbar = () => {
   const [sortColumn, setSortColumn] = useState<string>("");
@@ -71,13 +72,13 @@ const Sortbar = () => {
   }, [filteredRequests, sortColumn, shouldSort]);
 
   return (
-    <div className="absolute inset-x-10">
+    <div className="absolute inset-x-10 flex flex-row items-center space-x-2">
       <label htmlFor="sortColumn text-gray-700">Sort by:</label>
       <select
         id="sortColumn"
         value={sortColumn}
         onChange={(e) => handleSelectChange(e)}
-        className="mx-2 py-1 border rounded-md"
+        className={` ${buttonStyle} text-black-600 h-8  text-sm w-20`}
       >
         <option value="" disabled={disableSelect}>
           Any

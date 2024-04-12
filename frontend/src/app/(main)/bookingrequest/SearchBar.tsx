@@ -44,7 +44,7 @@ const SearchBar = () => {
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value.trim())}
       placeholder="Search by Booking ID or Room..."
-      className="w-1/2 ml-5 z-50 p-2 border border-black-100 rounded-md"
+      className="w-1/2 ml-5 z-50 p-2 border border-black-100 rounded-md focus:placeholder-transparent focus:outline-none "
     />
   );
 };

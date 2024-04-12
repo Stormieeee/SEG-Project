@@ -44,8 +44,11 @@ const layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
       <body className={inter.className}>
         <div className="flex">
           <Sidebar />
-          <div className="flex flex-col flex-grow bg-[#F8F8F8]">
+          <div className={`flex flex-col flex-grow 
+          bg-[radial-gradient(circle_at_top_left,_var(--tw-gradient-stops))] from-gray-50 via-sky-400/10 to-gray-50`}>
+          {/* dark:bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] dark:from-gray-800 dark:via-sky-900 dark:to-gray-800 */} 
             <StateProvider>
+              
               <Topbar />
               {children}
             </StateProvider>
@@ -58,45 +61,3 @@ const layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 
 export default dynamic(() => Promise.resolve(layout), { ssr: false }); // This is an attempt to fix hydration error
 
-// return (
-//   <html lang="en">
-//     <body className={inter.className}>{children}</body>
-//   </html>
-// );
-
-// import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
-// //import "./styles/globals.css";
-
-// import PageWrapper from "./page-wrapper";
-// import MarginWidthWrapper from "./marginWidthWrapper";
-// import Sidebar from "./components/Sidebar";
-
-// const inter = Inter({ subsets: ["latin"] });
-
-// export const metadata: Metadata = {
-//   title: "Room Booking",
-//   description: "Room Booking For University of Southampton Malaysia",
-// };
-
-// export default function RootLayout({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   return (
-//     <html lang="en">
-//       <body className={inter.className}>
-//         <div className="flex">
-//           <main className="flex-1">
-//             <MarginWidthWrapper>
-//               <Sidebar />
-//               {/* <Header /> */}
-//               <PageWrapper>{children}</PageWrapper>
-//             </MarginWidthWrapper>
-//           </main>
-//         </div>
-//       </body>
-//     </html>
-//   );
-// }

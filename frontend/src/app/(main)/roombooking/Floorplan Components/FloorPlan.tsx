@@ -86,11 +86,11 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
   const getButtonColorClass = (color: string) => {
     switch (color) {
       case "green":
-        return "bg-primary-50 border border-primary-200 hover:bg-primary-100";
+        return "bg-primary-50 border border-primary-200 hover:bg-primary-100 duration-75";
       case "red":
         return "bg-red-50 border border-red-400";
       case "yellow":
-        return "bg-yellow-50 border border-yellow-400 hover:bg-yellow-100";
+        return "bg-yellow-50 border border-yellow-400 hover:bg-yellow-100 duration-75";
       default:
         return "bg-black-50";
     }
@@ -108,6 +108,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
   const iconStyle = `h-[2rem] w-[2rem] justify-center items-center m-1`;
   const textStyle = "md:text-sm origin-center text-black-600";
+  const floorplanStyle = `bg-white-50 border border-black-50 rounded-2xl h-full p-3 flex flex-col`
 
   const getActiveButtonClass = (isActive: boolean, color: string) => {
     let backgroundColorClass = "";
@@ -115,14 +116,14 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
       switch (color) {
         case "green":
           backgroundColorClass =
-            " bg-primary-400 border-primary-600 border-2 hover:bg-primary-200";
+            " bg-primary-400 border-primary-600 border-2 hover:bg-primary-200 duration-75";
           break;
         case "red":
           backgroundColorClass = "bg-red-300 border-red-600 border-2";
           break;
         case "yellow":
           backgroundColorClass =
-            "bg-yellow-300 border-yellow-600 border-2 hover:bg-yellow-200 ";
+            "bg-yellow-300 border-yellow-600 border-2 hover:bg-yellow-200 duration-75";
           break;
         default:
           backgroundColorClass = "bg-black-50";
@@ -134,7 +135,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
   const SecondFloor = () => {
     return (
-      <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
+      <div className={`${floorplanStyle}`}>
         <div className="flex flex-row h-[130px]">
           <div className="flex flex-row w-1/5">
             <div className="flex flex-col w-1/3">
@@ -296,7 +297,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
   const ThirdFloor = () => {
     return (
-      <div className="bg-white-50 border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
+      <div className={`${floorplanStyle}`}>
         <div className="h-90/100 flex flex-row">
           <div className="w-10/100 flex flex-col">
             <div className="h-16/100 flex flex-row">
@@ -817,7 +818,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
   const SecondLeftWing = () => {
     return (
-      <div className="bg-white border border-gray-300 rounded-2xl h-full p-1.5 flex flex-col">
+      <div className={`${floorplanStyle}`}>
         <div className="h-20/100 bg-black-100"></div>
 
         <div className="h-60/100 flex flex-col">

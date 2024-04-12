@@ -6,7 +6,7 @@ import LoginButton from "./LoginButton";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "../Components/LoadingSpinner";
 import Image from "next/image";
-
+import { backgroundStyle } from "./componentStyle";
 interface LoginProps {
   handleSuccessLogin: () => void;
 }
@@ -81,9 +81,9 @@ const Login = ({ handleSuccessLogin }: LoginProps) => {
 
   //Login Form
   return (
-    <section className="flex flex-auto bg-white-500 dark:bg-gray-900">
+    <section className={`${backgroundStyle}`}>
       <div className="flex flex-col w-full items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full bg-gray-50 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-slate-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col">
             <div className="flex items-center justify-center mb-4">
               <Image
@@ -94,12 +94,13 @@ const Login = ({ handleSuccessLogin }: LoginProps) => {
                 layout="responsive"
               />
             </div>
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-slate-500">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-slate-300">
               Sign in to your account
             </h1>
             <form
               className="space-y-4 md:space-y-6 flex flex-col items-center"
               onSubmit={handleLogin}
+              autoComplete="off"
             >
               <EmailInput email={email} setEmail={setEmail} error={error} />
               <PasswordInput

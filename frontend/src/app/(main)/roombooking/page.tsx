@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import DateTime from "./Date and Time Components/DateAndTime";
 import Description from "./DescriptionComponents/Description";
@@ -8,9 +9,12 @@ import RoomStatusKey from "./RoomStatusComponents/StatusComponents";
 import { getDataFromServer } from "./utils/utils";
 import { useStateContext } from "../StateContext";
 import { formatHour, adjustTime } from "./utils/commonFunction";
+import FloorplanError from "../errorHandling/FloorplanError";
+import Loader from "@/app/loader/RoomBookingLoading";
 
 export default function RoomBooking() {
   const [dataFromApi, setFetchedData] = useState(null);
+  const [isLoading, setLoading] = useState(true);
 
   const {
     setRoomID,
@@ -22,12 +26,13 @@ export default function RoomBooking() {
     endTime,
   } = useStateContext();
 
-
   const fetchData = async (
     date: string,
     startTime: number,
     endTime: number
   ) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     try {
       const data = await getDataFromServer(
         date,
@@ -36,6 +41,7 @@ export default function RoomBooking() {
         capacity
       );
       setFetchedData(data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -45,16 +51,17 @@ export default function RoomBooking() {
     fetchData(date, startTime, endTime); // Fetch data when component mounts
   }, []);
 
-
-
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <div className="flex flex-row">
       <div className="w-1/2 flex flex-col">
         <div className="p-1 mt-[10px] ml-[15px]">
-          <DateTime
-            fetchData={fetchData}
-          />
+          <DateTime fetchData={fetchData} />
+        
         </div>
+
         <div className="p-1 mt-[10px] ml-[15px]">
           <RoomSpecifics
             setSpecifics={setDescription}
@@ -63,12 +70,14 @@ export default function RoomBooking() {
         </div>
       </div>
 
-      <div className=" w-1/2 flex flex-col">
+      <div className=" w-1/2 flex flex-col mr-4">
         <div className="h-4/6 p-1 mt-[10px] ml-[5px]">
           {dataFromApi ? (
             <FloorPlan dataFromApi={dataFromApi} setRoomID={setRoomID} />
           ) : (
-            <div className="justify-center items-center flex">Loading... </div>
+            <div className="justify-center items-center flex">
+              <FloorplanError />
+            </div>
           )}
         </div>
         <div className="h-2/6 flex flex-row">
