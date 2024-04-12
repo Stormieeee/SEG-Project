@@ -546,6 +546,7 @@ class HandleBooking(BaseModel):
     action: str         #action is either "accept" or "decline"
     bookingID: str
     comment: str
+    handler: str
 
 def check_collision(db_connection, cursor, requestID):
     query = """
@@ -577,7 +578,7 @@ def check_collision(db_connection, cursor, requestID):
     return True
 
 
-def accept_booking(db_connection, cursor, requestID, comment):
+def accept_booking(db_connection, cursor, requestID, comment, handler):
 
     if check_collision(db_connection, cursor, requestID) == False:
         return False
@@ -613,9 +614,9 @@ def accept_booking(db_connection, cursor, requestID, comment):
 
     # Insert data into Booking List table
     insertDetails1 = ("""
-        INSERT INTO `Booking List` (`Booking ID`, `User ID`, `Room ID`)
-        VALUES (%s, %s, %s);""")
-    cursor.execute(insertDetails1,(NewbookingID, details1[0], details1[1]))
+        INSERT INTO `Booking List` (`Booking ID`, `User ID`, `Room ID`,`handler`)
+        VALUES (%s, %s, %s, %s);""")
+    cursor.execute(insertDetails1,(NewbookingID, details1[0], details1[1], handler))
 
     # Commit the transaction
     db_connection.commit()
@@ -661,7 +662,7 @@ def accept_booking(db_connection, cursor, requestID, comment):
     return True
 
 
-def decline_booking(db_connection, cursor, requestID, comment):
+def decline_booking(db_connection, cursor, requestID, comment, handler):
 
     #Has to create a new Reject ID which is unique.
     while True:
@@ -694,9 +695,9 @@ def decline_booking(db_connection, cursor, requestID, comment):
 
     # Insert data into Booking List table
     insertDetails1 = ("""
-        INSERT INTO `booking rejects` (`Reject ID`, `User ID`, `Room ID`)
-        VALUES (%s, %s, %s);""")
-    cursor.execute(insertDetails1,(NewbookingID, details1[0], details1[1]))
+        INSERT INTO `booking rejects` (`Reject ID`, `User ID`, `Room ID`,`handler`)
+        VALUES (%s, %s, %s, %s);""")
+    cursor.execute(insertDetails1,(NewbookingID, details1[0], details1[1], handler))
 
     # Commit the transaction
     db_connection.commit()
@@ -745,12 +746,12 @@ def handle_booking(handling: HandleBooking, db_connection: mysql.connector.conne
     action = handling.action
 
     if action == "approve":
-        if accept_booking(db_connection, cursor, handling.bookingID, handling.comment) == True:
+        if accept_booking(db_connection, cursor, handling.bookingID, handling.comment, handling.handler) == True:
             return {"Approval Complete"}
         else:
             return {"Collision"}
     else:
-        decline_booking(db_connection, cursor, handling.bookingID, handling.comment)
+        decline_booking(db_connection, cursor, handling.bookingID, handling.comment, handling.handler)
         return {"Decline complete"}
 
 
@@ -1004,9 +1005,9 @@ def get_booking_details_users(details: BookingDetailsUsers, db_connection: mysql
 
 
 
-#################################### TO BE COMPLETED & TESTED
+#################################### AUTOMATION CALL
 
-	
+#call everyday at 00:00:00 for automation of clear bookings past current date
 def daily_bookingsR_clear(db_connection, cursor):
     # Get todays date and save locally for the clear
     today = datetime.now().date()
@@ -1023,7 +1024,7 @@ def daily_bookingsR_clear(db_connection, cursor):
     if bookings_today is not None:
         #Loop through and decline it 
         for request_id in bookings_today:
-            decline_booking(db_connection, cursor, request_id[0], "Booking declined automatically as it's past the scheduled date.")
+            decline_booking(db_connection, cursor, request_id[0], "Booking declined automatically as it's past the scheduled date.","System")
 
 @app.post("/daily_bookingsR_clear/")
 def get_booking_requests_users(db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
@@ -1033,4 +1034,404 @@ def get_booking_requests_users(db_connection: mysql.connector.connection.MySQLCo
 
 #Alt 3 for comment, Alt 4 for uncomment
 
+
+#################################### TO BE TESTED 
+
+class bookingType(BaseModel):
+    typeCheck : str
+
+
+def getAllBookings (db_connection, cursor,typeCheck):
+    import datetime
+    #Get todays date for checking
+    today = datetime.date.today()
+    formatted_date = today.strftime("%Y-%m-%d")
+
+    print (formatted_date)
+
+    if typeCheck == "current":
+        sql_query1 = """
+            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
+                   `booking request description`.`Date`,
+                   `booking request description`.`Start Time`,
+                   `booking request description`.`End Time`
+            FROM `booking request`
+            JOIN `booking request description`
+            ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+            WHERE `booking request description`.`Date` >= %s
+        """
+
+        sql_query2 = """
+            SELECT `booking list`.`Booking ID`, `booking list`.`Room ID`,
+                   `booking id description`.`Date`,
+                   `booking id description`.`Start Time`,
+                   `booking id description`.`End Time`
+            FROM `booking list`
+            JOIN `booking id description`
+            ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+            WHERE `booking id description`.`Date` >= %s
+        """
+
+        sql_query3 = """
+            SELECT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
+                   `booking rejects description`.`Date`,
+                   `booking rejects description`.`Start Time`,
+                   `booking rejects description`.`End Time`
+            FROM `booking rejects`
+            JOIN `booking rejects description`
+            ON `booking rejects`.`Reject ID` = `booking rejects description`.`Reject ID`
+            WHERE `booking rejects description`.`Date` >= %s
+        """
+
+        cursor.execute(sql_query1, (formatted_date,))
+        results1 = cursor.fetchall()
+        results1_labeled = [row + ("Pending",) for row in results1]
+
+        cursor.execute(sql_query2, (formatted_date,))
+        results2 = cursor.fetchall()
+        results2_labeled = [row + ("Accepted",)  for row in results2]
+
+        cursor.execute(sql_query3, (formatted_date,))
+        results3 = cursor.fetchall()
+        results3_labeled = [row + ("Rejected",)  for row in results3]    
+
+    else:
+        sql_query1 = """
+            SELECT `booking request`.`Request ID`, `booking request`.`Room ID`,
+                   `booking request description`.`Date`,
+                   `booking request description`.`Start Time`,
+                   `booking request description`.`End Time`
+            FROM `booking request`
+            JOIN `booking request description`
+            ON `booking request`.`Request ID` = `booking request description`.`Request ID`
+            WHERE `booking request description`.`Date` < %s
+        """
+
+        sql_query2 = """
+            SELECT `booking list`.`Booking ID`, `booking list`.`Room ID`,
+                   `booking id description`.`Date`,
+                   `booking id description`.`Start Time`,
+                   `booking id description`.`End Time`
+            FROM `booking list`
+            JOIN `booking id description`
+            ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+            WHERE `booking id description`.`Date` < %s
+        """
+
+        sql_query3 = """
+            SELECT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
+                   `booking rejects description`.`Date`,
+                   `booking rejects description`.`Start Time`,
+                   `booking rejects description`.`End Time`
+            FROM `booking rejects`
+            JOIN `booking rejects description`
+            ON `booking rejects`.`Reject ID` = `booking rejects description`.`Reject ID`
+            WHERE `booking rejects description`.`Date` < %s
+        """        
+
+        cursor.execute(sql_query1, (formatted_date,))
+        results1 = cursor.fetchall()
+        results1_labeled = [row + ("Pending",) for row in results1]
+
+        cursor.execute(sql_query2, (formatted_date,))
+        results2 = cursor.fetchall()
+        results2_labeled = [row + ("Completed",)  for row in results2]
+
+        cursor.execute(sql_query3, (formatted_date,))
+        results3 = cursor.fetchall()
+        results3_labeled = [row + ("Rejected",)  for row in results3]    
+
+
+    results = results1_labeled + results2_labeled + results3_labeled
+
+    formatted_result = []
+
+    for row in results:
+        formatted_row = list(row)
+        formatted_row[3] = str(row[3])
+        if formatted_row[3] == "9:00:00":
+            formatted_row[3] = "09:00:00"
+        formatted_row[4] = str(row[4])
+        formatted_result.append(formatted_row)
+
+    return formatted_result
+
+
+@app.post("/get_All_Bookings_Admin/")
+def get_booking_requests_admin(bookingtype : bookingType, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    dataset = getAllBookings(db_connection,cursor, typeCheck = bookingtype.typeCheck)
+    return dataset
+
+#################################### TO BE TESTED 
+
+
+class booking(BaseModel):
+    bookingID : str
+
+def get_admin_details(db_connection,cursor, ID):
+    query = """
+        SELECT
+            `booking list`.`User ID`,
+            `user roles`.`Name`,
+            `booking list`.`Handler`,
+            `booking id description`.`capacity` AS request_capacity,
+            `room`.`capacity` AS room_capacity,
+            `booking id description`.`Description` AS request_description,
+            `booking id description`.`Comment` AS request_comment
+        FROM 
+            `booking list`
+        JOIN 
+            `users` ON `booking list`.`User ID` = `users`.`User ID`
+        JOIN 
+            `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
+        JOIN 
+            `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+        JOIN 
+            `room` ON `booking list`.`Room ID` = `room`.`Room ID`
+            
+        WHERE 
+            `booking list`.`Booking ID` = %s
+         """
+
+    cursor.execute(query,(ID,))
+    details = cursor.fetchone()
+
+    transformed_data = {
+    "user_ID": details[0],
+    "user_Role": details[1],
+    "handler": details[2],
+    "request_capacity": details[3],
+    "room_capacity": details[4],
+    "description": details[5],
+    "comment": details[6]
+}
+
+    return transformed_data
+
+
+
+@app.post("/get_Booking_Details_Admin/")
+def get_Booking_Details_Admin(booking : booking, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    dataset = get_admin_details(db_connection,cursor, ID = booking.bookingID)
+    return dataset
+
+#################################### TO BE TESTED 
+
+class cancelations(BaseModel):
+    bookingID : str
+    reason : str
+    handler : str
+
+def cancelBooking (db_connection,cursor, ID, reason, handler):
+    #Has to create a new Reject ID which is unique.
+    while True:
+        # Generate a new bookingRequestID
+        NewbookingID = generate_random_string()
+
+        # Checking if the ID is pre-existing
+        RejectIDCheck = "SELECT `Reject ID` FROM `booking rejects`"
+        cursor.execute(RejectIDCheck)
+        currentRejectIDS = cursor.fetchall()
+
+        # Check if the bookingRequestID is in the currentRoomIDS
+        if any(NewbookingID in row for row in currentRejectIDS):
+            print("Booking ID is in the current IDs. Generating a new ID.")     #Test print
+        else:
+            print("Booking ID is not in the current IDs.")                      #Test print
+            break
+
+    #New unique Booking ID named NewbookingID
+    print (NewbookingID)        #Test print
+
+    #Getting the data from the main tables for primary key purposes
+    getDetails1 = ("""
+        SELECT `User ID`, `Room ID`
+        FROM `booking list`
+        WHERE `Booking ID` = %s;""")
+
+    cursor.execute(getDetails1,(ID,))
+    details1 = cursor.fetchone()
+
+    # Insert data into Booking List table
+    insertDetails1 = ("""
+        INSERT INTO `booking rejects` (`Reject ID`, `User ID`, `Room ID`, `handler`)
+        VALUES (%s, %s, %s, %s);""")
+    cursor.execute(insertDetails1,(NewbookingID, details1[0], details1[1], handler))
+
+    # Commit the transaction
+    db_connection.commit()
+
+    #Getting the dependant data from booking request description
+    getDetails2 = ("""SELECT * FROM `booking id description` WHERE `Booking ID` = %s;""")
+    cursor.execute(getDetails2,(ID,))
+    details2 = cursor.fetchone()
+
+    # Insert the data into booking id description
+    insertDetails2 = ("""
+        INSERT INTO `booking rejects description` (`Reject ID`, `Description`, `Date`, `Start Time`, `End Time` , `Capacity`, `Comment`)
+        VALUES (%s, %s, %s, %s, %s, %s, %s);""")
+
+    cursor.execute(insertDetails2,(NewbookingID, details2[1], details2[2], details2[3], details2[4], details2[5], reason))
+
+    #Remove the data from Booking Requests as already handled
+    delete1 = """
+        DELETE FROM `booking id description`
+        WHERE `Booking ID` = %s
+    """
+
+    delete2 = """
+        DELETE FROM `booking list`
+        WHERE `Booking ID` = %s
+    """
+
+    cursor.execute(delete1,(ID,))
+    cursor.execute(delete2,(ID,))
+
+    db_connection.commit()
+    
+    msg = "The booking ID " + str(ID) + " has now been canceled.\n" \
+          "The booking shows as rejected, with ID: " + str(NewbookingID) + ". \n" \
+          "Please view the Room Booking System Website for further details"
+    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )    
+
+
+@app.post("/booking_Cancel/")
+def cancel_booking(cancel : cancelations, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    cancelBooking(db_connection,cursor, ID = cancel.bookingID, reason = cancel.reason, handler = cancel.handler)
+    return {"Complete"}
+
+
+
+#################################### TO BE TESTED 
+
+class room(BaseModel):
+    roomID : str
+
+def get_room_quantity(db_connection, cursor, ID):
+    query1 = "SELECT `Capacity` FROM `room` WHERE `Room ID` = %s"
+    
+    cursor.execute(query1,(ID,))
+
+    details = cursor.fetchone()
+
+    quantity = details[0]
+
+    return quantity
+    
+def get_room_details(db_connection, cursor, ID):
+    query1 = "SELECT `equipment`, `quantity` FROM item WHERE `Room ID` = %s"
+
+    cursor.execute(query1,(ID,))
+
+    details = cursor.fetchall()
+
+    return details
+
+@app.post("/Room_Details/")
+def room_Details(room : room, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    quantity = get_room_quantity(db_connection,cursor, ID = room.roomID)
+    details = get_room_details(db_connection,cursor, ID = room.roomID)
+    return details
+
+@app.post("/Room_Quantity/")
+def room_Quantity(room : room, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    quantity = get_room_quantity(db_connection,cursor, ID = room.roomID)
+    return quantity
+
+
+#################################### TO BE TESTED 
+
+#################################### FEEDBACK SECTION
+
+class Feedback(BaseModel):
+    bookingID : str
+    title : str
+    feedback : str
+
+def createFeedback(db_connection, cursor, bookingID, title, feedback):
+    query = """
+        INSERT INTO feedback (`Booking ID`, `Title`, `Text`, `Active`)
+        VALUES (%s, %s, %s, %s)
+    """
+
+    cursor.execute(query,(bookingID,title,feedback,True))
+
+    db_connection.commit()
+    
+
+@app.post("/create_Feedback/")
+def create_Feedback(fb : Feedback, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    createFeedback(db_connection,cursor, bookingID = fb.bookingID, title = fb.title, feedback = fb.feedback)
+    return {"Complete"}
+
+
+#class booking(BaseModel):
+#    bookingID : str
+
+def readFeedback(db_connection,cursor, ID):
+
+    read_query = "SELECT `Active` FROM `feedback` WHERE `Booking ID` = %s"
+    cursor.execute(read_query,(ID,))
+    value = cursor.fetchone()
+    value1 = value[0]
+
+    value2 = not value1
+    
+    update_query = """
+        UPDATE feedback
+        SET `Active` = %s
+        WHERE `Booking ID` = %s
+    """
+
+    cursor.execute(update_query,(value2,ID))
+
+    # Commit the transaction
+    db_connection.commit()
+
+
+@app.post("/read_Feedback/")
+def read_Feedback(bt : booking, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    readFeedback(db_connection,cursor, ID = bt.bookingID)
+    return {"Complete"}
+
+
+#class bookingType(BaseModel):
+    #typeCheck : str
+
+def get_list_feedback(db_connection,cursor, typeCheck):
+    if typeCheck == "current":
+        query = """
+            SELECT `Booking ID`, `Title`, `Text`
+            FROM `feedback`
+            WHERE `Active` = 1
+        """
+
+        
+
+    else:
+        query = """
+            SELECT `Booking ID`, `Title`, `Text`
+            FROM `feedback`
+            WHERE `Active` = 0
+        """
+
+    cursor.execute(query)
+    feedbacklist = cursor.fetchall()
+
+    return feedbacklist
+
+
+
+@app.post("/get_Feedback/")             #"current" or "past"
+def get_Feedback(bt : bookingType, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    feedbacklist = get_list_feedback(db_connection,cursor, typeCheck = bt.typeCheck)
+    return feedbacklist
 
