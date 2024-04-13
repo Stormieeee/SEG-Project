@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import LoadingSpinner from "@/app/Components/LoadingSpinner";
+import React from "react";
 import editIcon from "../../../../public/Login-icon/edit_icon.svg";
 import Image from "next/image";
 import { useStateContext } from "./MyBookingContext";
