@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import PasswordVisibilityButton from "@/app/Components/PasswordVisibilityButton";
+import { loginButtonStyle, cancelButtonStyle } from "./componentStyle";
+import Image from "next/image";
 
 interface ResetPasswordProps {
   handleReset: () => void;
+  handleCancelReset: () => void;
 }
-const ResetPassword = ({ handleReset }: ResetPasswordProps) => {
+const ResetPassword = ({
+  handleReset,
+  handleCancelReset,
+}: ResetPasswordProps) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -71,92 +77,94 @@ const ResetPassword = ({ handleReset }: ResetPasswordProps) => {
       <div className="flex w-full flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white-200 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 border">
           <div className="flex-1 p-8 space-y-4 md:space-y-6 sm:p-8 flex flex-col">
-            <div>
-              <div className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-                Reset password
-              </div>
-              <form
-                className="space-y-4 md:space-y-6 flex flex-col items-center"
-                onSubmit={handleSubmit}
-              >
-                <div className="w-full">
-                  <label
-                    htmlFor="new-password"
-                    className="block mb-2 mt-5 text-sm font-medium text-gray-900"
-                  >
-                    New Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showNewPassword ? "text" : "password"}
-                      name="new-password"
-                      id="new-password"
-                      value={newPassword}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 sm:text-sm focus:placeholder-gray-700"
-                      placeholder="Enter new password"
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      onFocus={(e) => (e.target.placeholder = "")}
-                      onBlur={(e) =>
-                        (e.target.placeholder = "Enter new password")
-                      }
-                      required
-                    />
-                    <PasswordVisibilityButton
-                      showPassword={showNewPassword}
-                      setShowPassword={setShowNewPassword}
-                    />
-                  </div>
-                  <label
-                    htmlFor="confirm-password"
-                    className="block mt-5 mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Confirm Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      name="confirm-password"
-                      id="confirm-password"
-                      value={confirmPassword}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 sm:text-sm focus:placeholder-gray-700"
-                      placeholder="Confirm new password"
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      onFocus={(e) => (e.target.placeholder = "")}
-                      onBlur={(e) =>
-                        (e.target.placeholder = "Confirm new password")
-                      }
-                      required
-                    />
-                    <PasswordVisibilityButton
-                      showPassword={showConfirmPassword}
-                      setShowPassword={setShowConfirmPassword}
-                    />
-                  </div>
-                  {error && (
-                    <p className="text-red-500 text-xs mt-1">{error}</p>
-                  )}
-                </div>
-                <div className="flex justify-between w-full">
-                  {" "}
-                  {/* Added cancel button */}
-                  <button
-                    name="cancel-button"
-                    className="w-2/5 items-center justify-center text-gray-900 px-2 py-3 text-center text-sm bg-gray-300 hover:bg-gray-400 font-bold rounded-lg"
-                    onClick={handleReset}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    name="reset-pwd-button"
-                    className="w-2/5 items-center justify-center text-white-50 px-2 py-3 text-center text-sm bg-blue-400 hover:bg-blue-500 font-bold rounded-lg"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                  >
-                    {!loading ? "Reset" : "Processing..."}
-                  </button>
-                </div>
-              </form>
+            <div className="flex items-center justify-center mb-4">
+              <Image
+                src="/Company-logo/Company Logo.svg"
+                alt="Company Logo"
+                width={0}
+                height={0}
+                layout="responsive"
+              />
             </div>
+            <div className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+              Reset password
+            </div>
+            <form
+              className="space-y-4 md:space-y-6 flex flex-col items-center"
+              onSubmit={handleSubmit}
+            >
+              <div className="w-full">
+                <label
+                  htmlFor="new-password"
+                  className="block mb-2 mt-5 text-sm font-medium text-gray-900"
+                >
+                  New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    name="new-password"
+                    id="new-password"
+                    value={newPassword}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 sm:text-sm focus:placeholder-gray-700"
+                    placeholder="Enter new password"
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    onFocus={(e) => (e.target.placeholder = "")}
+                    onBlur={(e) =>
+                      (e.target.placeholder = "Enter new password")
+                    }
+                    required
+                  />
+                  <PasswordVisibilityButton
+                    showPassword={showNewPassword}
+                    setShowPassword={setShowNewPassword}
+                  />
+                </div>
+                <label
+                  htmlFor="confirm-password"
+                  className="block mt-5 mb-2 text-sm font-medium text-gray-900"
+                >
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirm-password"
+                    id="confirm-password"
+                    value={confirmPassword}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 sm:text-sm focus:placeholder-gray-700"
+                    placeholder="Confirm new password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onFocus={(e) => (e.target.placeholder = "")}
+                    onBlur={(e) =>
+                      (e.target.placeholder = "Confirm new password")
+                    }
+                    required
+                  />
+                  <PasswordVisibilityButton
+                    showPassword={showConfirmPassword}
+                    setShowPassword={setShowConfirmPassword}
+                  />
+                </div>
+                {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+              </div>
+              <div className="flex justify-center space-x-10 w-full">
+                <button
+                  name="cancel-button"
+                  className={`${cancelButtonStyle}`}
+                  onClick={handleCancelReset}
+                >
+                  Cancel
+                </button>
+                <button
+                  name="reset-pwd-button"
+                  type="submit"
+                  className={`${loginButtonStyle}`}
+                >
+                  Reset
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
