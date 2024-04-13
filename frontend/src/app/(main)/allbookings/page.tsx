@@ -2,9 +2,10 @@
 import React from "react";
 import Sortbar from "./Sortbar";
 import SearchBar from "./SearchBar";
-import RequestComponents from "./RequestComponents";
-import { StateProvider } from "./RequestContext";
-import { useStateContext } from "./RequestContext";
+import RequestComponents from "./BookingComponents";
+import BookingSwitcher from "./BookingSwitcher";
+import { StateProvider } from "./BookingContext";
+import { useStateContext } from "./BookingContext";
 import LoadingPage from "@/app/loader/LoadingPage";
 
 const BookingRequestPage = () => {
@@ -12,13 +13,10 @@ const BookingRequestPage = () => {
   return (
     <StateProvider>
       <div className="flex flex-1 flex-col">
-        <div className="relative h-10 flex mt-3 items-center">
-          <div className="absolute left-0 ml-10">
-            <Sortbar />
-          </div>
-          <div className="flex-grow flex items-center justify-center">
-            <SearchBar />
-          </div>
+        <div className="relative flex h-10 mt-3 px-10 items-center justify-between">
+          <Sortbar />
+          <BookingSwitcher />
+          <SearchBar />
         </div>
         <RequestComponents />
       </div>

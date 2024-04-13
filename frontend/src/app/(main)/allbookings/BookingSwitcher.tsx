@@ -1,12 +1,11 @@
-import { useStateContext } from "./MyBookingContext";
-
+import { useStateContext } from "./BookingContext";
 const BookingSwitcher = () => {
-  const { isCurrentBooking, setIsCurrentBooking, setSelectedRowIndex } =
-    useStateContext();
   const switchBooking = () => {
     setIsCurrentBooking(!isCurrentBooking);
     setSelectedRowIndex(-1);
   };
+  const { isCurrentBooking, setIsCurrentBooking, setSelectedRowIndex } =
+    useStateContext();
   return (
     <div className="flex items-center justify-center">
       <button
@@ -17,7 +16,7 @@ const BookingSwitcher = () => {
       >
         {"<"}
       </button>
-      <div className="flex w-[180px] py-2 justify-center text-lg font-medium border-y">
+      <div className="flex w-[180px] py-2 bg-white-100 justify-center text-lg font-medium border-y">
         {isCurrentBooking ? "Current Booking" : "Past Booking"}
       </div>
       <button

@@ -33,7 +33,7 @@ MYSQL_CONFIG = {
     "port": 3306,
     "user": "root",
     "password": "",
-    "database": "rbms"
+    "database": "rbms"     #CHANGE THIS
 }
 
 # Dependency to establish database connection
@@ -929,7 +929,6 @@ def get_user_booking_details(db_connection, cursor, ID, checkType):
             """
 
     elif checkType == "Approved" or checkType == "Completed":   #Approved or Completed
-        
         query = """
             SELECT 
                 `booking id description`.`capacity` AS request_capacity,
@@ -938,15 +937,17 @@ def get_user_booking_details(db_connection, cursor, ID, checkType):
                 `booking id description`.`Comment` AS request_comment
             FROM 
                 `booking list`
-
             JOIN 
                 `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
             JOIN 
                 `room` ON `booking list`.`Room ID` = `room`.`Room ID`
             WHERE 
                 `booking list`.`Booking ID` = %s
-            """
+        """
 
+        checkComment = "SELECT `Title`, `Text` FROM `feedback` WHERE `Booking ID` = %s"
+        cursor.execute(checkComment,(ID,))
+        validID = cursor.fetchone()
 
     else:   #Rejected
         
@@ -971,14 +972,36 @@ def get_user_booking_details(db_connection, cursor, ID, checkType):
     cursor.execute(query, (ID,))
     results = cursor.fetchone()
 
-    if  checkType == "Approved" or checkType == "Completed" or checkType == "Rejected":
+    if  checkType == "Approved" or checkType == "Completed":
+        if validID:
+            response = {
+                    "request_capacity": results[0] if results[0] is not None else "",
+                    "room_capacity": results[1] if results[1] is not None else "",
+                    "description": results[2] if results[2] is not None else "",
+                    "comment": results[3] if results[3] is not None else "",
+                    "feedback_title": validID[0] if validID[0] is not None else "",
+                    "feedback_text": validID[1] if validID[1] is not None else "",
+                }
+
+        else:
+            
+            response = {
+                    "request_capacity": results[0] if results[0] is not None else "",
+                    "room_capacity": results[1] if results[1] is not None else "",
+                    "description": results[2] if results[2] is not None else "",
+                    "comment": results[3] if results[3] is not None else "",
+                }
+
+
+    elif checkType == "Rejected":
         response = {
                 "request_capacity": results[0] if results[0] is not None else "",
                 "room_capacity": results[1] if results[1] is not None else "",
                 "description": results[2] if results[2] is not None else "",
-                "comment": results[3] if results[3] is not None else ""
+                "comment": results[3] if results[3] is not None else "",
             }
-    else:
+        
+    else:   
         response = {
             "request_capacity": results[0] if results[0] is not None else "",
             "room_capacity": results[1] if results[1] is not None else "",
@@ -1193,13 +1216,41 @@ def get_admin_details(db_connection,cursor, ID):
         WHERE 
             `booking list`.`Booking ID` = %s
          """
+    query1 = """
+        SELECT
+            `booking rejects`.`User ID`,
+            `user roles`.`Name`,
+            `booking rejects`.`Handler`,
+            `booking rejects description`.`capacity` AS request_capacity,
+            `room`.`capacity` AS room_capacity,
+            `booking rejects description`.`Description` AS request_description,
+            `booking rejects description`.`Comment` AS request_comment
+        FROM 
+            `booking rejects`
+        JOIN 
+            `users` ON `booking rejects`.`User ID` = `users`.`User ID`
+        JOIN 
+            `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
+        JOIN 
+            `booking rejects description` ON `booking rejects`.`Reject ID` = `booking rejects description`.`Reject ID`
+        JOIN 
+            `room` ON `booking rejects`.`Room ID` = `room`.`Room ID`
+            
+        WHERE 
+            `booking rejects`.`Reject ID` = %s
+         """
 
-    cursor.execute(query,(ID,))
+    cursor.execute(query, (ID,))
     details = cursor.fetchone()
 
+    if details == None:
+        cursor.execute(query1, (ID,))
+        details = cursor.fetchone()
+
+
     transformed_data = {
-    "user_ID": details[0],
-    "user_Role": details[1],
+    "user_id": details[0],
+    "user_role": details[1],
     "handler": details[2],
     "request_capacity": details[3],
     "room_capacity": details[4],
@@ -1354,14 +1405,27 @@ class Feedback(BaseModel):
     feedback : str
 
 def createFeedback(db_connection, cursor, bookingID, title, feedback):
-    query = """
-        INSERT INTO feedback (`Booking ID`, `Title`, `Text`, `Active`)
-        VALUES (%s, %s, %s, %s)
-    """
+    # Check if the bookingID already exists
+    query_check = "SELECT COUNT(*) FROM feedback WHERE `Booking ID` = %s"
+    cursor.execute(query_check, (bookingID,))
+    result = cursor.fetchone()
 
-    cursor.execute(query,(bookingID,title,feedback,True))
+    if result[0] > 0:  # If bookingID exists, update the existing record
+        query_update = """
+            UPDATE feedback 
+            SET `Title` = %s, `Text` = %s, `Active` = %s 
+            WHERE `Booking ID` = %s
+        """
+        cursor.execute(query_update, (title, feedback, True, bookingID))
+    else:  # If bookingID does not exist, insert a new record
+        query_insert = """
+            INSERT INTO feedback (`Booking ID`, `Title`, `Text`, `Active`)
+            VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(query_insert, (bookingID, title, feedback, True))
 
     db_connection.commit()
+
     
 
 @app.post("/create_Feedback/")

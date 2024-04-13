@@ -1,40 +1,45 @@
-import React, { useState } from "react";
-import { useStateContext } from "./MyBookingContext";
+import React, { useState, useEffect } from "react";
+import { useStateContext } from "./BookingContext";
 import { buttonStyle } from "../style/MainStyle";
 
 const Sortbar = () => {
-  const { bookings, setBookings, setSelectedRowIndex } = useStateContext();
   const [sortColumn, setSortColumn] = useState<string>("");
   const [disableSelect] = useState<boolean>(false);
-
-  const handleSort = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-    selectedColumn: number,
-    columnType: string
-  ) => {
-    setSortColumn(event.target.value);
-
+  const [selectedColumn, setSelectedColumn] = useState<number>(-1);
+  const [columnType, setColumnType] = useState<string>("");
+  const {
+    bookings,
+    filteredBookings,
+    setFilteredBookings,
+    setSelectedRowIndex,
+    setCurrentPage,
+    shouldSort,
+    setShouldSort,
+  } = useStateContext();
+  const handleSort = () => {
     // Sort the bookings based on the selected column
-    const sortedBookings = bookings ? [...bookings] : [];
+    console.log(sortColumn);
+    const sortedBookings = filteredBookings ? [...filteredBookings] : [];
     sortedBookings.sort((a, b) => {
       // Compare the values in the selected column
       const columnA = a[selectedColumn];
       const columnB = b[selectedColumn];
-
+      let comparisonResult = 0;
       if (columnType === "string") {
-        return columnA.localeCompare(columnB);
+        comparisonResult = columnA.localeCompare(columnB);
       } else if (columnType === "number") {
-        return parseFloat(columnA) - parseFloat(columnB);
+        comparisonResult = parseFloat(columnA) - parseFloat(columnB);
       } else if (columnType === "date") {
-        return new Date(columnA).getTime() - new Date(columnB).getTime();
+        comparisonResult =
+          new Date(columnA).getTime() - new Date(columnB).getTime();
       } else {
         // Fallback comparison
-        return columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
+        comparisonResult = columnA < columnB ? -1 : columnA > columnB ? 1 : 0;
       }
+      return comparisonResult;
     });
 
-    setBookings(sortedBookings);
-    setSelectedRowIndex(-1);
+    setFilteredBookings(sortedBookings);
   };
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
@@ -44,16 +49,28 @@ const Sortbar = () => {
         e.target.querySelector('option[value=""]') as HTMLOptionElement
       ).disabled = true;
     }
+    setSelectedColumn(parseInt(selectedValue.split(",")[0]));
+    setColumnType(selectedValue.split(",")[1]);
     setSortColumn(selectedValue);
-
-    // Extract selected column and column type
-    const [selectedColumn, columnType] = selectedValue.split(",");
-    handleSort(e, parseInt(selectedColumn), columnType);
   };
+
+  useEffect(() => {
+    handleSort();
+    setCurrentPage(1);
+    setSelectedRowIndex(-1);
+  }, [sortColumn]);
+  useEffect(() => {
+    if (shouldSort) {
+      handleSort();
+      setShouldSort(false); // Reset the flag after sorting
+    }
+  }, [filteredBookings, sortColumn, shouldSort]);
 
   return (
     <div className="flex flex-row items-center space-x-2">
-      <label htmlFor="sortColumn text-gray-700">Sort by:</label>
+      <label htmlFor="sortColumn" className="hidden lg:block text-gray-700">
+        Sort by:
+      </label>
       <select
         id="sortColumn"
         value={sortColumn}

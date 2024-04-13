@@ -3,34 +3,28 @@ import React, { useState } from "react";
 import { useStateContext } from "./RequestContext";
 import RectangularCheckbox from "./RectangularCheckbox";
 import LoadingSpinner from "@/app/Components/LoadingSpinner";
+import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 
-interface DetailsBarProps {
-  bookingId?: string;
-  user_id?: string;
-  user_role?: string;
-  request_capacity?: number;
-  room_capacity?: number;
-  description?: string;
-}
-
-const DetailsBar = ({
-  bookingId,
-  user_id,
-  user_role,
-  room_capacity,
-  request_capacity,
-  description,
-}: DetailsBarProps) => {
+const DetailsBar = () => {
   const [comment, setComment] = useState("");
   const [checked, setChecked] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const {
+    setIsLoading,
     setRequests,
     selectedRowIndex,
     setSelectedRowIndex,
     displayedRequests,
     setFilteredRequests,
+    requestDetails,
   } = useStateContext();
+  const {
+    bookingId,
+    user_id,
+    user_role,
+    room_capacity,
+    request_capacity,
+    description,
+  } = requestDetails ?? {};
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (bookingId: string) => {
     setRequests((prev) => prev.filter((request) => request[0] !== bookingId));
@@ -57,17 +51,18 @@ const DetailsBar = ({
             action: action,
             bookingID: bookingId,
             comment: comment,
+            handler: getEmailFromSessionStorage(),
           }),
         });
-        const data = await response.json();
-
         if (response.ok) {
+          const data = await response.json();
           if (data[0] === "Collision") {
             alert("Collision detected! Please decline this booking request.");
-          }
-          handleRemoveItem(bookingId ? bookingId : "");
-          if (selectedRowIndex === displayedRequests.length - 1) {
-            setSelectedRowIndex(selectedRowIndex - 1);
+          } else {
+            handleRemoveItem(bookingId ? bookingId : "");
+            if (selectedRowIndex === displayedRequests.length - 1) {
+              setSelectedRowIndex(selectedRowIndex - 1);
+            }
           }
         }
       } catch (error) {
@@ -78,19 +73,19 @@ const DetailsBar = ({
       setIsLoading(false);
     }
   };
-
+  const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3";
   return (
     <div className="flex flex-1 flex-col">
-      <div className="border-neutral-400 justify-start text-2xl font-bold">
+      <div className="justify-start text-2xl font-bold text-stone-900">
         Request Details
       </div>
       <div className="border-neutral-400 flex-1 flex-col justify-start inline-flex">
-        <div className="text-xl font-bold">From:</div>
+        <div className={subHeadingStyle}>From:</div>
         <div className="text-l mt-1">
           {user_id} ({user_role})
         </div>
 
-        <div className="text-xl font-bold mt-5">Booking Specific:</div>
+        <div className={subHeadingStyle}>Booking Specific:</div>
         <ul className="list-decimal pl-5">
           <li className="text-l mt-1">Room Capacity: {room_capacity}</li>
           <li className="text-l mt-3">Request Capacity: {request_capacity}</li>
@@ -121,24 +116,20 @@ const DetailsBar = ({
             }}
           />
         )}
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <div className="flex justify-between mt-5 mb-5">
-            <button
-              className="bg-green-500 w-[150px] h-[50px] hover:bg-green-700 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
-              onClick={() => handleSubmit("approve")}
-            >
-              Approve
-            </button>
-            <button
-              className="bg-red-500 w-[150px] h-[50px] hover:bg-red-800 text-white-50 rounded-md py-2 px-4 ml-3 transition duration-200 ease-in-out"
-              onClick={() => handleSubmit("reject")}
-            >
-              Reject
-            </button>
-          </div>
-        )}
+        <div className="flex justify-between mt-5 mb-5">
+          <button
+            className="bg-green-500 w-[150px] h-[50px] hover:bg-green-700 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
+            onClick={() => handleSubmit("approve")}
+          >
+            Approve
+          </button>
+          <button
+            className="bg-red-500 w-[150px] h-[50px] hover:bg-red-800 text-white-50 rounded-md py-2 px-4 ml-3 transition duration-200 ease-in-out"
+            onClick={() => handleSubmit("reject")}
+          >
+            Reject
+          </button>
+        </div>
       </div>
     </div>
   );

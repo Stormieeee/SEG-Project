@@ -1,29 +1,15 @@
 import React, { useEffect } from "react";
+import { useStateContext } from "./MyBookingContext";
 
-interface BookingsTableProps {
-  bookings: string[][];
-  setBookingStatus: React.Dispatch<React.SetStateAction<string>>;
-  setBookingDetails: React.Dispatch<
-    React.SetStateAction<{
-      index: number;
-      request_capacity: string;
-      room_capacity: string;
-      description: string;
-      comment?: string;
-    } | null>
-  >;
-  selectedRowIndex: number;
-  setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
-  setSelectedBookingId: React.Dispatch<React.SetStateAction<string>>;
-}
-const BookingsTable = ({
-  bookings,
-  setBookingStatus,
-  setBookingDetails,
-  selectedRowIndex,
-  setSelectedRowIndex,
-  setSelectedBookingId,
-}: BookingsTableProps) => {
+const BookingsTable = () => {
+  const {
+    bookings,
+    setBookingStatus,
+    setBookingDetails,
+    selectedRowIndex,
+    setSelectedRowIndex,
+    setSelectedBookingId,
+  } = useStateContext();
   const header = [
     "Booking ID",
     "Room",
@@ -43,7 +29,6 @@ const BookingsTable = ({
     setBookingStatus(status);
     setSelectedRowIndex(index);
     try {
-      console.log(bookingId, bookingStatus);
       const response = await fetch(
         "http://localhost:8000/get_booking_details_users/",
         {

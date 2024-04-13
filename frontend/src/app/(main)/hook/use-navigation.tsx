@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 const useNavigation = () => {
   const pathname = usePathname();
@@ -10,25 +10,30 @@ const useNavigation = () => {
   const [isMyBookingActive, setMyBookingActive] = useState(false);
   const [isProfileActive, setProfileActive] = useState(false);
   const [isBookingRequestActive, setBookingRequestActive] = useState(false);
+  const [isAllBookingActive, setAllBookingActive] = useState(false);
 
   useEffect(() => {
     setRoomBookingActive(false);
     setMyBookingActive(false);
     setProfileActive(false);
     setBookingRequestActive(false);
+    setAllBookingActive(false);
 
     switch (pathname) {
-      case '/roombooking':
+      case "/roombooking":
         setRoomBookingActive(true);
         break;
-      case '/mybooking':
+      case "/mybooking":
         setMyBookingActive(true);
         break;
-      case '/profile':
+      case "/profile":
         setProfileActive(true);
         break;
-      case '/bookingrequest':
+      case "/bookingrequest":
         setBookingRequestActive(true);
+        break;
+      case "/allbookings":
+        setAllBookingActive(true);
         break;
       default:
         // Handle any other cases here
@@ -41,6 +46,7 @@ const useNavigation = () => {
     isMyBookingActive,
     isProfileActive,
     isBookingRequestActive,
+    isAllBookingActive,
   };
 };
 

@@ -3,8 +3,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { getCurrentDate } from "./roombooking/utils/commonFunction";
 
-
-
 interface StateContextType {
   roomID: string;
   setRoomID: React.Dispatch<React.SetStateAction<string>>;
@@ -38,9 +36,9 @@ const defaultValue: StateContextType = {
   endTime: new Date().getHours() + 1,
   setEndTime: () => {},
   floor: "3",
-  setFloor: () =>{},
+  setFloor: () => {},
   floorSection: "R",
-  setFloorSection: () =>{},
+  setFloorSection: () => {},
 };
 
 const StateContext = createContext<StateContextType>(defaultValue);
@@ -75,7 +73,7 @@ export const StateProvider = ({ children }: any) => {
         floor,
         setFloor,
         floorSection,
-        setFloorSection
+        setFloorSection,
       }}
     >
       {children}

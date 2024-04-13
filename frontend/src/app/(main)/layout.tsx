@@ -44,11 +44,12 @@ const layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
       <body className={inter.className}>
         <div className="flex">
           <Sidebar />
-          <div className={`flex flex-col flex-grow 
-          bg-[radial-gradient(circle_at_top_left,_var(--tw-gradient-stops))] from-gray-50 via-sky-400/10 to-gray-50`}>
-          {/* dark:bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] dark:from-gray-800 dark:via-sky-900 dark:to-gray-800 */} 
+          <div
+            className={`flex flex-col flex-grow overflow-x-hidden
+          bg-[radial-gradient(circle_at_top_left,_var(--tw-gradient-stops))] from-gray-50 via-sky-400/10 to-gray-50`}
+          >
+            {/* dark:bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] dark:from-gray-800 dark:via-sky-900 dark:to-gray-800 */}
             <StateProvider>
-              
               <Topbar />
               {children}
             </StateProvider>
@@ -60,4 +61,3 @@ const layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 };
 
 export default dynamic(() => Promise.resolve(layout), { ssr: false }); // This is an attempt to fix hydration error
-

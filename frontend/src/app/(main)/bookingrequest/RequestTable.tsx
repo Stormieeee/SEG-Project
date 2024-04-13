@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useStateContext } from "./RequestContext";
 
-interface RequestTableProps {
-  setRequestDetails: React.Dispatch<
-    React.SetStateAction<{
-      bookingId: string;
-      user_id: string;
-      user_role: string;
-      request_capacity: number;
-      room_capacity: number;
-      description: string;
-    } | null>
-  >;
-}
-const RequestTable = ({ setRequestDetails }: RequestTableProps) => {
+const RequestTable = () => {
   const {
     filteredRequests,
     displayedRequests,
@@ -23,6 +11,7 @@ const RequestTable = ({ setRequestDetails }: RequestTableProps) => {
     rowsPerPage,
     currentPage,
     setCurrentPage,
+    setRequestDetails,
   } = useStateContext();
   const header = ["Booking ID", "Room", "Date", "Start Time", "End Time"];
 
@@ -117,7 +106,6 @@ const RequestTable = ({ setRequestDetails }: RequestTableProps) => {
                 : "bg-primary-50 hover:bg-primary-100 hover:border-primary-300 cursor-pointer transition duration-300 ease-in-out"
             }`}
             onClick={() => {
-              getRequestDetails(rowData[0], rowIndex);
               if (selectedRowIndex === rowIndex) {
                 setSelectedRowIndex(-1);
               } else {
