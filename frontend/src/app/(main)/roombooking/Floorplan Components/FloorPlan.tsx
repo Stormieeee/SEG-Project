@@ -133,167 +133,497 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
     return backgroundColorClass;
   };
 
-  const SecondFloor = () => {
-    return (
-      <div className={`${floorplanStyle}`}>
-        <div className="flex flex-row h-[130px]">
-          <div className="flex flex-row w-1/5">
-            <div className="flex flex-col w-1/3">
-              <button className="relative h-[60px] w-full  border-2">
-                <span className="block transform -rotate-90 text-xs origin-center">
-                  2R008
-                </span>
-              </button>
+  const SecondFloor = () => (
+    <div className={`${floorplanStyle}`}>
+      <div className="h-2/5 flex flex-row">
+        {/* Top Left */}
+        <div className="w-1/4 flex flex-row">
+          <div className="w-33/100 flex flex-col">
+            <button
+              key={"2R008"}
+              onClick={() => handleButtonClick("2R008")}
+              className={`h-44/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R008"])}
+                ${getActiveButtonClass(activeButton === "2R008", colorMap["2R008"])}`}
+              disabled={getButtonDisabledState(colorMap["2R008"])}
+            >
+              <span className="text-[11px] origin-center">2R008</span>
+            </button>
 
-              <button className="relative h-[60px] w-full mt-auto  border-2">
-                <span className="block transform -rotate-90 text-xs origin-center">
-                  2R007
-                </span>
-              </button>
-            </div>
+            <div className="h-8/100"></div>
 
-            <div className="flex flex-col w-1/3 ml-auto">
-              <button className="relative h-[40px] w-full mt-auto border-2">
-                <span className="text-[10px] origin-center">2R009</span>
-              </button>
-
-              <button className="relative h-[20px] w-full  border-2">
-                <span className="text-[10px] origin-center">2R010</span>
-              </button>
-            </div>
+            <button
+              key={"2R007"}
+              onClick={() => handleButtonClick("2R007")}
+              className={`h-37/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R007"])}
+                ${getActiveButtonClass(activeButton === "2R007", colorMap["2R007"])}`}
+              disabled={getButtonDisabledState(colorMap["2R007"])}
+            >
+              <span className="text-[11px] origin-center">2R007</span>
+            </button>
+            <button
+              key={"2R006"}
+              onClick={() => handleButtonClick("2R006")}
+              className={`h-11/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R006"])}
+                ${getActiveButtonClass(activeButton === "2R006", colorMap["2R006"])}`}
+              disabled={getButtonDisabledState(colorMap["2R006"])}
+            >
+              <span className="text-[11px] flex justify-center items-center">2R006</span>
+            </button>
           </div>
-
-          <div className="flex flex-row w-4/5">
-            <div className="w-5/12 flex flex-row">
-              <button className="h-full w-[75px]  border-2">2R011</button>
-              <button className="h-full flex-grow  border-2">2R012</button>
-              <button className="h-full w-[75px] ml-auto  border-2">
-                2R013
-              </button>
+          <div className="w-67/100 flex flex-col">
+            <div className="h-41/100 flex flex-row">
+              <div className="w-1/5 flex flex-col">
+                <div className="h-85/100 bg-black-200 rounded-md border-2 text-sm flex justify-center items-center">S</div>
+              </div>
+              <div className="w-4/5 flex flex-col">
+                <div className="h-2/5 text-[10px] bg-black-50 rounded-md border-2 flex justify-center items-center">Utility</div>
+                <div className="h-3/5 flex flex-row">
+                  <div className="w-58/100 flex flex-col">
+                    <div className="h-77/100 bg-black-50 rounded-md border-2 flex justify-center items-center">T</div>
+                  </div>
+                  <div className="w-42/100 bg-black-50 rounded-md border-2 flex justify-center items-center">T</div>
+                </div>
+              </div>
             </div>
-            <div className="w-7/12 bg-orange-400 flex flex-row">
-              <button className="h-full w-5/12  border-2">2R014</button>
-              <button className="h-full flex-grow  border-2">
-                <span className="block transform -rotate-90 text-xs origin-center">
-                  2R015
-                </span>
-              </button>
-              <button className="h-full w-5/12 ml-auto  border-2">2R016</button>
+
+            <div className="h-59/100 flex flex-row">
+              <div className="w-44/100"></div>
+              <div className="w-56/100 flex flex-col">
+                <button
+                  key={"2R009"}
+                  onClick={() => handleButtonClick("2R009")}
+                  className={`h-56/100 rounded-md border-2
+                    ${textStyle}
+                    ${getButtonColorClass(colorMap["2R009"])}
+                    ${getActiveButtonClass(activeButton === "2R009", colorMap["2R009"])}`}
+                  disabled={getButtonDisabledState(colorMap["2R009"])}
+                >
+                  <span className="text-[11px] origin-center">2R009</span>
+                </button>
+                <button
+                  key={"2R010"}
+                  onClick={() => handleButtonClick("2R010")}
+                  className={`h-16/100 rounded-md border-2
+                    ${textStyle}
+                    ${getButtonColorClass(colorMap["2R010"])}
+                    ${getActiveButtonClass(activeButton === "2R010", colorMap["2R010"])}`}
+                  disabled={getButtonDisabledState(colorMap["2R010"])}
+                >
+                  <span className="text-[11px] flex justify-center items-center">2R010</span>
+                </button>
+                <div className="h-28/100"></div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-row h-[30px]">
-          <button className="h-full  border-2">
-            <span className="text-xs">2R006</span>
-          </button>
-          <button className="h-full w-[65px] ml-auto  border-2">
-            <span className="text-xs">2R017</span>
-          </button>
-        </div>
-
-        <div className="flex flex-row flex-grow">
-          <div className="flex flex-col w-1/3">
-            <div className="flex flex-row h-1/5">
-              <button className="w-5/6  border-2">2R004</button>
-              <button className="w-1/6  border-2">
-                <span className="block transform -rotate-90 text-[10px] origin-center">
-                  2R005
-                </span>
-              </button>
-            </div>
-            <div className="flex flex-row h-4/5 bg-black-200">
-              <button className="w-1/3 h-1/4 ml-auto  border-2">2R003</button>
-            </div>
+        {/* Top Right */}
+        <div className="w-3/4 flex flex-col">
+          <div className="h-84/100 flex flex-row">
+            <button
+              key={"2R011"}
+              onClick={() => handleButtonClick("2R011")}
+              className={`w-15/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R011"])}
+                ${getActiveButtonClass(activeButton === "2R011", colorMap["2R011"])}`}
+              disabled={getButtonDisabledState(colorMap["2R011"])}
+            >
+              2R011
+            </button>
+            <button
+              key={"2R012"}
+              onClick={() => handleButtonClick("2R012")}
+              className={`w-12/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R012"])}
+                ${getActiveButtonClass(activeButton === "2R012", colorMap["2R012"])}`}
+              disabled={getButtonDisabledState(colorMap["2R012"])}
+            >
+              2R012
+            </button>
+            <button
+              key={"2R013"}
+              onClick={() => handleButtonClick("2R013")}
+              className={`w-15/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R013"])}
+                ${getActiveButtonClass(activeButton === "2R013", colorMap["2R013"])}`}
+              disabled={getButtonDisabledState(colorMap["2R013"])}
+            >
+              2R013
+            </button>
+            <button
+              key={"2R014"}
+              onClick={() => handleButtonClick("2R014")}
+              className={`w-27/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R014"])}
+                ${getActiveButtonClass(activeButton === "2R014", colorMap["2R014"])}`}
+              disabled={getButtonDisabledState(colorMap["2R014"])}
+            >
+              2R014
+            </button>
+            <button
+              key={"2R015"}
+              onClick={() => handleButtonClick("2R015")}
+              className={`w-7/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R015"])}
+                ${getActiveButtonClass(activeButton === "2R015", colorMap["2R015"])}`}
+              disabled={getButtonDisabledState(colorMap["2R015"])}
+            >
+              <span className="block transform -rotate-90">2R015</span>
+            </button>
+            <button
+              key={"2R016"}
+              onClick={() => handleButtonClick("2R016")}
+              className={`w-24/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R016"])}
+                ${getActiveButtonClass(activeButton === "2R016", colorMap["2R016"])}`}
+              disabled={getButtonDisabledState(colorMap["2R016"])}
+            >
+              2R016
+            </button>
           </div>
-
-          <div className="flex flex-row w-2/3">
-            <div className="flex flex-col ml-auto w-3/4">
-              <div className="flex flex-row h-5/6">
-                <div className="flex h-5/6 w-2/3">
-                  <div className="flex flex-col w-2/3">
-                    <div className="flex flex-row h-1/3 ">
-                      <button className="w-1/2  border-2">2R024</button>
-                      <button className="w-1/4  border-2">
-                        <span className="block transform -rotate-90 text-xs origin-center">
-                          2R025
-                        </span>
-                      </button>
-                      <button className="w-1/4  border-2">
-                        <span className="block transform -rotate-90 text-xs origin-center">
-                          2R027
-                        </span>
-                      </button>
-                    </div>
-
-                    <div className="flex flex-row h-2/3">
-                      <div className="flex flex-col w-1/2">
-                        <div className="flex flex-row h-1/4">
-                          <button className="w-3/4  border-2 border-r-[3.5px] border-b-[3.5px] text-xs">
-                            2R023
-                          </button>
-                          <button className="w-1/4  border-t-2">L</button>
-                        </div>
-                        <div className="flex flex-grow">
-                          <button className=" flex-grow border-l-2 border-b-2 text-sm">
-                            L(2R022)
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col w-1/2">
-                        <button className="h-1/2  border-r-2 border-t-2 border-b-2">
-                          L
-                        </button>
-                        <div className="flex flex-row h-1/2">
-                          <button className="w-1/2  border-2 border-l-4">
-                            <span className="block transform -rotate-90 text-xs origin-center">
-                              2R033
-                            </span>
-                          </button>
-                          <button className="w-1/2  border-2">
-                            <span className="block transform -rotate-90 text-xs origin-center">
-                              2R032
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col w-1/3 ml-auto bg-blue-200">
-                    <button className="h-2/5  border-2">2R028</button>
-                    <button className="h-1/5  border-2">2R029</button>
-                    <div className="h-2/5">
-                      <button className="h-2/3 w-full  border-t-2 border-l-2 border-r-2 text-sm">
-                        L(2R029)
-                      </button>
-                      <div className="flex flex-row h-1/3">
-                        <button className="w-1/2  border-2 border-t-[3.5px] border-r-[3.5px] text-[8px]">
-                          2R031
-                        </button>
-                        <button className="w-1/2  border-r-2 border-b-2">
-                          L
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col ml-auto w-1/5 bg-black-200">
-                  <button className="h-1/3  border-2">2R018</button>
-                </div>
-              </div>
-
-              <div className="flex flex-row h-1/6">
-                <button className="ml-auto w-1/2  border-2">2R019</button>
-              </div>
-            </div>
+          <div className="h-16/100 flex flex-row-reverse">
+            <button
+              key={"2R017"}
+              onClick={() => handleButtonClick("2R017")}
+              className={`w-10/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R017"])}
+                ${getActiveButtonClass(activeButton === "2R017", colorMap["2R017"])}`}
+              disabled={getButtonDisabledState(colorMap["2R017"])}
+            >
+              2R017
+            </button>
           </div>
         </div>
       </div>
-    );
-  };
+
+      <div className="h-3/5 flex flex-row">
+        {/* Bottom Left */}
+        <div className="w-36/100 flex flex-col">
+          <div className="h-17/100 flex flex-row">
+            <button
+              key={"2R004"}
+              onClick={() => handleButtonClick("2R004")}
+              className={`w-90/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R004"])}
+                ${getActiveButtonClass(activeButton === "2R004", colorMap["2R004"])}`}
+              disabled={getButtonDisabledState(colorMap["2R004"])}
+            >
+              2R004
+            </button>
+            <button
+              key={"2R005"}
+              onClick={() => handleButtonClick("2R005")}
+              className={`w-10/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R005"])}
+                ${getActiveButtonClass(activeButton === "2R005", colorMap["2R005"])}`}
+              disabled={getButtonDisabledState(colorMap["2R005"])}
+            >
+              <span className="text-[10px] flex transform -rotate-90 justify-center items-center">2R005</span>
+            </button>
+          </div>
+          <div className="h-20/100 flex flex-row">
+            <button
+              key={"2R002"}
+              onClick={() => handleButtonClick("2R002")}
+              className={`w-2/3 rounded-t-md border-t-2 border-l-2 border-r-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R002"])}
+                ${getActiveButtonClass(activeButton === "2R002", colorMap["2R002"])}`}
+              disabled={getButtonDisabledState(colorMap["2R002"])}
+            >
+              2R002-Cut-1
+            </button>
+            <button
+              key={"2R003"}
+              onClick={() => handleButtonClick("2R003")}
+              className={`w-1/3 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R003"])}
+                ${getActiveButtonClass(activeButton === "2R003", colorMap["2R003"])}`}
+              disabled={getButtonDisabledState(colorMap["2R003"])}
+            >
+              2R003
+            </button>
+          </div>
+          <div className="h-63/100 flex flex-row">
+            <button
+              key={"2R002"}
+              onClick={() => handleButtonClick("2R002")}
+              className={`w-70/100 rounded-b-md border-b-2 border-l-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R002"])}
+                ${getActiveButtonClass(activeButton === "2R002", colorMap["2R002"])}`}
+              disabled={getButtonDisabledState(colorMap["2R002"])}
+            >
+              2R002
+            </button>
+            <div className="w-30/100 flex flex-col">
+              <button
+                key={"2R002"}
+                onClick={() => handleButtonClick("2R002")}
+                className={`h-95/100 rounded-r-md border-t-2 border-r-2 border-b-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["2R002"])}
+                  ${getActiveButtonClass(activeButton === "2R002", colorMap["2R002"])}`}
+                disabled={getButtonDisabledState(colorMap["2R002"])}
+              >
+                2R002-Cut-2
+              </button>
+              <div className="h-5/100"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-20/100 flex flex-col">
+          <div className="h-17/100"></div>
+          {/* Center Stairs */}
+          <div className="h-25/100 flex flex-row">
+            <div className="w-21/100"></div>
+            <div className="w-45/100 bg-black-200 rounded-md border-2 flex justify-center items-center">S</div>
+            <div className="w-34/100"></div>
+          </div>
+          <div className="h-58/100"></div>
+        </div>
+
+        <div className="w-44/100 flex flex-col">
+          <div className="h-75/100 flex flex-row">
+            {/* Center Square */}
+            <div className="w-74/100 flex flex-col">
+              <div className="h-3/4 flex flex-row">
+                <div className="w-65/100 flex flex-col">
+                  <div className="h-30/100 flex flex-row">
+                    <button
+                      key={"2R024"}
+                      onClick={() => handleButtonClick("2R024")}
+                      className={`w-44/100 rounded-md border-2
+                        ${textStyle}
+                        ${getButtonColorClass(colorMap["2R024"])}
+                        ${getActiveButtonClass(activeButton === "2R024", colorMap["2R024"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R024"])}
+                    >
+                      2R024
+                    </button>
+                    <button
+                      key={"2R025"}
+                      onClick={() => handleButtonClick("2R025")}
+                      className={`w-26/100 rounded-md border-2
+                        ${textStyle}
+                        ${getButtonColorClass(colorMap["2R025"])}
+                        ${getActiveButtonClass(activeButton === "2R025", colorMap["2R025"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R025"])}
+                    >
+                      <span className="text-[10px]">2R025</span>
+                    </button>
+                    <button
+                      key={"2R027"}
+                      onClick={() => handleButtonClick("2R027")}
+                      className={`w-30/100 rounded-md border-2
+                        ${textStyle}
+                        ${getButtonColorClass(colorMap["2R027"])}
+                        ${getActiveButtonClass(activeButton === "2R027", colorMap["2R027"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R027"])}
+                    >
+                      <span className="text-[10px]">2R027</span>
+                    </button>
+                  </div>
+
+                  <div className="h-35/100 flex flex-row">
+                    <div className="w-28/100 flex flex-col">
+                      <button
+                        key={"2R023"}
+                        onClick={() => handleButtonClick("2R023")}
+                        className={`h-46/100 rounded-md border-2
+                          ${textStyle}
+                          ${getButtonColorClass(colorMap["2R023"])}
+                          ${getActiveButtonClass(activeButton === "2R023", colorMap["2R023"])}`}
+                        disabled={getButtonDisabledState(colorMap["2R023"])}
+                      >
+                        <span className="text-[10px]">2R023</span>
+                      </button>
+                      <button
+                        key={"2R022"}
+                        onClick={() => handleButtonClick("2R022")}
+                        className={`h-54/100 rounded-tl-md border-t-2 border-l-2
+                          ${textStyle}
+                          ${getButtonColorClass(colorMap["2R022"])}
+                          ${getActiveButtonClass(activeButton === "2R022", colorMap["2R022"])}`}
+                        disabled={getButtonDisabledState(colorMap["2R022"])}
+                      >
+                        <span className="text-[10px]">22-Cut</span>
+                      </button>
+                    </div>
+                    <button
+                      key={"2R022"}
+                      onClick={() => handleButtonClick("2R022")}
+                      className={`w-72/100 rounded-r-md rounded-tl-md border-t-2 border-r-2
+                        ${textStyle}
+                        ${getButtonColorClass(colorMap["2R022"])}
+                        ${getActiveButtonClass(activeButton === "2R022", colorMap["2R022"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R022"])}
+                    >
+                      2R022
+                    </button>
+                  </div>
+
+                  <div className="h-35/100 flex flex-row">
+                    <button
+                      key={"2R022"}
+                      onClick={() => handleButtonClick("2R022")}
+                      className={`w-40/100 rounded-b-md border-b-2 border-l-2 border-r-2
+                        ${textStyle}
+                        ${getButtonColorClass(colorMap["2R022"])}
+                        ${getActiveButtonClass(activeButton === "2R022", colorMap["2R022"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R022"])}
+                    >
+                      <span className="text-[10px]">22-Cut</span>
+                    </button>
+                    <button
+                      key={"2R033"}
+                      onClick={() => handleButtonClick("2R033")}
+                      className={`w-30/100 rounded-md border-2
+                        ${textStyle}
+                        ${getButtonColorClass(colorMap["2R033"])}
+                        ${getActiveButtonClass(activeButton === "2R033", colorMap["2R033"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R033"])}
+                    >
+                      <span className="text-[10px]">2R023</span>
+                    </button>
+                    <button
+                      key={"2R022"}
+                      onClick={() => handleButtonClick("2R022")}
+                      className={`w-30/100 rounded-md border-2
+                        ${textStyle}
+                        ${getButtonColorClass(colorMap["2R022"])}
+                        ${getActiveButtonClass(activeButton === "2R022", colorMap["2R022"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R022"])}
+                    >
+                      <span className="text-[10px]">2R022</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="w-35/100 flex flex-col">
+                  <button
+                    key={"2R028"}
+                    onClick={() => handleButtonClick("2R028")}
+                    className={`h-44/100 rounded-md border-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2R028"])}
+                      ${getActiveButtonClass(activeButton === "2R028", colorMap["2R028"])}`}
+                    disabled={getButtonDisabledState(colorMap["2R028"])}
+                  >
+                    2R028
+                  </button>
+                  <button
+                    key={"2R029"}
+                    onClick={() => handleButtonClick("2R029")}
+                    className={`h-22/100 rounded-md border-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2R029"])}
+                      ${getActiveButtonClass(activeButton === "2R029", colorMap["2R029"])}`}
+                    disabled={getButtonDisabledState(colorMap["2R029"])}
+                  >
+                    2R029
+                  </button>
+                  <button
+                    key={"2R030"}
+                    onClick={() => handleButtonClick("2R030")}
+                    className={`h-23/100 rounded-t-md rounded-bl-md border-t-2 border-l-2 border-r-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2R030"])}
+                      ${getActiveButtonClass(activeButton === "2R030", colorMap["2R030"])}`}
+                    disabled={getButtonDisabledState(colorMap["2R030"])}
+                  >
+                    2R030
+                  </button>
+                  <div className="h-11/100 flex flex-row">
+                    <button
+                      key={"2R031"}
+                      onClick={() => handleButtonClick("2R031")}
+                      className={`w-56/100 rounded-md border-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2R031"])}
+                      ${getActiveButtonClass(activeButton === "2R031", colorMap["2R031"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R031"])}
+                    >
+                      <span className="text-[11px] flex justify-center items-center">2R031</span>
+                    </button>
+                    <button
+                      key={"2R030"}
+                      onClick={() => handleButtonClick("2R030")}
+                      className={`w-44/100 rounded-b-md border-b-2 border-l-2 border-r-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2R030"])}
+                      ${getActiveButtonClass(activeButton === "2R030", colorMap["2R030"])}`}
+                      disabled={getButtonDisabledState(colorMap["2R030"])}
+                    >
+                      <span className="text-[7px] flex justify-center items-center">30-Cut</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="h-1/4"></div>
+            </div>
+
+            <div className="w-9/100"></div>
+
+            {/* Center Right */}
+            <div className="w-17/100 flex flex-col">
+              <button
+                key={"2R018"}
+                onClick={() => handleButtonClick("2R018")}
+                className={`h-22/100 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["2R018"])}
+                  ${getActiveButtonClass(activeButton === "2R018", colorMap["2R018"])}`}
+                disabled={getButtonDisabledState(colorMap["2R018"])}
+              >
+                2R018
+              </button>
+              <div className="h-10/100 bg-black-200 rounded-md border-2 flex justify-center items-center">S</div>
+              <div className="h-68/100 bg-black-200 rounded-md border-2 flex flex-col justify-center items-center space-y-5">
+                <span>Lift</span>
+                <span>T</span>
+                <span>T</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Right */}
+          <div className="h-20/100 flex flex-row-reverse">
+            <button
+              key={"2R019"}
+              onClick={() => handleButtonClick("2R019")}
+              className={`w-52/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2R019"])}
+                ${getActiveButtonClass(activeButton === "2R019", colorMap["2R019"])}`}
+              disabled={getButtonDisabledState(colorMap["2R019"])}
+            >
+              2R019
+            </button>
+          </div>
+
+          <div className="h-5/100"></div>
+        </div>
+      </div>
+    </div>
+  );
 
   const ThirdFloor = () => {
     return (
