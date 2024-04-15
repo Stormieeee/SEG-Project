@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import getEmailFromSessionStorage from "../../Components/CommonFunction";
 
 interface RequestContextType {
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
   requests: string[][];
@@ -21,9 +23,29 @@ interface RequestContextType {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   shouldSort: boolean;
   setShouldSort: React.Dispatch<React.SetStateAction<boolean>>;
+  requestDetails: {
+    bookingId: string;
+    user_id: string;
+    user_role: string;
+    request_capacity: number;
+    room_capacity: number;
+    description: string;
+  } | null;
+  setRequestDetails: React.Dispatch<
+    React.SetStateAction<{
+      bookingId: string;
+      user_id: string;
+      user_role: string;
+      request_capacity: number;
+      room_capacity: number;
+      description: string;
+    } | null>
+  >;
 }
 
 const defaultValue: RequestContextType = {
+  isLoading: false,
+  setIsLoading: () => {},
   searchTerm: "",
   setSearchTerm: () => {},
   requests: [],
@@ -40,11 +62,14 @@ const defaultValue: RequestContextType = {
   setCurrentPage: () => {},
   shouldSort: false,
   setShouldSort: () => {},
+  requestDetails: null,
+  setRequestDetails: () => {},
 };
 
 const RequestContext = createContext<RequestContextType>(defaultValue);
 
 export const StateProvider = ({ children }: any) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [requests, setRequests] = useState<string[][]>([]);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
@@ -53,6 +78,14 @@ export const StateProvider = ({ children }: any) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [shouldSort, setShouldSort] = useState<boolean>(false);
+  const [requestDetails, setRequestDetails] = useState<{
+    bookingId: string;
+    user_id: string;
+    user_role: string;
+    request_capacity: number;
+    room_capacity: number;
+    description: string;
+  } | null>(null);
 
   const getRequestData = async () => {
     try {
@@ -86,6 +119,8 @@ export const StateProvider = ({ children }: any) => {
   return (
     <RequestContext.Provider
       value={{
+        isLoading,
+        setIsLoading,
         searchTerm,
         setSearchTerm,
         requests,
@@ -102,6 +137,8 @@ export const StateProvider = ({ children }: any) => {
         setCurrentPage,
         shouldSort,
         setShouldSort,
+        requestDetails,
+        setRequestDetails,
       }}
     >
       {children}

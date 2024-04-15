@@ -3,30 +3,32 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import profile from "./default_profile_avatar.svg";
 import UserInfo from "./UserInfo";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Import from next/router instead of next/navigation
 import getEmailFromSessionStorage from "../../Components/CommonFunction";
 import ResetButton from "./ResetButton";
 import Link from "next/link";
 import ResetPassword from "./ResetPassword";
 // import editIcon from "../../../../public/Login-icon/edit_icon.svg";
 import Authentication from "@/app/Components/Authentication";
-// import ProfilePictureForm from "./ProfilePictureForm";
+import ProfilePictureForm from "./ProfilePictureForm";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState<{
     username: string | null;
     role: string | null;
+    profilePicture: string | null; // Change from Blob to string
   } | null>(null);
   const router = useRouter();
   let email = "";
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
-  // const [showEditIcon, setShowEditIcon] = useState(false);
-  // const [showEditForm, setShowEditForm] = useState(false);
-  // const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [showEditIcon, setShowEditIcon] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   const getUserInfo = async () => {
     try {
+      email = getEmailFromSessionStorage();
       const response = await fetch(
         "http://localhost:8000/get_profile_details/",
         {
@@ -39,15 +41,20 @@ const Profile = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setUserInfo(data);
+        // Assuming profile picture URL is returned in data.profilePicture
+        setUserInfo({
+          username: data.username,
+          role: data.role,
+          profilePicture: data.profilePicture,
+        });
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
   useEffect(() => {
-    email = getEmailFromSessionStorage();
     getUserInfo();
+    setProfilePicture(userInfo?.profilePicture ?? null);
   }, []);
 
   //Handles OTP Authentication
@@ -77,8 +84,7 @@ const Profile = () => {
           localStorage.clear();
           sessionStorage.clear();
           setUserInfo(null);
-          window.location.href = "/";
-          window.history.replaceState({}, "", "/");
+          router.push("/"); // Use router.push instead of window.location.href
         } else {
           console.error("Error logging out");
         }
@@ -90,78 +96,39 @@ const Profile = () => {
       console.error("Session storage is not supported in this browser.");
     }
   };
-  // const handleEditProfileClick = () => {
-  //   // document.getElementById("profile-picture-input")?.click();
-  //   setShowEditForm(true);
-  // };
+  const handleEditProfileClick = () => {
+    setShowEditForm(true);
+  };
 
-  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     setProfilePicture(file);
-  //   }
-  // };
-  // const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-
-  //   if (!profilePicture) {
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append("profile_picture", profilePicture);
-
-  // try {
-  //   const response = await fetch(
-  //     "http://localhost:8000/update_profile_picture/",
-  //     {
-  //       method: "POST",
-  //       body: formData,
-  //     }
-  //   );
-
-  //   if (response.ok) {
-  //     getUserInfo();
-  //     setShowEdit(false);
-  //   } else {
-  //     console.error("Error updating profile picture");
-  //   }
-  // } catch (error) {
-  //   console.error("Error:", error);
-  // }
-  //   setShowEditIcon(false);
-  // };
   return (
     <div className="h-full flex-col flex justify-center">
       <div className="flex flex-col w-full items-center ">
         <div
           className="relative"
-          // onMouseEnter={() => setShowEditIcon(true)}
-          // onMouseLeave={() => setShowEditIcon(false)}
+          onMouseEnter={() => setShowEditIcon(true)}
+          onMouseLeave={() => setShowEditIcon(false)}
         >
           <Image
-            src={profile}
-            // src={profilePicture ? URL.createObjectURL(profilePicture) : profile}
+            src={profilePicture || profile}
             alt="profile"
             className="w-40 h-40 rounded-full bg-gray-300"
-            width={0}
-            height={0}
+            width={160}
+            height={160}
           />
-          {/* {showEditIcon && (
+          {showEditIcon && (
             <div
-              className="absolute top-0 right-0 p-1 rounded-full bg-white-100 border border-black-800 cursor-pointer"
+              className="absolute top-1 right-1 p-1 rounded-full bg-white-100 border border-black-800 cursor-pointer"
               onClick={handleEditProfileClick}
             >
-              <input
-                id="profile-picture-input"
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleFileChange}
+              <Image
+                src="/Profile-icon/edit.svg"
+                alt="edit"
+                width={20}
+                height={20}
+                layout="fixed"
               />
-              <Image src={editIcon} alt="edit" className="w-6 h-6" />
             </div>
-          )} */}
+          )}
         </div>
         <label className="mt-2 mb-5 font-bold text-xl">
           {userInfo?.username}
@@ -171,9 +138,9 @@ const Profile = () => {
             <UserInfo
               label="Email Address"
               type="text"
-              value={(userInfo as any).username}
+              value={userInfo.username || ""}
             />
-            <UserInfo label="Role" type="text" value={(userInfo as any).role} />
+            <UserInfo label="Role" type="text" value={userInfo.role || ""} />
             <UserInfo label="Password" type="password" value="********">
               <ResetButton setShowAuth={setShowAuth} />
             </UserInfo>
@@ -200,7 +167,7 @@ const Profile = () => {
             />
           </div>
         )}
-        {/* <div
+        <div
           className="fixed inset-0 z-50 flex bg-black-100 bg-opacity-50 justify-end"
           style={{
             visibility: showEditForm ? "visible" : "hidden",
@@ -209,12 +176,13 @@ const Profile = () => {
           }}
         >
           <ProfilePictureForm
+            profilePicture={profilePicture}
+            setProfilePicture={setProfilePicture}
             showEditForm={showEditForm}
             setShowEditForm={setShowEditForm}
-            handleFormSubmit={handleFormSubmit}
-            handleFileChange={handleFileChange}
+            getUserInfo={getUserInfo}
           />
-        </div> */}
+        </div>
       </div>
     </div>
   );

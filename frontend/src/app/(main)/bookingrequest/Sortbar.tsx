@@ -72,7 +72,7 @@ const Sortbar = () => {
   }, [filteredRequests, sortColumn, shouldSort]);
 
   return (
-    <div className="absolute inset-x-10 flex flex-row items-center space-x-2">
+    <div className="flex flex-row items-center space-x-2">
       <label htmlFor="sortColumn text-gray-700">Sort by:</label>
       <select
         id="sortColumn"

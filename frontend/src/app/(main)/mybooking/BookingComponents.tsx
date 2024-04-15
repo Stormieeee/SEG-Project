@@ -1,47 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import BookingsTable from "./BookingsTable";
 import DetailsBar from "./DetailsBar";
-interface BookingComponentsProps {
-  selectedRowIndex: number;
-  setSelectedRowIndex: React.Dispatch<React.SetStateAction<number>>;
-  isCurrentBooking: boolean;
-  bookings: string[][];
-  setBookings: React.Dispatch<React.SetStateAction<string[][]>>;
-  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedBookingId: React.Dispatch<React.SetStateAction<string>>;
-}
-const BookingComponents = ({
-  selectedRowIndex,
-  setSelectedRowIndex,
-  isCurrentBooking,
-  bookings,
-  setBookings,
-  setShowForm,
-  setSelectedBookingId,
-}: BookingComponentsProps) => {
+import { useStateContext } from "./MyBookingContext";
+
+const BookingComponents = () => {
+  const { selectedRowIndex } = useStateContext();
   const isSelected = selectedRowIndex >= 0;
-  const [bookingStatus, setBookingStatus] = useState<string>(""); // ["Pending", "Approved", "Rejected", "Completed"]
-  const [bookingDetails, setBookingDetails] = useState<{
-    index: number;
-    request_capacity: string;
-    room_capacity: string;
-    description: string;
-    comment?: string;
-  } | null>(null);
+
   return (
     <div className="flex h-full" style={{ maxHeight: "75vh" }}>
       <div
         className={`flex flex-col ml-10 mr-5 h-full transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
       >
-        <BookingsTable
-          bookings={bookings}
-          setBookingStatus={setBookingStatus}
-          setBookingDetails={setBookingDetails}
-          selectedRowIndex={selectedRowIndex}
-          setSelectedRowIndex={setSelectedRowIndex}
-          setSelectedBookingId={setSelectedBookingId}
-        />
+        <BookingsTable />
       </div>
       {isSelected && (
         <div

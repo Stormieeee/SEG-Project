@@ -8,6 +8,8 @@ import profileDark from "../../../public/Sidebar-icon/Profile Dark.svg";
 import profileLight from "../../../public/Sidebar-icon/Profile Light.svg";
 import bookingRequestDark from "../../../public/Sidebar-icon/Booking Request Dark.svg";
 import bookingRequestLight from "../../../public/Sidebar-icon/Booking Request Light.svg";
+import feedbackLight from "../../../public/Sidebar-icon/Feedback Light.svg";
+import feedbackDark from "../../../public/Sidebar-icon/Feedback Dark.svg";
 import useNavigation from "./hook/use-navigation";
 
 import Image from "next/image";
@@ -23,6 +25,7 @@ const Sidebar = () => {
     isMyBookingActive,
     isProfileActive,
     isBookingRequestActive,
+    isAllBookingActive,
   } = useNavigation();
   const checkRole = async () => {
     try {
@@ -59,7 +62,7 @@ const Sidebar = () => {
   const textInactiveStyle =
     "text-md items-center text-gray-500 float-left font-normal font-Inter";
 
-  const iconStyle = "mx-2 w-7 justify-center p-0.5";
+  const iconStyle = "mx-2 w-7 h-10 justify-center p-0.5";
 
   return (
     <>
@@ -108,7 +111,7 @@ const Sidebar = () => {
                 <Image
                   src={myBookingDark}
                   alt="My Booking Dark"
-                  className={`${iconStyle}`}
+                  className={`${iconStyle} animate-vote duration-200`}
                 />
                 <span className={`${textActiveStyle}`}>My Booking</span>
               </div>
@@ -133,7 +136,7 @@ const Sidebar = () => {
                   <Image
                     src={bookingRequestDark}
                     alt="Booking Request Dark"
-                    className={`${iconStyle} h-7`}
+                    className={`${iconStyle} animate-vote duration-200`}
                   />
                   <span className={`${textActiveStyle}`}>Booking Request</span>
                 </div>
@@ -142,11 +145,37 @@ const Sidebar = () => {
                   <Image
                     src={bookingRequestLight}
                     alt="Booking Request Light"
-                    className={`${iconStyle} h-7 `}
+                    className={`${iconStyle}`}
                   />
                   <span className={`${textInactiveStyle}`}>
                     Booking Request
                   </span>
+                </div>
+              )}
+            </Link>
+          )}
+          {isAdmin && (
+            <Link
+              href="/allbookings"
+              className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+            >
+              {isAllBookingActive ? (
+                <div className={`${buttonActiveStyle}`}>
+                  <Image
+                    src={feedbackDark}
+                    alt="All Booking Dark"
+                    className={`${iconStyle} animate-vote duration-200`}
+                  />
+                  <span className={`${textActiveStyle}`}>All Bookings</span>
+                </div>
+              ) : (
+                <div className={`${buttonInactiveStyle}`}>
+                  <Image
+                    src={feedbackLight}
+                    alt="All Booking Light"
+                    className={`${iconStyle}`}
+                  />
+                  <span className={`${textInactiveStyle}`}>All Bookings</span>
                 </div>
               )}
             </Link>
@@ -164,7 +193,7 @@ const Sidebar = () => {
                 <Image
                   src={profileDark}
                   alt="Profile Dark"
-                  className={`${iconStyle}`}
+                  className={`${iconStyle} animate-vote duration-200`}
                 />
                 <span className={`${textActiveStyle}`}>Profile</span>
               </div>

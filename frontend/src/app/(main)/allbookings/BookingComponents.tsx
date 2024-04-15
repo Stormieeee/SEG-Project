@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
-import RequestTable from "./RequestTable";
+import React, { useState } from "react";
+import BookingsTable from "./BookingsTable";
 import DetailsBar from "./DetailsBar";
 import TableFooter from "./TablePager";
-import { useStateContext } from "./RequestContext";
+import { useStateContext } from "./BookingContext";
 
 const RequestComponents = () => {
   const { selectedRowIndex } = useStateContext();
@@ -15,16 +15,13 @@ const RequestComponents = () => {
         className={`flex flex-col ml-10 mr-5 mt-5 transition-width duration-500 ${isSelected ? "w-2/3" : "w-full"}`}
       >
         <TableFooter />
-        <RequestTable />
+        <BookingsTable />
       </div>
-
-      {isSelected && (
-        <div
-          className={`flex pl-5 mt-5 overflow-y-auto flex-shrink-0 border-l border-black-100 transform transition-transform duration-500 translate-x-0 mr-5 w-1/3`}
-        >
-          <DetailsBar {...requestDetails} />
-        </div>
-      )}
+      <div
+        className={`flex mt-5 overflow-y-auto overflow-x-hidden flex-shrink-0 transform transition-transform duration-500 ${isSelected ? "pl-5 border-l border-black-100 translate-x-0 mr-5 w-1/3" : "translate-x-full"}`}
+      >
+        {isSelected && <DetailsBar />}
+      </div>
     </div>
   );
 };
