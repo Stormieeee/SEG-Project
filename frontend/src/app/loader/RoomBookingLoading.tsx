@@ -6,10 +6,10 @@ const Loader = () => {
           {/* Left side */}
           <div className="w-full flex flex-col ">
             <div className="p-1 mt-4 ml-4">
-              <Shimmer width="50.6rem" height="15.3rem" />
+              <Shimmer width="100%" height="15.3rem" />
             </div>
             <div className="p-1 mt-4 ml-4">
-              <Shimmer width="50.6rem" height="28.1rem" />
+              <Shimmer width="100%" height="28.1rem" />
             </div>
           </div>
     

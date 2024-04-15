@@ -87,10 +87,8 @@ export async function handleRoomBooking(
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Room Booking succeeded:", data);
         return data;
       } else {
-        console.log("Room Booking Failed");
         throw new Error("Failed to book the room");
       }
     } catch (error) {
@@ -102,5 +100,59 @@ export async function handleRoomBooking(
         endTime,
       };
     }
+  }
+}
+
+export async function getCapacity(roomid: string) {
+  try {
+    const response = await fetch("http://localhost:8000/Room_Quantity/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        roomID: roomid,
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data
+    } else {
+      console.log("Capacity Fetch Failed");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      error: error,
+    };
+  }
+}
+
+export async function getRoomDetails(roomid: string) {
+  try {
+    const response = await fetch("http://localhost:8000/Room_Details/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        roomID: roomid,
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data)
+      return data;
+      
+    } else {
+      console.log("Capacity Fetch Failed");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      error: error,
+    };
   }
 }

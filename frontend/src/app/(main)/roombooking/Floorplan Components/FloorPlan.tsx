@@ -59,6 +59,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useStateContext } from "../../StateContext";
+import { getCapacity, getRoomDetails } from "../utils/utils";
 
 import stairs from "../../../../../public/FloorPlan-icon/stair-icon.svg";
 import toilet from "../../../../../public/FloorPlan-icon/wc-sign-svgrepo-com.svg";
@@ -70,7 +71,8 @@ interface FloorPlanProps {
 }
 
 const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
-  const {floor, floorSection} = useStateContext();
+  const { floor, floorSection, setRoomCapacity, setRoomEquipment , setRoomDescEmpty} =
+    useStateContext();
 
   const fetchData = dataFromApi;
   const roomStatus = fetchData.dataFromApi.available;
@@ -80,9 +82,40 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
   const colorMap = Object.fromEntries(roomStatus);
   // Function to handle button click
   const handleButtonClick = (buttonKey: string) => {
-    setActiveButton(buttonKey === activeButton ? null : buttonKey);
-    setRoomID(buttonKey === activeButton ? "" : buttonKey);
+    const newActiveButton = buttonKey === activeButton ? null : buttonKey;
+    setActiveButton(newActiveButton);
+    setRoomID(newActiveButton === null ? "" : newActiveButton);
+
+    if(newActiveButton !== null){ //if newActiveButton is not null then set capacity else empty
+      setRoomDescEmpty(true)
+      setCapacity(newActiveButton)
+    }else{
+      setRoomDescEmpty(false)
+    }
   };
+
+  const setCapacity = (roomid: string) => { //get and set capacity of room
+    getCapacity(roomid)
+      .then((capacity) => {
+        if (typeof capacity === "number") {
+          setRoomCapacity(capacity);
+        } else {
+          setRoomCapacity(100);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching capacity:", error);
+      });
+  };
+
+  const setEquipment = (roomid: string) => { //get and set array of equipment of room
+    getRoomDetails(roomid)
+      .then((equipment) => {})
+      .catch((error) => {
+        console.log("Error fetching equipment" + error);
+      });
+  };
+
   const getButtonColorClass = (color: string) => {
     switch (color) {
       case "green":
@@ -108,7 +141,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
   const iconStyle = `h-[2rem] w-[2rem] justify-center items-center m-1`;
   const textStyle = "md:text-sm origin-center text-black-600";
-  const floorplanStyle = `bg-white-50 border border-black-50 rounded-2xl h-full p-3 flex flex-col`
+  const floorplanStyle = `bg-white-50 border border-black-50 rounded-2xl h-full p-3 flex flex-col`;
 
   const getActiveButtonClass = (isActive: boolean, color: string) => {
     let backgroundColorClass = "";
@@ -1286,16 +1319,15 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
     );
   };
 
-  if(floor === "3" && floorSection === "R"){
+  if (floor === "3" && floorSection === "R") {
     return ThirdFloor();
   }
-  if(floor ==="2" && floorSection === "R"){
+  if (floor === "2" && floorSection === "R") {
     return SecondFloor();
   }
-  if(floor ==="2" && floorSection === "L"){
+  if (floor === "2" && floorSection === "L") {
     return SecondLeftWing();
   }
-  
 };
 
 export default FloorPlan;
