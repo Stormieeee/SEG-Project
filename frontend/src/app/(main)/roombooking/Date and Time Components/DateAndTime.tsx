@@ -134,12 +134,12 @@ const DateTime = ({ fetchData }: any) => {
         </div>
 
         {/* form */}
-        <div className="flex h-full py-5">
+        <div className="flex h-full py-6 justify-between space-x-6">
           {/* date */}
           <div className={WRAPPER}>
             <label className={FORM_LABEL}>Date</label>
             <input
-              className={FORM_INPUT}
+              className={`${FORM_INPUT} `}
               type="date"
               value={date}
               onChange={handleDateChange}

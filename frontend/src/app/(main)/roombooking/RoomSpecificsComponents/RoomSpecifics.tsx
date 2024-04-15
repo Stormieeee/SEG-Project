@@ -44,7 +44,7 @@ const RoomSpecifics: React.FC<RoomSpecificsProps> = ({
         />
       </div>
 
-      <div className="flex">
+      <div className="flex py-6">
         <div className="w-1/2 flex flex-col mt-4">
           {["Lecture", "Study", "Presentation", "Events", "Meetings"].map(
             (label) => (

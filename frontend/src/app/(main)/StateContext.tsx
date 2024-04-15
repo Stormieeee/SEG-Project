@@ -22,6 +22,12 @@ interface StateContextType {
   setFloor: React.Dispatch<React.SetStateAction<string>>;
   floorSection: string;
   setFloorSection: React.Dispatch<React.SetStateAction<string>>;
+  roomCapacity : number;
+  setRoomCapacity : React.Dispatch<React.SetStateAction<number>>;
+  roomEquipment: string[],
+  setRoomEquipment : React.Dispatch<React.SetStateAction<string[]>>;
+  isRoomDescEmpty : boolean;
+  setRoomDescEmpty : React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultValue: StateContextType = {
@@ -41,6 +47,12 @@ const defaultValue: StateContextType = {
   setFloor: () =>{},
   floorSection: "R",
   setFloorSection: () =>{},
+  roomCapacity: 0,
+  setRoomCapacity : () => {},
+  roomEquipment : [],
+  setRoomEquipment : () => {},
+  isRoomDescEmpty : true,
+  setRoomDescEmpty : () => {}
 };
 
 const StateContext = createContext<StateContextType>(defaultValue);
@@ -48,15 +60,17 @@ const StateContext = createContext<StateContextType>(defaultValue);
 export const StateProvider = ({ children }: any) => {
   const [roomID, setRoomID] = useState<string>(defaultValue.roomID);
   const [capacity, setCapacity] = useState<number>(defaultValue.capacity);
-  const [description, setDescription] = useState<string>(
-    defaultValue.description
-  );
+  const [description, setDescription] = useState<string>(defaultValue.description);
   const [date, setDate] = useState<string>(defaultValue.date);
   const [startTime, setStartTime] = useState<number>(new Date().getHours());
   const [endTime, setEndTime] = useState<number>(new Date().getHours() + 1);
   const [floor, setFloor] = useState<string>("3");
   const [floorSection, setFloorSection] = useState<string>("R");
 
+  const [roomCapacity , setRoomCapacity] = useState<number>(defaultValue.roomCapacity);
+  const [roomEquipment , setRoomEquipment] =  useState<string[]>(defaultValue.roomEquipment);
+  const [isRoomDescEmpty , setRoomDescEmpty] = useState(false);
+  
   return (
     <StateContext.Provider
       value={{
@@ -75,7 +89,13 @@ export const StateProvider = ({ children }: any) => {
         floor,
         setFloor,
         floorSection,
-        setFloorSection
+        setFloorSection,
+        roomCapacity,
+        setRoomCapacity,
+        roomEquipment,
+        setRoomEquipment,
+        isRoomDescEmpty, 
+        setRoomDescEmpty
       }}
     >
       {children}

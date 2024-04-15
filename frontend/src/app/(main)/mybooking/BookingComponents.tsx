@@ -43,10 +43,10 @@ const BookingComponents = ({
           setSelectedBookingId={setSelectedBookingId}
         />
       </div>
-      <div
-        className={`flex pl-5 h-full overflow-y-auto flex-shrink-0 border-l border-black-100 transform transition-transform duration-500 ${isSelected ? "translate-x-0 mr-5 w-1/3" : "translate-x-full"}`}
-      >
-        {isSelected && (
+      {isSelected && (
+        <div
+          className={`flex pl-5 h-full overflow-y-auto flex-shrink-0 border-l border-black-100 transform transition-transform duration-500 translate-x-0 mr-5 w-1/3`}
+        >
           <DetailsBar
             bookings={bookings}
             setBookings={setBookings}
@@ -57,8 +57,9 @@ const BookingComponents = ({
             {...bookingDetails}
             setShowForm={setShowForm}
           />
-        )}
-      </div>
+        </div>
+      )}
+
     </div>
   );
 };
