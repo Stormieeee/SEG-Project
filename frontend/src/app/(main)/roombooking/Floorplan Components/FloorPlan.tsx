@@ -89,6 +89,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
     if(newActiveButton !== null){ //if newActiveButton is not null then set capacity else empty
       setRoomDescEmpty(true)
       setCapacity(newActiveButton)
+      setEquipment(newActiveButton)
     }else{
       setRoomDescEmpty(false)
     }
@@ -110,7 +111,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
   const setEquipment = (roomid: string) => { //get and set array of equipment of room
     getRoomDetails(roomid)
-      .then((equipment) => {})
+      .then((equipment) => {
+        setRoomEquipment(equipment)
+      })
       .catch((error) => {
         console.log("Error fetching equipment" + error);
       });
@@ -679,7 +682,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                 <Image
                   src={stairs}
                   alt="Stair Icon"
-                  className={`${iconStyle} p-1`}
+                  className={`${iconStyle} pr-1`}
                 />
               </div>
             </div>
@@ -1007,7 +1010,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                         3R004
                       </button>
                     </div>
-                    <div className="w-51/100 flex flex-col mx-1 bg-white-50">
+                    <div className="w-50/100 flex flex-col mx-1 bg-white-50">
                       <div className="h-42/100 flex flex-row ">
                         <div className="w-19/100 bg-zinc-400 rounded-tl-md"></div>
                         <div className="w-46/100 bg-zinc-400"></div>

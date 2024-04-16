@@ -107,8 +107,8 @@ const Login = ({
                 setShowPassword={setShowPassword}
                 error={passwordError}
               />
-              <button className="underline" onClick={handleForgotPassword}>
-                Forgot Password?
+              <button className="underline dark:text-slate-400 hover:text-slate-500 " onClick={handleForgotPassword}>
+                Forget Password?
               </button>
               {loading ? <LoadingSpinner /> : <LoginButton />}
             </form>

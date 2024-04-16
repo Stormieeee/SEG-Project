@@ -124,7 +124,7 @@ const DateTime = ({ fetchData }: any) => {
             className="ml-auto"
           >
             <button
-              className="bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm my-2 items-center justify-center flex p-2 rounded-md flex-auto "
+              className="bg-black-500 text-zinc-200 hover:bg-black-900 font-normal text-sm my-2 items-center justify-center flex p-2 rounded-md flex-auto md:text-xs"
               type="submit"
               disabled={disabled}
             >
@@ -134,7 +134,7 @@ const DateTime = ({ fetchData }: any) => {
         </div>
 
         {/* form */}
-        <div className="flex h-full py-6 justify-between space-x-6">
+        <div className="flex h-full py-6 justify-between space-x-6 md:py-2">
           {/* date */}
           <div className={WRAPPER}>
             <label className={FORM_LABEL}>Date</label>

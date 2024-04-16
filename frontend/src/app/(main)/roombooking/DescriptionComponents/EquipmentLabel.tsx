@@ -17,18 +17,26 @@ const EquipmentLabel: React.FC<EquipmentProps> = ({ equipment }) => {
       </div>
 
       <div className="flex flex-grow flex-col">
-        {equipment.map((eqpt, index) => (
-          <div key={index} className="flex flex-row">
-            <div className="w-1/2">
-              <label className="text-sm font-semibold">{eqpt.name}</label>
-            </div>
+        {equipment ? (
+          <>
+            {equipment.map((eqpt, index) => (
+              <div key={index} className="flex flex-row">
+                <div className="w-1/2">
+                  <label className="text-sm font-semibold">{eqpt.name}</label>
+                </div>
 
-            <div className="w-1/2">
-              <label className="text-sm text-gray-400">x </label>
-              <label className="text-sm text-gray-400">{eqpt.amount}</label>
-            </div>
+                <div className="w-1/2">
+                  <label className="text-sm text-gray-400">x </label>
+                  <label className="text-sm text-gray-400">{eqpt.amount}</label>
+                </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          <div className="bg-black-500">
+            <span className="text-black-50" >Equipment Unavailable</span>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
