@@ -20,6 +20,10 @@ const getPageTitle = (path: string): string => {
       return "Profile";
     case "/bookingrequest":
       return "Booking Request";
+    case "/allbookings":
+      return "All Bookings";
+    case "/viewfeedback":
+      return "View Feedback";
     default:
       return "Default Title";
   }
@@ -68,9 +72,7 @@ const Topbar = () => {
 
         {pathname === "/roombooking" && (
           <div className="flex flex-auto justify-end items-center">
-
             <FloorSectorSelector /> {/* Floor Selector Component*/}
-
             <div className="ml-4">
               {isLoading ? (
                 <LoadingSpinner />
