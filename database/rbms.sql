@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 12, 2024 at 08:58 AM
+-- Generation Time: Apr 16, 2024 at 06:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -46,7 +46,6 @@ INSERT INTO `booking id description` (`Booking ID`, `Description`, `Date`, `Star
 ('8N3PZ', 'Study', '2024-03-18', '14:00:00', '16:59:00', 40, NULL),
 ('R72BG', 'Meeting', '2024-03-19', '10:00:00', '13:59:00', 40, NULL),
 ('K1ET2', 'Event', '2024-03-20', '09:00:00', '11:59:00', 40, NULL),
-('6D0A8', 'Group work', '2024-03-21', '13:00:00', '15:59:00', 40, NULL),
 ('Z5WQ9', 'Study', '2024-03-20', '12:00:00', '13:59:00', 40, NULL),
 ('P7L9C', 'Study', '2024-03-23', '11:00:00', '14:59:00', 40, NULL),
 ('N4XI6', 'Study', '2024-03-24', '08:00:00', '10:59:00', 40, NULL),
@@ -58,7 +57,13 @@ INSERT INTO `booking id description` (`Booking ID`, `Description`, `Date`, `Star
 ('hHYCP', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
 ('ViWib', 'Study', '2024-05-13', '15:00:00', '15:59:00', 15, 'Accepted as a test'),
 ('Igkg9', 'This should accept', '2024-03-31', '13:00:00', '14:59:00', 20, 'can i approve this'),
-('g903J', 'yes', '2024-04-12', '10:00:00', '11:59:00', 20, 'I have accepted');
+('g903J', 'yes', '2024-04-12', '10:00:00', '11:59:00', 20, 'I have accepted'),
+('26C1O', 'I want to book', '2024-04-20', '13:00:00', '13:59:00', 30, 'I approve this message'),
+('UupxI', 'I want to book', '2024-04-20', '15:00:00', '15:59:00', 30, 'yes'),
+('IPpRa', 'I want to book', '2024-04-20', '11:00:00', '11:59:00', 30, 'yes'),
+('TX3KI', 'yes booking it now', '2024-04-21', '11:00:00', '11:59:00', 30, 'yes'),
+('4q3iI', 'yes booking it now', '2024-04-21', '09:00:00', '09:59:00', 30, 'yes'),
+('UdI1C', 'yes booking it now', '2024-04-27', '09:00:00', '09:59:00', 30, 'yes');
 
 -- --------------------------------------------------------
 
@@ -78,7 +83,8 @@ CREATE TABLE `booking list` (
 --
 
 INSERT INTO `booking list` (`Booking ID`, `User ID`, `Room ID`, `handler`) VALUES
-('6D0A8', 'zzy1a21@soton.ac.uk', '3R011', 'zzy1a21@soton.ac.uk'),
+('26C1O', 'ap1a21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
+('4q3iI', 'ap1a21@soton.ac.uk', '3R006', 'systema'),
 ('8N3PZ', 'ap1a21@soton.ac.uk', '3R009', 'zzy1a21@soton.ac.uk'),
 ('BD24S', 'ap1a21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
 ('g903J', 'ap1a21@soton.ac.uk', '3R006', 'System'),
@@ -86,11 +92,15 @@ INSERT INTO `booking list` (`Booking ID`, `User ID`, `Room ID`, `handler`) VALUE
 ('hHYCP', 'ap1a21@soton.ac.uk', '3R022', 'zzy1a21@soton.ac.uk'),
 ('I1T3J', 'cht1c22@soton.ac.uk', '3R017', 'zzy1a21@soton.ac.uk'),
 ('Igkg9', 'ap1a21@soton.ac.uk', '3R017', 'zzy1a21@soton.ac.uk'),
+('IPpRa', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
 ('K1ET2', 'zzy1a21@soton.ac.uk', '3R009', 'zzy1a21@soton.ac.uk'),
 ('N4XI6', 'jyi1n21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
 ('P7L9C', 'psbs1a21@soton.ac.uk', '3R012', 'zzy1a21@soton.ac.uk'),
 ('R72BG', 'ap1a21@soton.ac.uk', '3R009', 'zzy1a21@soton.ac.uk'),
+('TX3KI', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
 ('U9F5H', 'jyi1n21@soton.ac.uk', '3R015', 'zzy1a21@soton.ac.uk'),
+('UdI1C', 'ap1a21@soton.ac.uk', '3R006', 'systemlol'),
+('UupxI', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
 ('UzYRO', 'ap1a21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
 ('V2G6Y', 'jyi1n21@soton.ac.uk', '3R016', 'zzy1a21@soton.ac.uk'),
 ('ViWib', 'ap1a21@soton.ac.uk', '3R023', 'zzy1a21@soton.ac.uk'),
@@ -114,11 +124,22 @@ CREATE TABLE `booking rejects` (
 --
 
 INSERT INTO `booking rejects` (`Reject ID`, `User ID`, `Room ID`, `handler`) VALUES
+('07nOc', 'ap1a21@soton.ac.uk', '3R006', 'System'),
+('0w7pP', 'ap1a21@soton.ac.uk', '3R006', 'System'),
 ('7Nw0m', 'ap1a21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
+('BgmgU', 'ap1a21@soton.ac.uk', '3R006', 'System'),
 ('clOlK', 'ap1a21@soton.ac.uk', '3R026', 'System'),
+('EGJgT', 'ap1a21@soton.ac.uk', '3R006', 'System'),
+('gi3y4', 'ap1a21@soton.ac.uk', '3R006', 'System'),
+('glzqb', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
+('jy6uM', 'zzy1a21@soton.ac.uk', '3R011', 'System'),
+('mrqYb', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
 ('S4Wvr', 'ap1a21@soton.ac.uk', '3R011', 'zzy1a21@soton.ac.uk'),
+('UuzAB', 'ap1a21@soton.ac.uk', '3R006', 'system2'),
+('WmVUl', 'ap1a21@soton.ac.uk', '3R006', 'yesss'),
 ('y3viy', 'ap1a21@soton.ac.uk', '3R006', 'System'),
-('yaizK', 'jyi1n21@soton.ac.uk', '3R014', 'System');
+('yaizK', 'jyi1n21@soton.ac.uk', '3R014', 'System'),
+('Z0sN1', 'ap1a21@soton.ac.uk', '3R006', 'sysysysys');
 
 -- --------------------------------------------------------
 
@@ -145,7 +166,18 @@ INSERT INTO `booking rejects description` (`Reject ID`, `Description`, `Date`, `
 ('7Nw0m', 'zoom call', '2024-03-26', '14:00:00', '20:59:00', 5, 'I want to cancel this ew'),
 ('clOlK', 'Meeting for SEG', '2024-03-20', '13:00:00', '13:59:00', 15, 'I have rejected'),
 ('yaizK', 'Meeting', '2024-03-20', '10:00:00', '10:59:00', 40, 'I want to remove u'),
-('y3viy', 'yes', '2024-03-12', '09:00:00', '10:59:00', 15, 'Booking declined automatically as it\'s past the scheduled date.');
+('y3viy', 'yes', '2024-03-12', '09:00:00', '10:59:00', 15, 'Booking declined automatically as it\'s past the scheduled date.'),
+('mrqYb', 'I want to book', '2024-04-20', '11:00:00', '11:59:00', 30, 'yes'),
+('glzqb', 'I want to book', '2024-04-20', '10:00:00', '10:59:00', 30, 'yes'),
+('07nOc', 'I want to book', '2024-04-20', '10:00:00', '10:59:00', 30, 'test for calendar'),
+('BgmgU', 'I want to book', '2024-04-20', '12:00:00', '12:59:00', 30, 'test for calendar'),
+('jy6uM', 'Group work', '2024-03-21', '13:00:00', '15:59:00', 40, 'test for calendar'),
+('gi3y4', 'I want to book', '2024-04-20', '14:00:00', '14:59:00', 30, 'test for calendar'),
+('EGJgT', 'yes booking it now', '2024-04-21', '10:00:00', '10:59:00', 30, 'test for calendar'),
+('0w7pP', 'yes booking it now', '2024-04-21', '12:00:00', '12:59:00', 30, 'test for calendar'),
+('UuzAB', 'yes booking it now', '2024-04-25', '10:00:00', '11:59:00', 30, 'yes'),
+('Z0sN1', 'yes booking it now', '2024-04-26', '10:00:00', '11:59:00', 30, 'yes'),
+('WmVUl', 'yes booking it now', '2024-04-26', '09:00:00', '09:59:00', 30, 'yes');
 
 -- --------------------------------------------------------
 
@@ -286,11 +318,11 @@ CREATE TABLE `user login` (
 --
 
 INSERT INTO `user login` (`User ID`, `Password`, `OTPKey`, `LoggedIn`) VALUES
-('ap1a21@soton.ac.uk', 'password1', 57782, 1),
+('ap1a21@soton.ac.uk', 'AVDSg1qH6gdyuMhvn_WwNw==', 39282, 1),
 ('cht1c22@soton.ac.uk', 'password5', NULL, 0),
 ('jyi1n21@soton.ac.uk', 'password2', NULL, 0),
 ('psbs1a21@soton.ac.uk', 'password3', NULL, 0),
-('zzy1a21@soton.ac.uk', 'password4', NULL, 0);
+('zzy1a21@soton.ac.uk', 'JgvBlb5DqaxrQKtvTYZMc_EyIGP9yEi4V_0XCGu-1fQ=', 98366, 0);
 
 -- --------------------------------------------------------
 
@@ -322,19 +354,20 @@ INSERT INTO `user roles` (`Role ID`, `Name`) VALUES
 
 CREATE TABLE `users` (
   `User ID` varchar(255) NOT NULL,
-  `Role ID` int(11) DEFAULT NULL
+  `Role ID` int(11) DEFAULT NULL,
+  `profile_picture` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`User ID`, `Role ID`) VALUES
-('ap1a21@soton.ac.uk', 1),
-('jyi1n21@soton.ac.uk', 2),
-('cht1c22@soton.ac.uk', 3),
-('zzy1a21@soton.ac.uk', 4),
-('psbs1a21@soton.ac.uk', 5);
+INSERT INTO `users` (`User ID`, `Role ID`, `profile_picture`) VALUES
+('ap1a21@soton.ac.uk', 1, NULL),
+('cht1c22@soton.ac.uk', 3, NULL),
+('jyi1n21@soton.ac.uk', 2, NULL),
+('psbs1a21@soton.ac.uk', 5, NULL),
+('zzy1a21@soton.ac.uk', 4, NULL);
 
 --
 -- Indexes for dumped tables

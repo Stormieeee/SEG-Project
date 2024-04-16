@@ -13,9 +13,36 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-# from routes.index import user_router
+
+from tempfile import NamedTemporaryFile
+
+###################### ENCRYPTION
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+import base64
+
+def encrypt_with_aes_ecb(plaintext):
+    key = "segproject"        
+    # Convert the string key to bytes and pad it to make it 32 bytes long
+    key_bytes = key.ljust(32, "\x00").encode()
+
+    # Create a Cipher object with AES in ECB mode
+    cipher = Cipher(algorithms.AES(key_bytes), modes.ECB(), backend=default_backend())
+
+    # Pad the plaintext to be a multiple of the block size (16 bytes for AES)
+    padding_length = 16 - (len(plaintext) % 16)
+    padded_plaintext = plaintext + bytes([padding_length]) * padding_length
+
+    # Encrypt the plaintext
+    encryptor = cipher.encryptor()
+    ciphertext = encryptor.update(padded_plaintext) + encryptor.finalize()
+
+    # Encode the ciphertext as URL-safe base64
+    encrypted_text = base64.urlsafe_b64encode(ciphertext)
+
+    return encrypted_text.decode()
 
 app = FastAPI()
 #Allows all origins, methods, and headers. Use with caution and only in development.
@@ -30,7 +57,7 @@ app.add_middleware(
 # Define database connection settings
 MYSQL_CONFIG = {
     "host": "127.0.0.1",
-    "port": 8111,
+    "port": 3306,
     "user": "root",
     "password": "",
     "database": "rbms"     #CHANGE THIS
@@ -77,6 +104,110 @@ def send_email(sender_email, receiver_email, password, subject, msg, smtp_server
 
     # Close the connection
     server.quit()
+
+def convert_to_calendar_format(date, time):
+    """
+    Convert date and time to the desired calendar format 'YYYYMMDDTHHMMSS'.
+
+    Args:
+        date (str): Date in the format 'YYYY-MM-DD'.
+        time (str): Time in the format 'HH:MM:SS'.
+
+    Returns:
+        str: Date and time in the desired calendar format.
+    """
+    # Formatting the parts
+    formatted_datetime = f"{date.replace('-', '')}T{time.replace(':', '')}"
+
+    print (formatted_datetime)
+    
+    return formatted_datetime
+
+
+def send_calendar_invitation(subject,start_time, end_time, location, description, attendees, message):
+    # Email configuration
+    smtp_server = 'smtp.office365.com'
+    smtp_port = 587
+    sender_email = 'segproject32@outlook.com'
+    sender_password = 'aquastorm797'
+    
+    # Create message container
+    msg = MIMEMultipart()
+    msg['Subject'] = subject
+    msg['From'] = sender_email
+    msg['To'] = ', '.join(attendees)
+    
+    # Create calendar event content
+    event_content = f'''
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Sample Calendar//Sample Event//EN
+BEGIN:VEVENT
+SUMMARY:{subject}
+LOCATION:{location}
+DESCRIPTION:{description}
+DTSTART:{start_time}
+DTEND:{end_time}
+END:VEVENT
+END:VCALENDAR
+'''
+    # Attach calendar event content using MIMEText
+    part = MIMEText(event_content, 'calendar')
+    part.add_header('Content-Disposition', 'attachment; filename="Room Booking.ics"')
+    msg.attach(part)
+
+    # Add the message to the email body
+    msg.attach(MIMEText(message, 'plain'))
+
+    # Connect to SMTP server
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, attendees, msg.as_string())
+
+
+
+def send_calendar_cancellation(subject, start_time, end_time, attendees, message):
+    # Email configuration
+    smtp_server = 'smtp.office365.com'
+    smtp_port = 587
+    sender_email = 'segproject32@outlook.com'
+    sender_password = 'aquastorm797'
+    
+    # Create message container
+    msg = MIMEMultipart()
+    msg['Subject'] = f'{subject}'  # Update the subject to indicate cancellation
+    msg['From'] = sender_email
+    msg['To'] = ', '.join(attendees)
+    
+    # Add the message to the email body
+    msg.attach(MIMEText(message, 'plain'))
+    
+    # Create cancellation event content
+    event_content = f'''
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Sample Calendar//Sample Event//EN
+BEGIN:VEVENT
+SUMMARY:CANCELED: {subject}
+DTSTART:{start_time}
+DTEND:{end_time}
+STATUS:CANCELLED
+END:VEVENT
+END:VCALENDAR
+'''
+    # Attach cancellation event content using MIMEText
+    part = MIMEText(event_content, 'calendar')
+    part.add_header('Content-Disposition', 'attachment; filename="event_cancelled.ics"')
+    msg.attach(part)
+
+    # Connect to SMTP server
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, attendees, msg.as_string())
+
+        
 ########################################### USER LOGIN - WORKING
 
 # Login
@@ -88,6 +219,8 @@ class Login(BaseModel):
 
 def user_login_check(db_connection, cursor, userID=None, password=None):
     query = "SELECT COUNT(*) FROM `user login` WHERE `User ID` = %s AND `Password` = %s"
+    password_bytes = password.encode()
+    password = encrypt_with_aes_ecb(password_bytes)
     cursor.execute(query, (userID, password))
     if cursor.fetchone()[0] > 0:
         send_otp(db_connection, cursor, userID)
@@ -102,7 +235,6 @@ def user_login(login: Login, db_connection: mysql.connector.connection.MySQLConn
         return {"message": "Login successful"}
     else:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-
 
 
 class Otp(BaseModel):
@@ -188,6 +320,8 @@ class EditPassword(BaseModel):
 
 #error
 def update_password(db_connection, cursor, userID, new_password):
+    password = new_password.encode()
+    new_password = encrypt_with_aes_ecb(password)
     query = "UPDATE `User Login` SET `Password` = %s WHERE `User ID` = %s"
     cursor.execute(query, (new_password, userID))
     db_connection.commit()
@@ -347,7 +481,7 @@ def create_booking_request(db_connection, cursor, userID, room_id, capacity, des
         "Timing:   " +
         str(start_time) + "  :  " + str(end_time) + ".\nIf you did not make this booking, please check your account immediately.")
 
-    send_email ("segproject32@outlook.com", userID, "aquastorm797",'Room Booking System OTP', confirmMessage ,'smtp-mail.outlook.com',587 )
+    send_email ("segproject32@outlook.com", userID, "aquastorm797",'New Booking Request', confirmMessage ,'smtp-mail.outlook.com',587 )
 
 @app.post("/booking_request/")
 def create_booking(booking_request: BookingRequest, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
@@ -375,7 +509,7 @@ class userClass(BaseModel):
 
 def get_profile_details(db_connection, cursor, userID):
     get_details = """
-        SELECT `user roles`.`Name` 
+        SELECT `users`.`User ID`, `users`.`profile_picture`, `user roles`.`Name` 
         FROM `users` 
         JOIN `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
         WHERE `users`.`User ID` = %s
@@ -383,7 +517,7 @@ def get_profile_details(db_connection, cursor, userID):
     cursor.execute(get_details, (userID,))
     role = cursor.fetchone()
 
-    profile = (userID, role[0])
+    profile = (role[0], role[1],role[2])
 
     return profile
 
@@ -395,7 +529,7 @@ def get_profile(profile: userClass, db_connection: mysql.connector.connection.My
             cursor,
             userID=profile.UserID
             )
-    return {"username": prof[0], "role": prof[1]}
+    return {"username": prof[0], "role": prof[2],"profile picture":prof[1]}
 
 
 
@@ -654,11 +788,29 @@ def accept_booking(db_connection, cursor, requestID, comment, handler):
 
     db_connection.commit()
 
+    subject = "Booking " + str(NewbookingID)
+    date = str(details2[2])
+    start_time = str(details2[3])
+    if start_time == "9:00:00":
+        start_time = "09:00:00"
+        
+    end_time = str(details2[4])
+    if end_time == "9:59:00":
+        end_time = "09:59:00"
+        
+    start_time1 = convert_to_calendar_format(date, start_time)
+    end_time1 = convert_to_calendar_format(date, end_time)
+    
+    location = details1[1]
+    description = details2[1]
+    attendees = [details1[0]]
     msg = "The booking request " + str(requestID) + " has been approved.\n" \
           "The ID of your booking has been updated to: " + str(NewbookingID) + "\n" \
-          "Please view the Room Booking System Website for further details"
-    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
-
+          "Kindly add the event to your calender for reference. \n" \
+        "Please view the Room Booking System Website for further details"
+    
+    send_calendar_invitation(subject,start_time1, end_time1, location, description, attendees, msg)
+    
     return True
 
 
@@ -735,7 +887,7 @@ def decline_booking(db_connection, cursor, requestID, comment, handler):
           "The booking is now rejected, with ID: " + str(NewbookingID) + ". \n" \
           "The reason for the booking declined is: \n" + comment + "\n" \
           "Please view the Room Booking System Website for further details"
-    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
+    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking Request Declined', msg ,'smtp-mail.outlook.com',587 )
 
 
 
@@ -1342,11 +1494,26 @@ def cancelBooking (db_connection,cursor, ID, reason, handler):
 
     db_connection.commit()
     
-    msg = "The booking ID " + str(ID) + " has now been canceled.\n" \
-          "The booking shows as rejected, with ID: " + str(NewbookingID) + ". \n" \
-          "Please view the Room Booking System Website for further details"
-    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )    
+    subject = "Booking " + str(ID)
+    date = str(details2[2])
+    
+    start_time = str(details2[3])
+    if start_time == "9:00:00":
+        start_time = "09:00:00"
+        
+    end_time = str(details2[4])
+    if end_time == "9:59:00":
+        end_time = "09:59:00"
 
+    start_time1 = str(convert_to_calendar_format(date, start_time))
+    end_time1 =  str(convert_to_calendar_format(date, end_time))
+    
+    attendees = [details1[0]]
+    message = "The booking ID " + str(ID) + " has now been canceled.\n" \
+          "The booking shows as rejected, with ID: " + str(NewbookingID) + ". \n" \
+          "Please view the Room Booking System Website for further details"    
+
+    send_calendar_cancellation(subject, start_time1, end_time1, attendees, message)
 
 @app.post("/booking_Cancel/")
 def cancel_booking(cancel : cancelations, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
@@ -1477,8 +1644,6 @@ def get_list_feedback(db_connection,cursor, typeCheck):
             WHERE `Active` = 1
         """
 
-        
-
     else:
         query = """
             SELECT `Booking ID`, `Title`, `Text`
@@ -1492,10 +1657,39 @@ def get_list_feedback(db_connection,cursor, typeCheck):
     return feedbacklist
 
 
-
 @app.post("/get_Feedback/")             #"current" or "past"
 def get_Feedback(bt : bookingType, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
     cursor = db_connection.cursor()
     feedbacklist = get_list_feedback(db_connection,cursor, typeCheck = bt.typeCheck)
     return feedbacklist
+
+
+#################################### TO BE TESTED 
+
+
+class UpdateProfilePicture(BaseModel):
+    username: str
+    profile_picture: bytes
+
+def update_profile_picture_in_db(db_connection,cursor, username, image_data):
+
+    # Update the profile picture in the database
+    update_query = "UPDATE users SET profile_picture = %s WHERE username = %s"
+    cursor.execute(update_query, (image_data, username))
+    db_connection.commit()
+
+
+@app.post("/update-profile-picture/")
+def update_profile_picture(update_data: UpdateProfilePicture, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    update_profile_picture_in_db(db_connection,cursor, update_data.username, update_data.profile_picture)
+    return {"message": "Profile picture updated successfully"}
+
+
+
+#################################### TO BE COMPLETED 
+
+
+
+
 
