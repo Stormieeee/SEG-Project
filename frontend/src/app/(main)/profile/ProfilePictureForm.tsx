@@ -1,6 +1,7 @@
 import Image from "next/image";
 import profile from "./default_profile_avatar.svg";
 import { useEffect, useRef, useState } from "react";
+import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 
 interface ProfilePictureFormProps {
   showEditForm: boolean;
@@ -29,6 +30,7 @@ const ProfilePictureForm = ({
       event.target.value = "";
     }
   };
+
   useEffect(() => {
     console.log("Selected file:", profilePicture);
   }, [profilePicture]);
@@ -46,10 +48,13 @@ const ProfilePictureForm = ({
 
     try {
       const response = await fetch(
-        "http://localhost:8000/update_profile_picture/",
+        "http://localhost:8000/update-profile-picture/",
         {
           method: "POST",
-          body: formData,
+          body: JSON.stringify({
+            username: getEmailFromSessionStorage(),
+            profile_picture: formData,
+          }),
         }
       );
 
@@ -121,7 +126,7 @@ const ProfilePictureForm = ({
             />
           </div>
           <button
-            className="absolute top-0 right-8 top-3 hover:opacity-60 bg-white-100 cursor-pointer"
+            className="absolute right-8 top-3 hover:opacity-60 bg-white-100 cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               handleDelete();

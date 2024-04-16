@@ -91,7 +91,7 @@ const Login = ({
                 layout="responsive"
               />
             </div>
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-slate-500">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-slate-400">
               Sign in to your account
             </h1>
             <form

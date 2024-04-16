@@ -161,7 +161,7 @@ const Authentication = ({
                         Didn{`'`}t receive the verification OTP?
                       </span>
                       <span
-                        className="text-blue-400 cursor-pointer hover:text-blue-500 pl-1"
+                        className="text-primary-400 cursor-pointer hover:text-primary-500 pl-1"
                         onClick={handleResendOTP}
                       >
                         Resend OTP
@@ -169,7 +169,7 @@ const Authentication = ({
                     </>
                   ) : (
                     <>
-                      <span className="text-gray-500">
+                      <span className="text-slate-500">
                         Resend code in{" "}
                         <span className="font-bold">{countdown} seconds</span>
                       </span>

@@ -44,15 +44,14 @@ const defaultValue: StateContextType = {
   floor: "3",
   setFloor: () => {},
   floorSection: "R",
-
   setFloorSection: () =>{},
+  
   roomCapacity: 0,
   setRoomCapacity : () => {},
   roomEquipment : [],
   setRoomEquipment : () => {},
   isRoomDescEmpty : true,
   setRoomDescEmpty : () => {},
-  setFloorSection: () => {},
 };
 
 const StateContext = createContext<StateContextType>(defaultValue);
