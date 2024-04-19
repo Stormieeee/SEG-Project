@@ -1,4 +1,3 @@
-from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 import mysql.connector
 import random
@@ -8,14 +7,49 @@ from pydantic import BaseModel
 #from datetime import date, time
 #import datetime
 from datetime import datetime, date, time, timedelta
+import pandas as pd
+import io
+import tempfile
+
+from typing import List
+import openpyxl
+from io import BytesIO
+from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
 
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-# from routes.index import user_router
+
+from tempfile import NamedTemporaryFile
+
+###################### ENCRYPTION
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+import base64
+
+def encrypt_with_aes_ecb(plaintext):
+    key = "segproject"        
+    # Convert the string key to bytes and pad it to make it 32 bytes long
+    key_bytes = key.ljust(32, "\x00").encode()
+
+    # Create a Cipher object with AES in ECB mode
+    cipher = Cipher(algorithms.AES(key_bytes), modes.ECB(), backend=default_backend())
+
+    # Pad the plaintext to be a multiple of the block size (16 bytes for AES)
+    padding_length = 16 - (len(plaintext) % 16)
+    padded_plaintext = plaintext + bytes([padding_length]) * padding_length
+
+    # Encrypt the plaintext
+    encryptor = cipher.encryptor()
+    ciphertext = encryptor.update(padded_plaintext) + encryptor.finalize()
+
+    # Encode the ciphertext as URL-safe base64
+    encrypted_text = base64.urlsafe_b64encode(ciphertext)
+
+    return encrypted_text.decode()
 
 app = FastAPI()
 #Allows all origins, methods, and headers. Use with caution and only in development.
@@ -33,7 +67,7 @@ MYSQL_CONFIG = {
     "port": 3306,
     "user": "root",
     "password": "",
-    "database": "rbms"     #CHANGE THIS
+    "database": "rbms1"     #CHANGE THIS
 }
 
 # Dependency to establish database connection
@@ -47,7 +81,7 @@ def generate_random_string():
     characters = string.ascii_letters + string.digits
 
     # Generate a random 5-character alphanumeric string
-    random_string = ''.join(random.choice(characters) for _ in range(5))
+    random_string = ''.join(random.choice(characters) for _ in range(8))
 
     return random_string
 
@@ -77,6 +111,110 @@ def send_email(sender_email, receiver_email, password, subject, msg, smtp_server
 
     # Close the connection
     server.quit()
+
+def convert_to_calendar_format(date, time):
+    """
+    Convert date and time to the desired calendar format 'YYYYMMDDTHHMMSS'.
+
+    Args:
+        date (str): Date in the format 'YYYY-MM-DD'.
+        time (str): Time in the format 'HH:MM:SS'.
+
+    Returns:
+        str: Date and time in the desired calendar format.
+    """
+    # Formatting the parts
+    formatted_datetime = f"{date.replace('-', '')}T{time.replace(':', '')}"
+
+    print (formatted_datetime)
+    
+    return formatted_datetime
+
+
+def send_calendar_invitation(subject,start_time, end_time, location, description, attendees, message):
+    # Email configuration
+    smtp_server = 'smtp.office365.com'
+    smtp_port = 587
+    sender_email = 'segproject32@outlook.com'
+    sender_password = 'aquastorm797'
+    
+    # Create message container
+    msg = MIMEMultipart()
+    msg['Subject'] = subject
+    msg['From'] = sender_email
+    msg['To'] = ', '.join(attendees)
+    
+    # Create calendar event content
+    event_content = f'''
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Sample Calendar//Sample Event//EN
+BEGIN:VEVENT
+SUMMARY:{subject}
+LOCATION:{location}
+DESCRIPTION:{description}
+DTSTART:{start_time}
+DTEND:{end_time}
+END:VEVENT
+END:VCALENDAR
+'''
+    # Attach calendar event content using MIMEText
+    part = MIMEText(event_content, 'calendar')
+    part.add_header('Content-Disposition', 'attachment; filename="Room Booking.ics"')
+    msg.attach(part)
+
+    # Add the message to the email body
+    msg.attach(MIMEText(message, 'plain'))
+
+    # Connect to SMTP server
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, attendees, msg.as_string())
+
+
+
+def send_calendar_cancellation(subject, start_time, end_time, attendees, message):
+    # Email configuration
+    smtp_server = 'smtp.office365.com'
+    smtp_port = 587
+    sender_email = 'segproject32@outlook.com'
+    sender_password = 'aquastorm797'
+    
+    # Create message container
+    msg = MIMEMultipart()
+    msg['Subject'] = f'{subject}'  # Update the subject to indicate cancellation
+    msg['From'] = sender_email
+    msg['To'] = ', '.join(attendees)
+    
+    # Add the message to the email body
+    msg.attach(MIMEText(message, 'plain'))
+    
+    # Create cancellation event content
+    event_content = f'''
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Sample Calendar//Sample Event//EN
+BEGIN:VEVENT
+SUMMARY:CANCELED: {subject}
+DTSTART:{start_time}
+DTEND:{end_time}
+STATUS:CANCELLED
+END:VEVENT
+END:VCALENDAR
+'''
+    # Attach cancellation event content using MIMEText
+    part = MIMEText(event_content, 'calendar')
+    part.add_header('Content-Disposition', 'attachment; filename="event_cancelled.ics"')
+    msg.attach(part)
+
+    # Connect to SMTP server
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, attendees, msg.as_string())
+
+        
 ########################################### USER LOGIN - WORKING
 
 # Login
@@ -88,6 +226,8 @@ class Login(BaseModel):
 
 def user_login_check(db_connection, cursor, userID=None, password=None):
     query = "SELECT COUNT(*) FROM `user login` WHERE `User ID` = %s AND `Password` = %s"
+    password_bytes = password.encode()
+    password = encrypt_with_aes_ecb(password_bytes)
     cursor.execute(query, (userID, password))
     if cursor.fetchone()[0] > 0:
         send_otp(db_connection, cursor, userID)
@@ -102,7 +242,6 @@ def user_login(login: Login, db_connection: mysql.connector.connection.MySQLConn
         return {"message": "Login successful"}
     else:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-
 
 
 class Otp(BaseModel):
@@ -188,6 +327,8 @@ class EditPassword(BaseModel):
 
 #error
 def update_password(db_connection, cursor, userID, new_password):
+    password = new_password.encode()
+    new_password = encrypt_with_aes_ecb(password)
     query = "UPDATE `User Login` SET `Password` = %s WHERE `User ID` = %s"
     cursor.execute(query, (new_password, userID))
     db_connection.commit()
@@ -199,7 +340,7 @@ def edit_user_password(edit_password: EditPassword, db_connection: mysql.connect
     return {"message": "Password updated successfully"}
 
 
-########################################### TESTING TO BE DONE
+########################################### READY
 
 class RoomAvailabilityRequest(BaseModel):
     userID: str
@@ -293,7 +434,7 @@ def check_room_availability_endpoint(request: RoomAvailabilityRequest, db_connec
 
 
 
-########################################### TESTING TO BE DONE
+########################################### READY
 
 class BookingRequest(BaseModel):
     user_id: str
@@ -347,7 +488,7 @@ def create_booking_request(db_connection, cursor, userID, room_id, capacity, des
         "Timing:   " +
         str(start_time) + "  :  " + str(end_time) + ".\nIf you did not make this booking, please check your account immediately.")
 
-    send_email ("segproject32@outlook.com", userID, "aquastorm797",'Room Booking System OTP', confirmMessage ,'smtp-mail.outlook.com',587 )
+    send_email ("segproject32@outlook.com", userID, "aquastorm797",'New Booking Request', confirmMessage ,'smtp-mail.outlook.com',587 )
 
 @app.post("/booking_request/")
 def create_booking(booking_request: BookingRequest, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
@@ -368,14 +509,14 @@ def create_booking(booking_request: BookingRequest, db_connection: mysql.connect
 
 
 
-########################################### TESTING TO BE DONE
+########################################### READY
 
 class userClass(BaseModel):
     UserID: str
 
 def get_profile_details(db_connection, cursor, userID):
     get_details = """
-        SELECT `user roles`.`Name` 
+        SELECT `users`.`User ID`, `users`.`profile_picture`, `user roles`.`Name` 
         FROM `users` 
         JOIN `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
         WHERE `users`.`User ID` = %s
@@ -383,7 +524,7 @@ def get_profile_details(db_connection, cursor, userID):
     cursor.execute(get_details, (userID,))
     role = cursor.fetchone()
 
-    profile = (userID, role[0])
+    profile = (role[0], role[1],role[2])
 
     return profile
 
@@ -395,11 +536,11 @@ def get_profile(profile: userClass, db_connection: mysql.connector.connection.My
             cursor,
             userID=profile.UserID
             )
-    return {"username": prof[0], "role": prof[1]}
+    return {"username": prof[0], "role": prof[2],"profile picture":prof[1]}
 
 
 
-########################################### TESTING TO BE DONE
+###########################################READY
 
 #Uses userClass
 
@@ -430,7 +571,7 @@ def check_approval_role(username: userClass, db_connection: mysql.connector.conn
 
 
 
-########################################### TESTING TO BE DONE
+########################################### READY
 
 #Uses userClass
 
@@ -491,7 +632,7 @@ def get_booking_requests(username: userClass, db_connection: mysql.connector.con
     return check
 
 
-########################################### TESTING TO BE DONE
+########################################### READY
 
 
 #4. ⁠get_request_details, which I will give u bookingId and need {requester: “email”, roomSpecific: {capacity: 5, purpose: [“Meeting”, Presentation”]}}
@@ -539,7 +680,7 @@ def get_request_dets(request: RequestDetails, db_connection: mysql.connector.con
     return {"user_id": details[0], "user_role": details[1], "request_capacity": details[2], "room_capacity": details[3], "description": details[4], }
 
 
-########################################### TO BE tested
+########################################### READY
 
 
 class HandleBooking(BaseModel): 
@@ -594,7 +735,7 @@ def accept_booking(db_connection, cursor, requestID, comment, handler):
         currentBookingIDS = cursor.fetchall()
 
         # Check if the bookingRequestID is in the currentRoomIDS
-        if any(requestID in row for row in bookingIDCheck):
+        if any(NewbookingID in row for row in bookingIDCheck):
             print("Booking ID is in the current IDs. Generating a new ID.")     #Test print
         else:
             print("Booking ID is not in the current IDs.")                      #Test print
@@ -654,11 +795,29 @@ def accept_booking(db_connection, cursor, requestID, comment, handler):
 
     db_connection.commit()
 
+    subject = "Booking " + str(NewbookingID)
+    date = str(details2[2])
+    start_time = str(details2[3])
+    if start_time == "9:00:00":
+        start_time = "09:00:00"
+        
+    end_time = str(details2[4])
+    if end_time == "9:59:00":
+        end_time = "09:59:00"
+        
+    start_time1 = convert_to_calendar_format(date, start_time)
+    end_time1 = convert_to_calendar_format(date, end_time)
+    
+    location = details1[1]
+    description = details2[1]
+    attendees = [details1[0]]
     msg = "The booking request " + str(requestID) + " has been approved.\n" \
           "The ID of your booking has been updated to: " + str(NewbookingID) + "\n" \
-          "Please view the Room Booking System Website for further details"
-    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
-
+          "Kindly add the event to your calender for reference. \n" \
+        "Please view the Room Booking System Website for further details"
+    
+    send_calendar_invitation(subject,start_time1, end_time1, location, description, attendees, msg)
+    
     return True
 
 
@@ -735,7 +894,7 @@ def decline_booking(db_connection, cursor, requestID, comment, handler):
           "The booking is now rejected, with ID: " + str(NewbookingID) + ". \n" \
           "The reason for the booking declined is: \n" + comment + "\n" \
           "Please view the Room Booking System Website for further details"
-    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )
+    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking Request Declined', msg ,'smtp-mail.outlook.com',587 )
 
 
 
@@ -758,7 +917,7 @@ def handle_booking(handling: HandleBooking, db_connection: mysql.connector.conne
 
 
 
-#################################### TO BE TESTED
+#################################### READY
     
 class HandleRequests(BaseModel):
     UserID: str
@@ -901,7 +1060,7 @@ def get_booking_requests_users(handling: HandleRequests, db_connection: mysql.co
 
 
 
-#################################### TO BE TESTED
+####################################READY
 
 
 class BookingDetailsUsers(BaseModel):
@@ -1058,7 +1217,7 @@ def get_booking_requests_users(db_connection: mysql.connector.connection.MySQLCo
 #Alt 3 for comment, Alt 4 for uncomment
 
 
-#################################### TO BE TESTED 
+#################################### READY 
 
 class bookingType(BaseModel):
     typeCheck : str
@@ -1186,7 +1345,7 @@ def get_booking_requests_admin(bookingtype : bookingType, db_connection: mysql.c
     dataset = getAllBookings(db_connection,cursor, typeCheck = bookingtype.typeCheck)
     return dataset
 
-#################################### TO BE TESTED 
+#################################### READY 
 
 
 class booking(BaseModel):
@@ -1268,7 +1427,7 @@ def get_Booking_Details_Admin(booking : booking, db_connection: mysql.connector.
     dataset = get_admin_details(db_connection,cursor, ID = booking.bookingID)
     return dataset
 
-#################################### TO BE TESTED 
+#################################### READY
 
 class cancelations(BaseModel):
     bookingID : str
@@ -1342,11 +1501,26 @@ def cancelBooking (db_connection,cursor, ID, reason, handler):
 
     db_connection.commit()
     
-    msg = "The booking ID " + str(ID) + " has now been canceled.\n" \
-          "The booking shows as rejected, with ID: " + str(NewbookingID) + ". \n" \
-          "Please view the Room Booking System Website for further details"
-    send_email ("segproject32@outlook.com", details1[0], "aquastorm797",'Room Booking System OTP', msg ,'smtp-mail.outlook.com',587 )    
+    subject = "Booking " + str(ID)
+    date = str(details2[2])
+    
+    start_time = str(details2[3])
+    if start_time == "9:00:00":
+        start_time = "09:00:00"
+        
+    end_time = str(details2[4])
+    if end_time == "9:59:00":
+        end_time = "09:59:00"
 
+    start_time1 = str(convert_to_calendar_format(date, start_time))
+    end_time1 =  str(convert_to_calendar_format(date, end_time))
+    
+    attendees = [details1[0]]
+    message = "The booking ID " + str(ID) + " has now been canceled.\n" \
+          "The booking shows as rejected, with ID: " + str(NewbookingID) + ". \n" \
+          "Please view the Room Booking System Website for further details"    
+
+    send_calendar_cancellation(subject, start_time1, end_time1, attendees, message)
 
 @app.post("/booking_Cancel/")
 def cancel_booking(cancel : cancelations, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
@@ -1356,7 +1530,7 @@ def cancel_booking(cancel : cancelations, db_connection: mysql.connector.connect
 
 
 
-#################################### TO BE TESTED 
+#################################### READY
 
 class room(BaseModel):
     roomID : str
@@ -1395,7 +1569,7 @@ def room_Quantity(room : room, db_connection: mysql.connector.connection.MySQLCo
     return quantity
 
 
-#################################### TO BE TESTED 
+#################################### READY
 
 #################################### FEEDBACK SECTION
 
@@ -1477,8 +1651,6 @@ def get_list_feedback(db_connection,cursor, typeCheck):
             WHERE `Active` = 1
         """
 
-        
-
     else:
         query = """
             SELECT `Booking ID`, `Title`, `Text`
@@ -1492,10 +1664,428 @@ def get_list_feedback(db_connection,cursor, typeCheck):
     return feedbacklist
 
 
-
 @app.post("/get_Feedback/")             #"current" or "past"
 def get_Feedback(bt : bookingType, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
     cursor = db_connection.cursor()
     feedbacklist = get_list_feedback(db_connection,cursor, typeCheck = bt.typeCheck)
     return feedbacklist
+
+
+#################################### READY
+
+
+def update_profile_picture_in_db(db_connection, cursor, user_id, image_data):
+    # Update the profile picture in the database
+    update_query = "UPDATE users SET profile_picture = %s WHERE `User ID` = %s"
+    cursor.execute(update_query, (image_data, user_id))
+    db_connection.commit()
+
+@app.post("/update_profile_pic/")
+def update_profile_picture(user_id: str, file: UploadFile = UploadFile(...), db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+
+    if file.filename == "":
+        # Handle the case when no file is uploaded
+        raise HTTPException(status_code=400, detail="No file uploaded")
+    else:
+        cursor = db_connection.cursor()
+        
+        # Read the file content as bytes
+        profile_picture_bytes = file.file.read()
+        
+        update_profile_picture_in_db(db_connection, cursor, user_id, profile_picture_bytes)
+    
+        return {"message": "Profile picture updated successfully"}
+
+
+#################################### READY
+
+def insert_data(db_connection, cursor, userlist):
+    insert_user_query = "INSERT INTO `users` (`User ID`, `Role ID`) VALUES (%s, %s)"
+    insert_user_login_query = "INSERT INTO `user login` (`User ID`, Password) VALUES (%s, %s)"
+
+    user_check = "SELECT * FROM `users` WHERE `User ID` = %s"
+    
+    for user in userlist:
+        cursor.execute(user_check,(user[0],))
+        if cursor.fetchall():
+            next
+        else:  
+            temp = str(user[1]).encode()
+            password = encrypt_with_aes_ecb(temp)
+                
+            cursor.execute(insert_user_query, (user[0], user[2]))
+            cursor.execute(insert_user_login_query, (user[0], password))
+    # Commit the changes to the database
+    db_connection.commit()
+
+@app.post("/upload-excel/")
+async def upload_excel(file: UploadFile = File(...), db_connection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    # Check if the file is an Excel file
+    if not file.filename.endswith(".xlsx"):
+        raise HTTPException(status_code=400, detail="Only Excel files (.xlsx) are supported.")
+
+    # Save the uploaded Excel file to a temporary file
+    with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp:
+        tmp.write(file.read())
+        tmp_filename = tmp.name
+
+    # Read the Excel file using pandas
+    excel_data = pd.read_excel(tmp_filename)
+
+    # Iterate over the rows of the Excel file
+    for index, row in excel_data.iterrows():
+        # Extract data from each row
+        username = row['username']
+        password = row['password']
+        user_role = row['user role']
+
+        # Insert the user data into the database
+        insert_data(db_connection, cursor, [(username, password, user_role)])
+
+    return {"message": "Excel upload complete"}
+
+
+
+#################################### TO BE COMPLETED 
+
+class graphdata(BaseModel):         #If its data for May 2024, then should get "05" "2024"
+    GraphType: str  #Refer below to the name of graphs
+    Month : int
+    Year : int 
+
+def format_result(result):
+    labels = []
+    data = []
+
+    for row in result:
+        labels.append(row[0])
+        data.append(row[1])
+
+    return {"labels": labels, "data": data}
+    
+#Number of rooms booked per floor
+def graphFloor(cursor, db_connection, month, year):
+    query = """SELECT room.Section, COUNT(*) AS occurrence_count
+            FROM room
+            JOIN `booking list` ON room.`Room ID` = `booking list`.`Room ID`
+            JOIN `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+            WHERE YEAR(`booking id description`.`Date`) = %s
+              AND MONTH(`booking id description`.`Date`) = %s
+            GROUP BY room.Section;
+                        """
+        
+    cursor.execute(query, (year, month,))
+    formatted = format_result(cursor.fetchall())
+
+    return formatted
+    
+
+#Number of bookings per role category
+def graphRole(cursor, db_connection, month, year):
+
+    query = """
+        SELECT `user roles`.`Name`, COUNT(*) AS occurrence_count
+        FROM `user roles`
+        JOIN `users` ON `user roles`.`Role ID` = `users`.`Role ID`  
+        JOIN `booking list` ON `users`.`User ID` = `booking list`.`User ID`       
+        JOIN `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+        WHERE YEAR(`booking id description`.`Date`) = %s
+          AND MONTH(`booking id description`.`Date`) = %s
+        GROUP BY `user roles`.`Name`;
+    """
+
+    cursor.execute(query, (year, month,))
+    formatted = format_result(cursor.fetchall())
+
+    return formatted
+    
+
+    
+#Capacity per bookings (group by 10s)
+def graphCapacity(cursor, db_connection, month, year):
+
+    query = """
+        SELECT CONCAT(FLOOR(`capacity` / 10) * 10, ' - ', FLOOR(`capacity` / 10) * 10 + 9) AS `Capacity Group`, COUNT(*) AS group_count
+        FROM `booking id description`
+        WHERE YEAR(`booking id description`.`Date`) = %s
+          AND MONTH(`booking id description`.`Date`) = %s
+        GROUP BY FLOOR(`capacity` / 10);
+    """
+
+    cursor.execute(query, (year, month,))
+    formatted = format_result(cursor.fetchall())
+
+    return formatted
+    
+    
+#Most booked rooms (top 10)
+def graphMostBooked(cursor, db_connection, month, year):
+    query = """
+        SELECT `Room ID`, COUNT(*) AS group_count
+        FROM `booking list`
+        JOIN `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+        WHERE YEAR(`booking id description`.`Date`) = %s
+          AND MONTH(`booking id description`.`Date`) = %s
+        GROUP BY `Room ID`
+        ORDER BY group_count DESC
+        LIMIT 10;
+    """
+
+    cursor.execute(query, (year, month,))
+    formatted = format_result(cursor.fetchall())
+
+    return formatted
+    
+#Least booked rooms (top 10)
+def graphLeastBooked(cursor, db_connection, month, year):
+    query = """
+        SELECT `Room ID`, COUNT(*) AS group_count
+        FROM `booking list`
+        JOIN `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+        WHERE YEAR(`booking id description`.`Date`) = %s
+          AND MONTH(`booking id description`.`Date`) = %s
+        GROUP BY `Room ID`
+        ORDER BY group_count ASC
+        LIMIT 10;
+    """
+
+    cursor.execute(query, (year, month,))
+    formatted = format_result(cursor.fetchall())
+
+    return formatted
+   
+#Which admin accepts bookings
+def graphAdmins(cursor, db_connection, month, year):
+    query = """
+        SELECT `handler`, COUNT(*) AS group_count
+        FROM `booking list`
+        JOIN `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
+        WHERE YEAR(`booking id description`.`Date`) = %s
+          AND MONTH(`booking id description`.`Date`) = %s
+        GROUP BY `handler`;
+    """
+
+    cursor.execute(query, (year, month,))
+    formatted = format_result(cursor.fetchall())
+
+    return formatted
+
+#Bookings based on time
+def graphTimes(cursor, db_connection, month, year):
+
+    dataset = []
+    for hour in range(9, 23):
+        time_str = f"{hour:02d}:00:00"  # Format the hour as two digits
+        dataset.append(time_str)
+
+    print(dataset)
+               
+    query = """
+        SELECT COUNT(*) as bookings
+        FROM `booking id description`
+        WHERE %s BETWEEN `Start Time` AND `End Time`
+          AND YEAR(`booking id description`.`Date`) = %s
+          AND MONTH(`booking id description`.`Date`) = %s;
+    """
+
+    labels = []
+    data = []
+
+    for time in dataset:
+        cursor.execute(query, (time,year, month,))
+        counter = cursor.fetchone()
+        labels.append(time)
+        data.append(counter[0])
+        
+
+    return {"labels": labels, "data": data}
+
+
+@app.post("/get_graph/")
+def upload_excel(gd : graphdata, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    
+    cursor = db_connection.cursor()
+    graphtype = gd.GraphType
+    month = gd.Month
+    year = gd.Year
+
+    #REFER TO THIS IF ELSE TO SEE WHAT THE GRAPHTYPES ARE
+    if graphtype == 'floor':
+        return graphFloor(cursor, db_connection, month, year)
+            
+    elif graphtype == 'role':
+        return graphRole(cursor, db_connection, month, year)
+        
+    elif graphtype == 'capacity':
+        return graphCapacity(cursor, db_connection, month, year)
+        
+    elif graphtype == 'most':
+        return graphMostBooked(cursor, db_connection, month, year)
+        
+    elif graphtype == 'least':
+        return graphLeastBooked(cursor, db_connection, month, year)
+        
+    elif graphtype == 'admins':
+        return graphAdmins(cursor, db_connection, month, year)
+        
+    elif graphtype == 'times':
+        return graphTimes(cursor, db_connection, month, year)
+
+
+
+
+#################################### TO BE COMPLETED 
+
+
+
+# Function to get the value from the nearest non-empty cell above the specified cell in the same column
+def get_value_above(worksheet, cell):
+    if not cell.value:
+        current_row = cell.row
+        current_column = cell.column
+        while current_row > 1:
+            current_row -= 1
+            above_cell = worksheet.cell(row=current_row, column=current_column)
+            if above_cell.value:
+                return above_cell.value
+    return cell.value
+
+def get_value_left(worksheet, cell):
+    if not cell.value:
+        current_row = cell.row
+        current_column = cell.column
+        while current_column > 1:
+            current_column -= 1
+            left_cell = worksheet.cell(row=current_row, column=current_column)
+            if left_cell.value:
+                return left_cell.value
+    return cell.value
+
+def process_excel(file):
+    # Load the workbook from the file contents
+    file_contents = file.read()  # No 'await' since it's not an asynchronous operation anymore
+    workbook = openpyxl.load_workbook(filename=BytesIO(file_contents))
+    worksheet = workbook.active
+
+    start_row = 5
+    start_column = 2
+    totaldata = []
+
+    for column_index in range(start_column, worksheet.max_column + 1):
+        for row_index in range(start_row, worksheet.max_row + 1, 3):
+            classroom = get_value_above(worksheet, worksheet.cell(row=row_index, column=1))
+            day = get_value_left(worksheet, worksheet.cell(row=3, column=column_index))
+            cell_b11_value = worksheet.cell(row=row_index, column=column_index).value
+            cell_b12_value = worksheet.cell(row=row_index + 1, column=column_index).value
+            cell_b13_value = worksheet.cell(row=row_index + 2, column=column_index).value
+            combined_values = ','.join(str(cell_value) for cell_value in [cell_b11_value, cell_b12_value, cell_b13_value] if cell_value is not None)
+
+            if combined_values:
+                dataset = f"[{classroom},{day}, {combined_values}]"
+                dataset = dataset.replace(" ", "")
+
+                if dataset.count(',') == 4:
+                    parts = dataset.strip("[]").split(",")
+                    time_range = parts[3]
+                    start_str, end_str = time_range.split("-")
+                    start_str = start_str.strip()
+                    end_str = end_str.strip()
+                    start_time = datetime.strptime(start_str, "%I:%M%p")
+                    end_time = datetime.strptime(end_str, "%I:%M%p")
+                    stime_only = start_time.time()
+                    etime_only = end_time.time()
+                    output_string = f"{parts[0]}, {parts[1]}, {parts[2]}, {stime_only}, {etime_only}, {parts[4]}"
+                    totaldata.append(output_string)
+    
+    return totaldata
+
+
+
+# Function to get the dates of the upcoming n occurrences of a given weekday
+def upcoming_weekdays(day_of_week: str, n: int) -> List[str]:
+    # Map day names to their respective indices (0 for Monday, 1 for Tuesday, etc.)
+    days_mapping = {
+        'Monday': 0,
+        'Tuesday': 1,
+        'Wednesday': 2,
+        'Thursday': 3,
+        'Friday': 4,
+        'Saturday': 5,
+        'Sunday': 6
+    }
+
+    # Get the current date
+    current_date = datetime.now().date()
+
+    # Calculate the index of the given day
+    target_day_index = days_mapping[day_of_week]
+
+    # Find the dates of the upcoming occurrences of the given day
+    upcoming_dates = []
+    while len(upcoming_dates) < n:
+        # Calculate the date of the next occurrence of the given day
+        days_until_target = (target_day_index - current_date.weekday()) % 7
+        next_date = current_date + timedelta(days=days_until_target)
+
+        # Add the next occurrence date to the list
+        upcoming_dates.append(next_date.strftime('%Y-%m-%d'))
+
+        # Move to the next week
+        current_date += timedelta(days=7)
+
+    return upcoming_dates
+
+
+def writeData(data, db_connection, cursor):
+    for val in data:
+        parts = val.split(", ")
+        day_of_week = upcoming_weekdays(parts[1], 1)       #CHANGE THE LAST NUMBER FOR HOW MANY WEEKS
+
+        for day in day_of_week:
+            while True:
+                # Generate a new bookingRequestID
+                NewbookingID = generate_random_string()
+
+                # Checking if the ID is pre-existing
+                bookingIDCheck = "SELECT `Booking ID` FROM `booking list`"
+                cursor.execute(bookingIDCheck)
+                currentBookingIDS = cursor.fetchall()
+
+                # Check if the bookingRequestID is in the currentRoomIDS
+                if any(NewbookingID in row for row in bookingIDCheck):
+                    print("Booking ID is in the current IDs. Generating a new ID.")     # Test print
+                else:
+                    break
+
+     
+            # Insert data into Booking List table
+            insertDetails1 = ("""
+                INSERT INTO `Booking List` (`Booking ID`, `User ID`, `Room ID`,`handler`)
+                VALUES (%s, %s, %s, %s);""")
+            cursor.execute(insertDetails1, (NewbookingID, parts[5], parts[0], "System"))
+
+            #"[2R011, Monday, IFYP0023-LEC, 09:00:00, 10:00:00, Shaba]"
+
+            # Insert the data into booking id description
+            insertDetails2 = ("""
+                INSERT INTO `booking id description` (`Booking ID`, `Description`, `Date`, `Start Time`, `End Time` , `Capacity`, `Comment`)
+                VALUES (%s, %s, %s, %s, %s, %s, %s);""")
+
+            cursor.execute(insertDetails2, (NewbookingID, parts[2], day, parts[3], parts[4], 30, ""))
+            
+            # Commit the transaction
+            db_connection.commit()
+
+    
+def datahandler(file, db_connection, cursor):
+    datalist = process_excel(file)
+    writeData(datalist, db_connection, cursor)
+    return datalist
+
+@app.post("/process_excel/")
+def process_excel_file(file: UploadFile = File(...), db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+    cursor = db_connection.cursor()
+    datalist = datahandler(file, db_connection, cursor)    
+    return datalist  # Await the result of process_excel
 
