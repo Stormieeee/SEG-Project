@@ -16,7 +16,7 @@ const RectangularCheckbox: React.FC<RectangularCheckboxProps> = ( { label, check
   };
 
   return (
-    <div className="flex items-center relative rounded-[5px] border my-3 ml-2 mr-20 xl:py-4 xl:px-5 border-gray-300 text-black-500 xl:text-base font-medium bg-white-50 md:px-3 md:text-sm md:py-4">
+    <div className="flex items-center relative rounded-[5px] border my-3 ml-2 mr-20 2xl:py-4 2xl:px-5 border-gray-300 text-black-500 2xl:text-base font-medium bg-white-50 sm:px-3 sm:text-sm sm:py-4">
       <label>{label}</label>
       <div
         className={`w-6 h-6 border border-gray-300 rounded cursor-pointer flex right-4 absolute  ${

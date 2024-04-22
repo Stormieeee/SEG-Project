@@ -71,13 +71,19 @@ interface FloorPlanProps {
 }
 
 const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
-  const { floor, floorSection, setRoomCapacity, setRoomEquipment , setRoomDescEmpty} =
-    useStateContext();
+  const {
+    floor,
+    floorSection,
+    setRoomCapacity,
+    setRoomEquipment,
+    setRoomDescEmpty,
+  } = useStateContext();
 
   const fetchData = dataFromApi;
   const roomStatus = fetchData.dataFromApi.available;
   // State variable to track the active button
   const [activeButton, setActiveButton] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(true);
 
   const colorMap = Object.fromEntries(roomStatus);
   // Function to handle button click
@@ -86,16 +92,22 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
     setActiveButton(newActiveButton);
     setRoomID(newActiveButton === null ? "" : newActiveButton);
 
-    if(newActiveButton !== null){ //if newActiveButton is not null then set capacity else empty
-      setRoomDescEmpty(true)
-      setCapacity(newActiveButton)
-      setEquipment(newActiveButton)
-    }else{
-      setRoomDescEmpty(false)
+    if (newActiveButton !== null) {
+      //if newActiveButton is not null then set capacity else empty
+      setRoomDescEmpty(true);
+      setCapacity(newActiveButton);
+      setEquipment(newActiveButton);
+    } else {
+      setRoomDescEmpty(false);
     }
   };
 
-  const setCapacity = (roomid: string) => { //get and set capacity of room
+  useEffect(() => {
+
+  }, [roomStatus])
+
+  const setCapacity = (roomid: string) => {
+    //get and set capacity of room
     getCapacity(roomid)
       .then((capacity) => {
         if (typeof capacity === "number") {
@@ -109,10 +121,11 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
       });
   };
 
-  const setEquipment = (roomid: string) => { //get and set array of equipment of room
+  const setEquipment = (roomid: string) => {
+    //get and set array of equipment of room
     getRoomDetails(roomid)
       .then((equipment) => {
-        setRoomEquipment(equipment)
+        setRoomEquipment(equipment);
       })
       .catch((error) => {
         console.log("Error fetching equipment" + error);
@@ -128,7 +141,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
       case "yellow":
         return "bg-yellow-50 border border-yellow-400 hover:bg-yellow-100 duration-75";
       default:
-        return "bg-black-50";
+        return "bg-gray-300";
     }
   };
 
@@ -162,7 +175,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
             "bg-yellow-300 border-yellow-600 border-2 hover:bg-yellow-200 duration-75";
           break;
         default:
-          backgroundColorClass = "bg-black-50";
+          backgroundColorClass = "bg-gray-300";
           break;
       }
     }
@@ -209,21 +222,31 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                 ${getActiveButtonClass(activeButton === "2R006", colorMap["2R006"])}`}
               disabled={getButtonDisabledState(colorMap["2R006"])}
             >
-              <span className="text-[11px] flex justify-center items-center">2R006</span>
+              <span className="text-[11px] flex justify-center items-center">
+                2R006
+              </span>
             </button>
           </div>
           <div className="w-67/100 flex flex-col">
             <div className="h-41/100 flex flex-row">
               <div className="w-1/5 flex flex-col">
-                <div className="h-85/100 bg-black-200 rounded-md border-2 text-sm flex justify-center items-center">S</div>
+                <div className="h-85/100 bg-black-200 rounded-md border-2 text-sm flex justify-center items-center">
+                  S
+                </div>
               </div>
               <div className="w-4/5 flex flex-col">
-                <div className="h-2/5 text-[10px] bg-black-50 rounded-md border-2 flex justify-center items-center">Utility</div>
+                <div className="h-2/5 text-[10px] bg-gray-300 rounded-md border-2 flex justify-center items-center">
+                  Utility
+                </div>
                 <div className="h-3/5 flex flex-row">
                   <div className="w-58/100 flex flex-col">
-                    <div className="h-77/100 bg-black-50 rounded-md border-2 flex justify-center items-center">T</div>
+                    <div className="h-77/100 bg-gray-300 rounded-md border-2 flex justify-center items-center">
+                      T
+                    </div>
                   </div>
-                  <div className="w-42/100 bg-black-50 rounded-md border-2 flex justify-center items-center">T</div>
+                  <div className="w-42/100 bg-gray-300 rounded-md border-2 flex justify-center items-center">
+                    T
+                  </div>
                 </div>
               </div>
             </div>
@@ -251,7 +274,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     ${getActiveButtonClass(activeButton === "2R010", colorMap["2R010"])}`}
                   disabled={getButtonDisabledState(colorMap["2R010"])}
                 >
-                  <span className="text-[11px] flex justify-center items-center">2R010</span>
+                  <span className="text-[11px] flex justify-center items-center">
+                    2R010
+                  </span>
                 </button>
                 <div className="h-28/100"></div>
               </div>
@@ -369,7 +394,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                 ${getActiveButtonClass(activeButton === "2R005", colorMap["2R005"])}`}
               disabled={getButtonDisabledState(colorMap["2R005"])}
             >
-              <span className="text-[10px] flex transform -rotate-90 justify-center items-center">2R005</span>
+              <span className="text-[10px] flex transform -rotate-90 justify-center items-center">
+                2R005
+              </span>
             </button>
           </div>
           <div className="h-20/100 flex flex-row">
@@ -430,7 +457,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           {/* Center Stairs */}
           <div className="h-25/100 flex flex-row">
             <div className="w-21/100"></div>
-            <div className="w-45/100 bg-black-200 rounded-md border-2 flex justify-center items-center">S</div>
+            <div className="w-45/100 bg-black-200 rounded-md border-2 flex justify-center items-center">
+              S
+            </div>
             <div className="w-34/100"></div>
           </div>
           <div className="h-58/100"></div>
@@ -597,7 +626,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                       ${getActiveButtonClass(activeButton === "2R031", colorMap["2R031"])}`}
                       disabled={getButtonDisabledState(colorMap["2R031"])}
                     >
-                      <span className="text-[11px] flex justify-center items-center">2R031</span>
+                      <span className="text-[11px] flex justify-center items-center">
+                        2R031
+                      </span>
                     </button>
                     <button
                       key={"2R030"}
@@ -608,7 +639,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                       ${getActiveButtonClass(activeButton === "2R030", colorMap["2R030"])}`}
                       disabled={getButtonDisabledState(colorMap["2R030"])}
                     >
-                      <span className="text-[7px] flex justify-center items-center">30-Cut</span>
+                      <span className="text-[7px] flex justify-center items-center">
+                        30-Cut
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -631,7 +664,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               >
                 2R018
               </button>
-              <div className="h-10/100 bg-black-200 rounded-md border-2 flex justify-center items-center">S</div>
+              <div className="h-10/100 bg-black-200 rounded-md border-2 flex justify-center items-center">
+                S
+              </div>
               <div className="h-68/100 bg-black-200 rounded-md border-2 flex flex-col justify-center items-center space-y-5">
                 <span>Lift</span>
                 <span>T</span>
@@ -678,7 +713,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               >
                 <span className={`${textStyle}`}>3R041</span>
               </button>
-              <div className="flex w-full h-3/5 bg-zinc-400 rounded-tl-lg rounded-bl-lg justify-normal items-center">
+              <div className="flex w-full h-3/5 bg-gray-300 rounded-tl-lg rounded-bl-lg justify-normal items-center">
                 <Image
                   src={stairs}
                   alt="Stair Icon"
@@ -747,7 +782,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
             <div className="h-1/2 flex flex-row">
               <div className="w-4/5 flex flex-col">
                 <div className="h-26/100 flex flex-row">
-                  <div className="flex flex-auto w-23/100 bg-zinc-400 justify-center items-center rounded-tr-lg rounded-br-lg rounded-bl-lg">
+                  <div className="flex flex-auto w-23/100 bg-gray-300 justify-center items-center rounded-tr-lg rounded-br-lg rounded-bl-lg">
                     <Image
                       src={toilet}
                       alt="Toilet Icon"
@@ -915,7 +950,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               </div>
 
               <div className="w-1/5 flex flex-col">
-                <div className="h-66/100 bg-black-50 rounded-md"></div>
+                <div className="h-66/100 bg-gray-300 rounded-md"></div>
                 <button
                   key={"3R026"}
                   onClick={() => handleButtonClick("3R026")}
@@ -1012,15 +1047,15 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     </div>
                     <div className="w-50/100 flex flex-col mx-1 bg-white-50">
                       <div className="h-42/100 flex flex-row ">
-                        <div className="w-19/100 bg-zinc-400 rounded-tl-md"></div>
-                        <div className="w-46/100 bg-zinc-400"></div>
-                        <div className="w-19/100 bg-zinc-400 rounded-tr-md "></div>
+                        <div className="w-19/100 bg-gray-300 rounded-tl-md"></div>
+                        <div className="w-46/100 bg-gray-300"></div>
+                        <div className="w-19/100 bg-gray-300 rounded-tr-md "></div>
                         <div className="w-16/100 flex flex-col">
                           <div className="h-76/100"></div>
-                          <div className="h-24/100 bg-zinc-400 rounded-tr-md"></div>
+                          <div className="h-24/100 bg-gray-300 rounded-tr-md"></div>
                         </div>
                       </div>
-                      <div className=" flex h-56/100 bg-zinc-400 items-top justify-center rounded-bl-md rounded-br-md">
+                      <div className=" flex h-56/100 bg-gray-300 items-top justify-center rounded-bl-md rounded-br-md">
                         <Image
                           src={stairs}
                           alt="Stairs Icon"
@@ -1091,7 +1126,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
 
                   <div className="w-4/100"></div>
 
-                  <div className="w-10/100 bg-zinc-400 flex flex-col items-center justify-between py-1 rounded-lg">
+                  <div className="w-10/100 bg-gray-300 flex flex-col items-center justify-between py-1 rounded-lg">
                     <Image
                       src={stairs}
                       alt="Stair Icon"
@@ -1162,7 +1197,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           </div>
         </div>
         <div className="h-10/100 flex flex-row">
-          <div className="w-13/100 bg-black-50 rounded-lg"></div>
+          <div className="w-13/100 bg-gray-300 rounded-lg"></div>
           <button
             key={"3R006"}
             onClick={() => {
@@ -1176,7 +1211,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           >
             3R006
           </button>
-          <div className="w-76/100 bg-black-50 rounded-lg"></div>
+          <div className="w-76/100 bg-gray-300 rounded-lg"></div>
         </div>
       </div>
     );
@@ -1185,7 +1220,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
   const SecondLeftWing = () => {
     return (
       <div className={`${floorplanStyle}`}>
-        <div className="h-20/100 bg-black-100"></div>
+        <div className="h-20/100 bg-gray-300"></div>
 
         <div className="h-60/100 flex flex-col">
           <div className="h-40/100 w-98/100 flex flex-row">

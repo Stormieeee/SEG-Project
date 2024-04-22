@@ -5,7 +5,7 @@ import DetailsBar from "./DetailsBar";
 import { useStateContext } from "./MyBookingContext";
 
 const BookingComponents = () => {
-  const { selectedRowIndex } = useStateContext();
+  const { bookings,setBookings,bookingStatus,setSelectedRowIndex,selectedRowIndex ,isCurrentBooking, bookingDetails, setShowForm } = useStateContext();
   const isSelected = selectedRowIndex >= 0;
 
   return (

@@ -31,7 +31,6 @@ export default function RoomBooking() {
     startTime: number,
     endTime: number
   ) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     try {
       const data = await getDataFromServer(
@@ -54,6 +53,7 @@ export default function RoomBooking() {
   if (isLoading) {
     return <Loader />;
   }
+  
   return (
     <div className="flex flex-row">
       <div className="w-1/2 flex flex-col">

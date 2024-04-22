@@ -12,7 +12,7 @@ const EmailInput = ({ email, setEmail, error }: EmailInputProps) => {
     <div className=" w-full">
       <label
         htmlFor="email"
-        className="block mb-2 text-base md:text-sm font-medium text-gray-900 dark:text-slate-400"
+        className="block mb-2 text-base md:text-sm font-medium text-gray-900 dark:text-slate-300"
       >
         Your email
       </label>

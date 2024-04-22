@@ -58,7 +58,7 @@ const Sidebar = () => {
 
   const buttonActiveStyle =
     "flex flex-row py-1 bg-primary-200 rounded-md items-center";
-  const buttonInactiveStyle = "flex flex-row py-1.5 rounded-md items-center";
+  const buttonInactiveStyle = "flex flex-row py-1 rounded-md items-center";
 
   const textActiveStyle =
     "text-base items-center text-gray-800 float-left font-normal font-Inter ";

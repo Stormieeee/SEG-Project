@@ -4,7 +4,7 @@ import editIcon from "../../../../public/Login-icon/edit_icon.svg";
 import Image from "next/image";
 import { useStateContext } from "./MyBookingContext";
 
-const DetailsBar = () => {
+const   DetailsBar = () => {
   const {
     bookings,
     setBookings,

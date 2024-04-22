@@ -84,7 +84,7 @@ const Profile = () => {
           localStorage.clear();
           sessionStorage.clear();
           setUserInfo(null);
-          router.push("/"); // Use router.push instead of window.location.href
+          window.location.href = "/"; // Use router.push instead of window.location.href
         } else {
           console.error("Error logging out");
         }
