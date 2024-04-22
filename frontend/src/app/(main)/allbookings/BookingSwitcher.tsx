@@ -10,7 +10,7 @@ const BookingSwitcher = () => {
     <div className="flex items-center justify-center">
       <button
         className={`px-4 py-2 bg-blue-500 rounded-xl rounded-r border text-xl
-        ${isCurrentBooking ? "bg-primary-50 text-primary-200" : "bg-primary-100 text-primary-500"}`}
+        ${isCurrentBooking ? "bg-primary-50 text-primary-200" : "bg-primary-100 text-primary-500 hover:bg-primary-300/50"}`}
         onClick={switchBooking}
         disabled={isCurrentBooking}
       >
@@ -21,7 +21,7 @@ const BookingSwitcher = () => {
       </div>
       <button
         className={`px-4 py-2 bg-blue-500 rounded-xl rounded-l border text-xl
-        ${!isCurrentBooking ? "bg-primary-50 text-primary-200" : "bg-primary-100 text-primary-500"}`}
+        ${!isCurrentBooking ? "bg-primary-50 text-primary-200" : "bg-primary-100 text-primary-500 hover:bg-primary-300/50"}`}
         onClick={switchBooking}
         disabled={!isCurrentBooking}
       >

@@ -4,7 +4,7 @@ import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
 import LoginButton from "./LoginButton";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../Components/LoadingSpinner";
+import LoadingSpinner from "./LoadingSpinner";
 import Image from "next/image";
 
 interface LoginProps {
@@ -79,8 +79,8 @@ const Login = ({
   //Login Form
   return (
     <section className="flex flex-auto bg-white-500 dark:bg-gray-900">
-      <div className="flex flex-col w-full items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      <div className="flex flex-col w-full items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" >
+        <div className="w-full h-[33.625rem] bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col">
             <div className="flex items-center justify-center mb-4">
               <Image

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CapacityLabel from "./CapacityLabel";
 import EquipmentLabel from "./EquipmentLabel";
 import descriptionLogo from "../../../../../public/Components-icon/Description Logo.svg";
@@ -12,6 +12,9 @@ const Description = () => {
     name,
     amount,
   }));
+  
+  useEffect(() => {
+  }, [formattedEquipment]);
 
   return (
     <div className={`${FORM_CONTAINER} justify-start flex `}>
@@ -34,8 +37,8 @@ const Description = () => {
           </div>
         </>
       ) : (
-        <div className="flex items-center justify-center">
-          <span className="text-lg font-semibold flex items-center text-black-500">
+        <div className="flex flex-auto items-center justify-center">
+          <span className="text-lg font-semibold flex items-center text-black-600">
             Select a room
           </span>
         </div>

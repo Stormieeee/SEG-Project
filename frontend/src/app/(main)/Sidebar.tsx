@@ -10,15 +10,15 @@ import bookingRequestDark from "../../../public/Sidebar-icon/Booking Request Dar
 import bookingRequestLight from "../../../public/Sidebar-icon/Booking Request Light.svg";
 import feedbackLight from "../../../public/Sidebar-icon/Feedback Light.svg";
 import feedbackDark from "../../../public/Sidebar-icon/Feedback Dark.svg";
-import viewfeedbackDark from "../../../public/Sidebar-icon/ViewFeedBack Dark.svg"
-import viewfeedbackLight from "../../../public/Sidebar-icon/ViewFeedBack Light.svg"
+import viewfeedbackDark from "../../../public/Sidebar-icon/ViewFeedBack Dark.svg";
+import viewfeedbackLight from "../../../public/Sidebar-icon/ViewFeedBack Light.svg";
 import useNavigation from "./hook/use-navigation";
 
 import Image from "next/image";
 import companylogo from "../../../public/Company-logo/Company Logo.svg";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import getEmailFromSessionStorage from "../../../src/app/Components/CommonFunction";
+import getEmailFromSessionStorage from "../Components/CommonFunction";
 
 const Sidebar = () => {
   const [isAdmin, setIsAdmin] = useState(false);

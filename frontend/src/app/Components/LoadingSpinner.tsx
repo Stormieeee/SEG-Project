@@ -1,10 +1,18 @@
 import React from "react";
+import { ring } from "ldrs";
 
 const LoadingSpinner = () => {
+
+  ring.register();
+
   return (
-    <div className="flex justify-center items-center mt-4">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 dark:border-white-100"></div>
-    </div>
+    <l-ring
+      size="30"
+      stroke="5"
+      bg-opacity="0"
+      speed="2"
+      color="#cbd5e1"
+    ></l-ring>
   );
 };
 

@@ -1,10 +1,10 @@
 import Image from "next/image";
 
-export const FORM_CONTAINER = "h-full w-full flex-col grow bg-white-50/80 backdrop-blur-lg rounded-xl border border-neutral-200 2xl:px-4 2xl:py-2 pb-10 sm:py-1";
-export const WRAPPER = "flex flex-col w-1/3 2xl:mx-3 sm:mx-0"
-export const FORM_LABEL = "pl-2 font-normal 2xl:text-lg text-black-700 sm:text-base pb-1";
-export const FORM_INPUT = `bg-secondary-300/10 w-full rounded-md 2xl:my-2 2xl:py-4 text-blue-500 font-medium rounded-lg text-center 2xl:text-base hover:cursor-pointer focus:outline-none hover:bg-secondary-200/30 duration-100
-sm:py-3.5 sm:my-1 sm:text-sm`;
+export const FORM_CONTAINER = "h-full w-full flex-col grow bg-white-50/80 backdrop-blur-lg rounded-xl border border-neutral-200 xl:px-4 xl:py-2 pb-10 md:py-1";
+export const WRAPPER = "flex flex-col w-1/3 xl:mx-3 md:mx-0"
+export const FORM_LABEL = "pl-2 font-normal xl:text-lg text-black-700 md:text-base pb-1";
+export const FORM_INPUT = `bg-secondary-300/10 w-full rounded-md xl:my-2 xl:py-4 px-2 text-blue-500 font-medium rounded-lg text-center xl:text-base hover:cursor-pointer focus:outline-none hover:bg-secondary-200/30 duration-100
+md:py-3.5 md:my-1 md:text-sm`;
 export const ICON = "px-1";
 
 interface FormHeaderProps {

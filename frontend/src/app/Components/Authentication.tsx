@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import getEmailFromSessionStorage from "../Components/CommonFunction";
+import getEmailFromSessionStorage from "./CommonFunction";
 import { backgroundStyle, cancelButtonStyle, inputFormat, loginButtonStyle } from "./componentStyle";
 
 type AuthenticationProps = {

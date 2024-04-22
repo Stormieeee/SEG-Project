@@ -56,7 +56,7 @@
 
 // export default FloorPlan;
 
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import Image from "next/image";
 import { useStateContext } from "../../StateContext";
 import { getCapacity, getRoomDetails } from "../utils/utils";
