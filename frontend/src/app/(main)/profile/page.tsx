@@ -25,6 +25,9 @@ const Profile = () => {
   const [showEditIcon, setShowEditIcon] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [originalProfilePicture, setOriginalProfilePicture] = useState<
+    string | null
+  >(null); // Add originalProfilePicture state
 
   const getUserInfo = async () => {
     try {
@@ -47,6 +50,14 @@ const Profile = () => {
           role: data.role,
           profilePicture: data.profilePicture,
         });
+        if (data.profilePicture) {
+          setProfilePicture(`data:image/png;base64,${data.profilePicture}`);
+          setOriginalProfilePicture(
+            `data:image/png;base64,${data.profilePicture}`
+          );
+        } else {
+          setProfilePicture(profile);
+        }
       }
     } catch (error) {
       console.error("Error:", error);
@@ -54,7 +65,7 @@ const Profile = () => {
   };
   useEffect(() => {
     getUserInfo();
-    setProfilePicture(userInfo?.profilePicture ?? null);
+    // setProfilePicture(userInfo?.profilePicture ?? null);
   }, []);
 
   //Handles OTP Authentication
@@ -84,7 +95,8 @@ const Profile = () => {
           localStorage.clear();
           sessionStorage.clear();
           setUserInfo(null);
-          router.push("/"); // Use router.push instead of window.location.href
+          // router.push("/"); // Use router.push instead of window.location.href
+          window.location.href = "/";
         } else {
           console.error("Error logging out");
         }
@@ -117,7 +129,7 @@ const Profile = () => {
           />
           {showEditIcon && (
             <div
-              className="absolute top-1 right-1 p-1 rounded-full bg-white-100 border border-black-800 cursor-pointer"
+              className="absolute top-1 right-1 p-1 rounded-full bg-white-100 border border-black-100 cursor-pointer"
               onClick={handleEditProfileClick}
             >
               <Image
@@ -181,6 +193,8 @@ const Profile = () => {
             showEditForm={showEditForm}
             setShowEditForm={setShowEditForm}
             getUserInfo={getUserInfo}
+            originalProfilePicture={originalProfilePicture}
+            setOriginalProfilePicture={setOriginalProfilePicture}
           />
         </div>
       </div>

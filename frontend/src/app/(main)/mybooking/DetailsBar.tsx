@@ -82,6 +82,7 @@ const DetailsBar = () => {
   };
 
   const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3";
+  const feedbackStyle = `bg-transparent leading-tight w-full border border-black-100 rounded-md resize-none px-1 focus-none`;
   return (
     <div className="flex flex-1 flex-col">
       <div className="justify-start text-2xl font-bold text-stone-900">
@@ -107,9 +108,7 @@ const DetailsBar = () => {
         )}
         {bookingStatus === "Completed" && feedback_text && (
           <>
-            <div
-              className={`${subHeadingStyle} flex justify-between pr-20 items-center`}
-            >
+            <div className={`${subHeadingStyle} flex gap-5 items-center`}>
               Feedback:
               <span onClick={handleEdit}>
                 <Image
@@ -118,6 +117,23 @@ const DetailsBar = () => {
                   className="w-4 h-4 cursor-pointer"
                 />
               </span>
+            </div>
+            <div className="flex w-full mb-2">
+              <input
+                type="text"
+                value={feedback_title}
+                readOnly
+                disabled
+                className={feedbackStyle}
+              />
+            </div>
+            <div className="flex w-full">
+              <textarea
+                value={feedback_text}
+                readOnly
+                disabled
+                className={feedbackStyle}
+              />
             </div>
           </>
         )}
