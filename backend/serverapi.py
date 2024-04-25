@@ -67,7 +67,7 @@ MYSQL_CONFIG = {
     "port": 3306,
     "user": "root",
     "password": "",
-    "database": "rbms1"     #CHANGE THIS
+    "database": "rbms2"     #CHANGE THIS
 }
 
 # Dependency to establish database connection
@@ -81,7 +81,7 @@ def generate_random_string():
     characters = string.ascii_letters + string.digits
 
     # Generate a random 5-character alphanumeric string
-    random_string = ''.join(random.choice(characters) for _ in range(8))
+    random_string = ''.join(random.choice(characters) for _ in range(12))
 
     return random_string
 
@@ -1727,7 +1727,7 @@ async def upload_excel(file: UploadFile = File(...), db_connection = Depends(get
 
     # Save the uploaded Excel file to a temporary file
     with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp:
-        tmp.write(file.read())
+        tmp.write(await file.read())
         tmp_filename = tmp.name
 
     # Read the Excel file using pandas
@@ -1932,15 +1932,10 @@ def upload_excel(gd : graphdata, db_connection: mysql.connector.connection.MySQL
     elif graphtype == 'times':
         return graphTimes(cursor, db_connection, month, year)
 
-
-
-
-#################################### TO BE COMPLETED 
-
-
+######################################################
 
 # Function to get the value from the nearest non-empty cell above the specified cell in the same column
-def get_value_above(worksheet, cell):
+async def get_value_above(worksheet, cell):
     if not cell.value:
         current_row = cell.row
         current_column = cell.column
@@ -1951,7 +1946,7 @@ def get_value_above(worksheet, cell):
                 return above_cell.value
     return cell.value
 
-def get_value_left(worksheet, cell):
+async def get_value_left(worksheet, cell):
     if not cell.value:
         current_row = cell.row
         current_column = cell.column
@@ -1962,9 +1957,9 @@ def get_value_left(worksheet, cell):
                 return left_cell.value
     return cell.value
 
-def process_excel(file):
+async def process_excel(file: UploadFile):
     # Load the workbook from the file contents
-    file_contents = file.read()  # No 'await' since it's not an asynchronous operation anymore
+    file_contents = await file.read()  # Await the coroutine to get the file contents
     workbook = openpyxl.load_workbook(filename=BytesIO(file_contents))
     worksheet = workbook.active
 
@@ -1973,9 +1968,9 @@ def process_excel(file):
     totaldata = []
 
     for column_index in range(start_column, worksheet.max_column + 1):
-        for row_index in range(start_row, worksheet.max_row + 1, 3):
-            classroom = get_value_above(worksheet, worksheet.cell(row=row_index, column=1))
-            day = get_value_left(worksheet, worksheet.cell(row=3, column=column_index))
+        for row_index in range(start_row,worksheet.max_row + 1, 3):
+            classroom = await get_value_above(worksheet, worksheet.cell(row=row_index, column=1))
+            day = await get_value_left(worksheet, worksheet.cell(row=3, column=column_index))
             cell_b11_value = worksheet.cell(row=row_index, column=column_index).value
             cell_b12_value = worksheet.cell(row=row_index + 1, column=column_index).value
             cell_b13_value = worksheet.cell(row=row_index + 2, column=column_index).value
@@ -1984,6 +1979,7 @@ def process_excel(file):
             if combined_values:
                 dataset = f"[{classroom},{day}, {combined_values}]"
                 dataset = dataset.replace(" ", "")
+
 
                 if dataset.count(',') == 4:
                     parts = dataset.strip("[]").split(",")
@@ -1996,14 +1992,16 @@ def process_excel(file):
                     stime_only = start_time.time()
                     etime_only = end_time.time()
                     output_string = f"{parts[0]}, {parts[1]}, {parts[2]}, {stime_only}, {etime_only}, {parts[4]}"
-                    totaldata.append(output_string)
+
+
+                    if output_string not in totaldata:
+                        totaldata.append(output_string)
     
     return totaldata
 
 
-
 # Function to get the dates of the upcoming n occurrences of a given weekday
-def upcoming_weekdays(day_of_week: str, n: int) -> List[str]:
+def upcoming_weekdays(day, ranges):
     # Map day names to their respective indices (0 for Monday, 1 for Tuesday, etc.)
     days_mapping = {
         'Monday': 0,
@@ -2019,11 +2017,11 @@ def upcoming_weekdays(day_of_week: str, n: int) -> List[str]:
     current_date = datetime.now().date()
 
     # Calculate the index of the given day
-    target_day_index = days_mapping[day_of_week]
+    target_day_index = days_mapping[day]
 
     # Find the dates of the upcoming occurrences of the given day
     upcoming_dates = []
-    while len(upcoming_dates) < n:
+    while len(upcoming_dates) < ranges:
         # Calculate the date of the next occurrence of the given day
         days_until_target = (target_day_index - current_date.weekday()) % 7
         next_date = current_date + timedelta(days=days_until_target)
@@ -2036,11 +2034,15 @@ def upcoming_weekdays(day_of_week: str, n: int) -> List[str]:
 
     return upcoming_dates
 
+#DELETE FROM `feedback`;
+#DELETE FROM `booking id description`;
+#DELETE FROM `booking list`;
 
-def writeData(data, db_connection, cursor):
+
+async def writeData(data, db_connection, cursor):
     for val in data:
         parts = val.split(", ")
-        day_of_week = upcoming_weekdays(parts[1], 1)       #CHANGE THE LAST NUMBER FOR HOW MANY WEEKS
+        day_of_week = upcoming_weekdays(parts[1], 12)       #CHANGE THE LAST NUMBER FOR HOW MANY WEEKS
 
         for day in day_of_week:
             while True:
@@ -2054,7 +2056,7 @@ def writeData(data, db_connection, cursor):
 
                 # Check if the bookingRequestID is in the currentRoomIDS
                 if any(NewbookingID in row for row in bookingIDCheck):
-                    print("Booking ID is in the current IDs. Generating a new ID.")     # Test print
+                    continue
                 else:
                     break
 
@@ -2078,14 +2080,15 @@ def writeData(data, db_connection, cursor):
             db_connection.commit()
 
     
-def datahandler(file, db_connection, cursor):
-    datalist = process_excel(file)
-    writeData(datalist, db_connection, cursor)
+async def datahandler(file, db_connection, cursor):
+    datalist = await process_excel(file)
+    await writeData(datalist, db_connection, cursor)
     return datalist
+        
 
 @app.post("/process_excel/")
-def process_excel_file(file: UploadFile = File(...), db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
+async def process_excel_file(file: UploadFile = File(...), db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
     cursor = db_connection.cursor()
-    datalist = datahandler(file, db_connection, cursor)    
+    datalist = await datahandler(file, db_connection, cursor)    
     return datalist  # Await the result of process_excel
 
