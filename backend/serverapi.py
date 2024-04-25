@@ -83,7 +83,7 @@ def generate_random_string():
     characters = string.ascii_letters + string.digits
 
     # Generate a random 5-character alphanumeric string
-    random_string = ''.join(random.choice(characters) for _ in range(12))
+    random_string = ''.join(random.choice(characters) for _ in range(6))
 
     return random_string
 
@@ -2238,7 +2238,18 @@ async def download_sample_excel(filename: str):
         # Return a 404 error if the file does not exist
         return {"error": "Sample Excel file not found"}
 
+@app.get("/download_user_guide/")
+async def download_user_guide():
+    # Define the path to the user guide PDF file
+    user_guide_path = os.path.join("static", "user_guide.pdf")
 
+    # Check if the file exists
+    if os.path.exists(user_guide_path):
+        # Return the file as a FileResponse
+        return FileResponse(user_guide_path, media_type="application/pdf", filename="user_guide.pdf")
+    else:
+        # Return a 404 error if the file does not exist
+        return {"error": "User guide PDF file not found"}
 
 
 ####################################
