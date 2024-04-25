@@ -20,6 +20,8 @@ const getPageTitle = (path: string): string => {
       return "Profile";
     case "/bookingrequest":
       return "Booking Request";
+    case "/graphstatistics":
+      return "Graph Statistics";
     default:
       return "Default Title";
   }

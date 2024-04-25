@@ -10,6 +10,8 @@ import bookingRequestDark from "../../../public/Sidebar-icon/Booking Request Dar
 import bookingRequestLight from "../../../public/Sidebar-icon/Booking Request Light.svg";
 import feedbackLight from "../../../public/Sidebar-icon/Feedback Light.svg";
 import feedbackDark from "../../../public/Sidebar-icon/Feedback Dark.svg";
+import graphStatisticsDark from "../../../public/Sidebar-icon/Graph-Statistics-Dark.svg"
+import graphStatisticsLight from "../../../public/Sidebar-icon/Graph-Statistics-Light.svg"
 import useNavigation from "./hook/use-navigation";
 
 import Image from "next/image";
@@ -26,6 +28,7 @@ const Sidebar = () => {
     isProfileActive,
     isBookingRequestActive,
     isAllBookingActive,
+    isGraphStatisticActive,
   } = useNavigation();
   const checkRole = async () => {
     try {
@@ -65,7 +68,7 @@ const Sidebar = () => {
   const iconStyle = "mx-2 w-7 h-10 justify-center p-0.5";
 
   return (
-    <>
+    <div>
       <div className="relative top-0 flex flex-col h-screen bg-[#fefefe] ">
         <Link href="https://www.southampton.ac.uk/my/index.page">
           <Image
@@ -180,6 +183,33 @@ const Sidebar = () => {
               )}
             </Link>
           )}
+          {isAdmin && (
+            <Link
+              href="/graphstatistics"
+              className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+            >
+              {isGraphStatisticActive ? (
+                <div className={`${buttonActiveStyle}`}>
+                  <Image
+                    src={graphStatisticsDark}
+                    alt="Graph Statistics Dark"
+                    className={`${iconStyle} animate-vote duration-200`}
+                  />
+                  <span className={`${textActiveStyle}`}>Graph Statistics</span>
+                </div>
+              ) : (
+                <div className={`${buttonInactiveStyle}`}>
+                  <Image
+                    src={graphStatisticsLight}
+                    alt="Graph Statistics Light"
+                    className={`${iconStyle} animate-vote duration-200`}
+                  />
+                  <span className={`${textInactiveStyle}`}>Graph Statistics</span>
+                </div>
+              )}
+            </Link>
+          )}
+           
         </div>
 
         <div className=" bottom-4 w-full flex flex-col absolute">
@@ -210,7 +240,7 @@ const Sidebar = () => {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
