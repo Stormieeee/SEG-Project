@@ -95,6 +95,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
       //if newActiveButton is not null then set capacity else empty
       setRoomDescEmpty(true);
       setCapacity(newActiveButton);
+      setEquipment(newActiveButton);
     } else {
       setRoomDescEmpty(false);
     }
@@ -118,7 +119,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
   const setEquipment = (roomid: string) => {
     //get and set array of equipment of room
     getRoomDetails(roomid)
-      .then((equipment) => {})
+      .then((equipment) => {
+        setRoomEquipment(equipment);
+      })
       .catch((error) => {
         console.log("Error fetching equipment" + error);
       });
@@ -621,8 +624,7 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                       ${getActiveButtonClass(activeButton === "2R030", colorMap["2R030"])}`}
                       disabled={getButtonDisabledState(colorMap["2R030"])}
                     >
-                      <span className="text-[7px] flex justify-center items-center">
-                      </span>
+                      <span className="text-[7px] flex justify-center items-center"></span>
                     </button>
                   </div>
                 </div>
