@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles/globals.css";
 
-// import PageWrapper from "./roombooking/page-wrapper";
-// import MarginWidthWrapper from "./roombooking/marginWidthWrapper";
-// import Sidebar from "./Sidebar";
-
 
 const inter = Inter({ subsets: ["latin"] });
 

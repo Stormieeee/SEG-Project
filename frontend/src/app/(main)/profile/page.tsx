@@ -166,12 +166,12 @@ const Profile = () => {
           Log out
         </button>
         {showResetPassword && (
-          <div className="fixed inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
+          <div className="inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
             <ResetPassword setShowResetPassword={setShowResetPassword} />
           </div>
         )}
         {showAuth && (
-          <div className="fixed inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
+          <div className="inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
             <Authentication
               handleSuccessAuth={handleSuccessAuth}
               handleFailedAuth={handleFailedAuth}

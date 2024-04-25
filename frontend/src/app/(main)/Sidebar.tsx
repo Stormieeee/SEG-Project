@@ -199,7 +199,7 @@ const Sidebar = () => {
                   <Image
                     src={graphStatisticsDark}
                     alt="Graph Statistics Dark"
-                    className={`${iconStyle} pt-1.5 pb-1.5 animate-vote duration-200`}
+                    className={`${iconStyle} pt-1.5 pb-1.5 duration-200`}
                   />
                   <span className={`${textActiveStyle}`}>Graph Statistics</span>
                 </div>
@@ -225,7 +225,7 @@ const Sidebar = () => {
                   <Image
                     src={uploadDark}
                     alt="Upload Dark"
-                    className={`${iconStyle} animate-vote duration-200`}
+                    className={`${iconStyle}  duration-200`}
                   />
                   <span className={`${textActiveStyle}`}>Upload</span>
                 </div>
@@ -282,7 +282,7 @@ const Sidebar = () => {
                 <Image
                   src={profileDark}
                   alt="Profile Dark"
-                  className={`${iconStyle} animate-vote duration-200`}
+                  className={`${iconStyle} duration-200`}
                 />
                 <span className={`${textActiveStyle}`}>Profile</span>
               </div>

@@ -23,12 +23,7 @@ interface StateContextType {
   dataFromApi: null;
   setFetchedData : React.Dispatch<React.SetStateAction<null>>;
 
-  roomCapacity : number;
-  setRoomCapacity : React.Dispatch<React.SetStateAction<number>>;
-  roomEquipment: string[],
-  setRoomEquipment : React.Dispatch<React.SetStateAction<string[]>>;
-  isRoomDescEmpty : boolean;
-  setRoomDescEmpty : React.Dispatch<React.SetStateAction<boolean>>;
+
   roomCapacity: number;
   setRoomCapacity: React.Dispatch<React.SetStateAction<number>>;
   roomEquipment: string[];
@@ -64,20 +59,16 @@ const defaultValue: StateContextType = {
   dataFromApi : null,
   setFetchedData : () => {},
   
-
-  setFloorSection: () => {},
   roomCapacity: 0,
   setRoomCapacity : () => {},
   roomEquipment : [],
   setRoomEquipment : () => {},
   isRoomDescEmpty : true,
   setRoomDescEmpty : () => {},
-  setRoomCapacity: () => {},
-  roomEquipment: [],
-  setRoomEquipment: () => {},
-  isRoomDescEmpty: true,
-  setRoomDescEmpty: () => {},
-  setFloorSection: () => {},
+
+
+
+
 
   message: "",
   setMessage: () => {},
