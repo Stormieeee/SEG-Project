@@ -105,6 +105,25 @@ const ProfilePictureForm = ({
     setProfilePicture(profile);
     setSaveable(true);
   };
+  // Close form when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const form = document.getElementById("profile-picture-form");
+      if (form && !form.contains(event.target as Node)) {
+        handleCloseEditForm();
+      }
+    };
+
+    if (showEditForm) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showEditForm]);
 
   return (
     <form

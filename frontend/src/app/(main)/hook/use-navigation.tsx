@@ -12,6 +12,7 @@ const useNavigation = () => {
   const [isBookingRequestActive, setBookingRequestActive] = useState(false);
   const [isAllBookingActive, setAllBookingActive] = useState(false);
   const [isGraphStatisticActive, setGraphStatisticActive] = useState(false);
+  const [isUploadActive, setUploadActive] = useState(false);
 
   useEffect(() => {
     setRoomBookingActive(false);
@@ -20,6 +21,7 @@ const useNavigation = () => {
     setBookingRequestActive(false);
     setAllBookingActive(false);
     setGraphStatisticActive(false);
+    setUploadActive(false);
 
     switch (pathname) {
       case "/roombooking":
@@ -39,6 +41,10 @@ const useNavigation = () => {
         break;
       case "/graphstatistics":
         setGraphStatisticActive(true);
+        break;
+      case "/upload":
+        setUploadActive(true);
+        break;
       default:
         // Handle any other cases here
         break;
@@ -52,6 +58,7 @@ const useNavigation = () => {
     isBookingRequestActive,
     isAllBookingActive,
     isGraphStatisticActive,
+    isUploadActive,
   };
 };
 

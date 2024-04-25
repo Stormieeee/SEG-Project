@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useStateContext } from "./BookingContext";
-import LoadingSpinner from "@/app/Components/LoadingSpinner";
 import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
+import { useStateContext as mainStateContext } from "../StateContext";
 
 const DetailsBar = () => {
   const [newComment, setNewComment] = useState("");
@@ -26,6 +26,10 @@ const DetailsBar = () => {
     description,
     comment,
   } = bookingDetails ?? {};
+
+  // Popup message after canceling booking
+  const { setIsVisible, setMessage, setIsSuccess } = mainStateContext();
+
   // Remove request from table after approving/rejecting
   const getBookingData = async () => {
     try {
@@ -80,14 +84,17 @@ const DetailsBar = () => {
           if (response.ok) {
             setNewComment("");
             getBookingData();
-            // getBookingDetails();
+            setMessage("Booking request rejected successfully");
+            setIsSuccess(true);
           }
         } catch (error) {
           console.error("Error approving/rejecting request:", error);
-          throw error;
+          setMessage("Error rejecting request");
+          setIsSuccess(false);
+        } finally {
+          setIsLoading(false);
+          setIsVisible(true);
         }
-        // setShouldRegenerate(true);
-        setIsLoading(false);
       }
     }
   };

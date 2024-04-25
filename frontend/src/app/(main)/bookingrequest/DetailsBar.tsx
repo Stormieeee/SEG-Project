@@ -4,6 +4,7 @@ import { useStateContext } from "./RequestContext";
 import RectangularCheckbox from "./RectangularCheckbox";
 import LoadingSpinner from "@/app/Components/LoadingSpinner";
 import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
+import { useStateContext as mainStateContext } from "../StateContext";
 
 const DetailsBar = () => {
   const [comment, setComment] = useState("");
@@ -25,6 +26,9 @@ const DetailsBar = () => {
     request_capacity,
     description,
   } = requestDetails ?? {};
+  // Popup message after approving/rejecting booking
+  const { setIsVisible, setMessage, setIsSuccess } = mainStateContext();
+
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (bookingId: string) => {
     setRequests((prev) => prev.filter((request) => request[0] !== bookingId));
@@ -57,20 +61,27 @@ const DetailsBar = () => {
         if (response.ok) {
           const data = await response.json();
           if (data[0] === "Collision") {
-            alert("Collision detected! Please decline this booking request.");
+            setMessage(
+              "Collision detected! Please decline this booking request."
+            );
+            setIsSuccess(false);
           } else {
             handleRemoveItem(bookingId ? bookingId : "");
             if (selectedRowIndex === displayedRequests.length - 1) {
               setSelectedRowIndex(selectedRowIndex - 1);
             }
+            setMessage("Booking request handled successfully");
+            setIsSuccess(true);
           }
         }
       } catch (error) {
-        console.error("Error approving/rejecting request:", error);
-        throw error;
+        setMessage("Error approving/rejecting request");
+        setIsSuccess(false);
+      } finally {
+        setIsLoading(false);
+        setChecked(false);
+        setIsVisible(true);
       }
-      setChecked(false);
-      setIsLoading(false);
     }
   };
   const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3";

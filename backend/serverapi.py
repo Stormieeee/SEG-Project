@@ -14,7 +14,7 @@ import tempfile
 from typing import List
 import openpyxl
 from io import BytesIO
-from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
+from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Response
 
 import smtplib
 from email.mime.text import MIMEText
@@ -24,6 +24,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from tempfile import NamedTemporaryFile
+from fastapi.responses import FileResponse
+import os
 
 ###################### ENCRYPTION
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -1699,7 +1701,7 @@ def update_profile_picture(user_id: str, file: UploadFile = UploadFile(...), db_
         update_profile_picture_in_db(db_connection, cursor, user_id, profile_picture_bytes)
     
         return {"message": "Profile picture updated successfully"}
-
+     
 def delete_profile_picture_in_db(db_connection, cursor, user_id):
     # Update the profile picture in the database to NULL
     update_query = "UPDATE users SET profile_picture = NULL WHERE `User ID` = %s"
@@ -1737,8 +1739,8 @@ def insert_data(db_connection, cursor, userlist):
 async def upload_excel(file: UploadFile = File(...), db_connection = Depends(get_database_connection)):
     cursor = db_connection.cursor()
     # Check if the file is an Excel file
-    if not file.filename.endswith(".xlsx"):
-        raise HTTPException(status_code=400, detail="Only Excel files (.xlsx) are supported.")
+    if not (file.filename.endswith(".xlsx") or file.filename.endswith(".xls")):
+        raise HTTPException(status_code=400, detail="Only Excel files (.xlsx/.xls) are supported.")
 
     # Save the uploaded Excel file to a temporary file
     with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp:
@@ -1751,7 +1753,7 @@ async def upload_excel(file: UploadFile = File(...), db_connection = Depends(get
     # Iterate over the rows of the Excel file
     for index, row in excel_data.iterrows():
         # Extract data from each row
-        username = row['username']
+        username = row['email']
         password = row['password']
         user_role = row['user role']
 
@@ -1981,7 +1983,9 @@ async def process_excel(file: UploadFile):
     start_row = 5
     start_column = 2
     totaldata = []
-
+    
+    #for column_index in range(start_column, 2 + 1):
+        #for row_index in range(start_row,23 + 1, 3):
     for column_index in range(start_column, worksheet.max_column + 1):
         for row_index in range(start_row,worksheet.max_row + 1, 3):
             classroom = await get_value_above(worksheet, worksheet.cell(row=row_index, column=1))
@@ -2011,6 +2015,7 @@ async def process_excel(file: UploadFile):
 
                     if output_string not in totaldata:
                         totaldata.append(output_string)
+
     
     return totaldata
 
@@ -2049,15 +2054,35 @@ def upcoming_weekdays(day, ranges):
 
     return upcoming_dates
 
-#DELETE FROM `feedback`;
-#DELETE FROM `booking id description`;
-#DELETE FROM `booking list`;
+def has_duplicate_entry(existing_data, new_entry):
+    for data_entry in existing_data:
+        # Split each existing data entry based on comma
+        existing_sections = data_entry.split(", ")
+
+        # Split the new entry based on comma
+        new_sections = new_entry.split(", ")
+
+        # Compare the first, second, and fourth sections
+        if (existing_sections[0].strip() == new_sections[0].strip() and
+            existing_sections[1].strip() == new_sections[1].strip() and
+            existing_sections[3].strip() == new_sections[3].strip()):
+            return True  # Duplicate entry found
+        
+    return False  # No duplicate entry found
 
 
 async def writeData(data, db_connection, cursor):
-    for val in data:
+    written = []
+    unwritten = []
+    for indi in data:
+        if has_duplicate_entry(written,indi):
+            unwritten.append(indi)
+        else:
+            written.append(indi)
+            
+    for val in written:
         parts = val.split(", ")
-        day_of_week = upcoming_weekdays(parts[1], 12)       #CHANGE THE LAST NUMBER FOR HOW MANY WEEKS
+        day_of_week = upcoming_weekdays(parts[1],12)       #CHANGE THE LAST NUMBER FOR HOW MANY WEEKS
 
         for day in day_of_week:
             while True:
@@ -2074,15 +2099,14 @@ async def writeData(data, db_connection, cursor):
                     continue
                 else:
                     break
+                    
 
-     
             # Insert data into Booking List table
             insertDetails1 = ("""
                 INSERT INTO `Booking List` (`Booking ID`, `User ID`, `Room ID`,`handler`)
                 VALUES (%s, %s, %s, %s);""")
             cursor.execute(insertDetails1, (NewbookingID, parts[5], parts[0], "System"))
 
-            #"[2R011, Monday, IFYP0023-LEC, 09:00:00, 10:00:00, Shaba]"
 
             # Insert the data into booking id description
             insertDetails2 = ("""
@@ -2090,15 +2114,59 @@ async def writeData(data, db_connection, cursor):
                 VALUES (%s, %s, %s, %s, %s, %s, %s);""")
 
             cursor.execute(insertDetails2, (NewbookingID, parts[2], day, parts[3], parts[4], 30, ""))
-            
+                    
             # Commit the transaction
             db_connection.commit()
 
+
+    unwritten = list(set(unwritten))
+           
+    return unwritten
+
+async def createDuplicates(data):
+    from openpyxl import Workbook
+    # Create a new workbook and select the active worksheet
+    wb = Workbook()
+    ws = wb.active
+
+    # Define the data
+    headers = ["room", "day", "description", "start time", "end time", "lecturer"]
+
+    ws.append(headers)
+
+    dataset = convert_to_nested_lists(data)
     
+    # Write the data to the worksheet
+    for row in dataset:
+        ws.append(row)
+
+    # Write the workbook to a BytesIO buffer instead of a temporary file
+    excel_buffer = io.BytesIO()
+    wb.save(excel_buffer)
+    excel_buffer.seek(0)
+
+    # Read the contents from the BytesIO buffer
+    content = excel_buffer.getvalue()
+
+    # Set the response headers to indicate it's an Excel file
+    response = Response(content, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response.headers["Content-Disposition"] = "attachment; filename=duplicateClasses.xlsx"
+
+    return response
+
+def convert_to_nested_lists(data):
+    nested_data = []
+    for string in data:
+        nested_data.append(string.split(","))
+    return nested_data
+
 async def datahandler(file, db_connection, cursor):
     datalist = await process_excel(file)
-    await writeData(datalist, db_connection, cursor)
-    return datalist
+    unwritten_data = await writeData(datalist, db_connection, cursor)
+    #return unwritten_data
+    file = await createDuplicates(unwritten_data)        
+    return file
+
         
 
 @app.post("/process_excel/")
@@ -2107,3 +2175,21 @@ async def process_excel_file(file: UploadFile = File(...), db_connection: mysql.
     datalist = await datahandler(file, db_connection, cursor)    
     return datalist  # Await the result of process_excel
 
+# DELETE FROM `feedback`;
+# DELETE FROM `booking id description`;
+# DELETE FROM `booking list`;
+
+#################################### JIEYANG
+# Download the sample timetable Excel file
+@app.get("/download_sample_excel/{filename}")
+async def download_sample_excel(filename: str):
+    # Define the path to your sample Excel file
+    sample_excel_path = os.path.join("static", filename)
+
+    # Check if the file exists
+    if os.path.exists(sample_excel_path):
+        # Return the file as a FileResponse
+        return FileResponse(sample_excel_path, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename=filename)
+    else:
+        # Return a 404 error if the file does not exist
+        return {"error": "Sample Excel file not found"}

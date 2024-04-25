@@ -13,6 +13,8 @@ import feedbackDark from "../../../public/Sidebar-icon/Feedback Dark.svg";
 import graphStatisticsDark from "../../../public/Sidebar-icon/Graph-Statistics-Dark.svg"
 import graphStatisticsLight from "../../../public/Sidebar-icon/Graph-Statistics-Light.svg"
 import useNavigation from "./hook/use-navigation";
+import uploadDark from "../../../public/Sidebar-icon/Upload Dark.svg";
+import uploadLight from "../../../public/Sidebar-icon/Upload Light.svg";
 
 import Image from "next/image";
 import companylogo from "../../../public/Company-logo/Company Logo.svg";
@@ -29,6 +31,7 @@ const Sidebar = () => {
     isBookingRequestActive,
     isAllBookingActive,
     isGraphStatisticActive,
+    isUploadActive,
   } = useNavigation();
   const checkRole = async () => {
     try {
@@ -209,7 +212,33 @@ const Sidebar = () => {
               )}
             </Link>
           )}
-           
+          {isAdmin && (
+            <Link
+              href="/upload"
+              className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+            >
+              {isUploadActive ? (
+                <div className={`${buttonActiveStyle}`}>
+                  <Image
+                    src={uploadDark}
+                    alt="Upload Dark"
+                    className={`${iconStyle} animate-vote duration-200`}
+                  />
+                  <span className={`${textActiveStyle}`}>Upload</span>
+                </div>
+              ) : (
+                <div className={`${buttonInactiveStyle}`}>
+                  <Image
+                    src={uploadLight}
+                    alt="Upload Light"
+                    className={`${iconStyle}`}
+                  />
+                  <span className={`${textInactiveStyle}`}>Upload</span>
+                </div>
+              )}
+            </Link>
+          )}
+              
         </div>
 
         <div className=" bottom-4 w-full flex flex-col absolute">
