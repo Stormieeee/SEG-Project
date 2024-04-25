@@ -1,5 +1,6 @@
 import Image from "next/image";
 import profile from "./default_profile_avatar.svg";
+import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 import { useEffect, useRef, useState } from "react";
 import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 
@@ -9,6 +10,10 @@ interface ProfilePictureFormProps {
   getUserInfo: () => void;
   profilePicture: string | null;
   setProfilePicture: React.Dispatch<React.SetStateAction<string | null>>;
+  originalProfilePicture: string | null;
+  setOriginalProfilePicture: React.Dispatch<
+    React.SetStateAction<string | null>
+  >;
 }
 
 const ProfilePictureForm = ({
@@ -17,12 +22,17 @@ const ProfilePictureForm = ({
   getUserInfo,
   profilePicture,
   setProfilePicture,
+  originalProfilePicture,
+  setOriginalProfilePicture,
 }: ProfilePictureFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [saveable, setSaveable] = useState<boolean>(false);
+  const [deleteable, setDeleteable] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // event.preventDefault();
+    setSaveable(true);
+    setDeleteable(true);
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
@@ -32,48 +42,90 @@ const ProfilePictureForm = ({
   };
 
   useEffect(() => {
-    console.log("Selected file:", profilePicture);
+    setDeleteable(profilePicture !== profile);
   }, [profilePicture]);
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const userId = getEmailFromSessionStorage();
 
-    if (!selectedFile) {
-      console.log("No file selected");
-      return;
-    }
+    if (deleteable && selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
 
-    const formData = new FormData();
-    formData.append("profile_picture", selectedFile);
+      try {
+        const response = await fetch(
+          `http://localhost:8000/update_profile_pic/?user_id=${userId}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
-    try {
-      const response = await fetch(
-        "http://localhost:8000/update-profile-picture/",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            username: getEmailFromSessionStorage(),
-            profile_picture: formData,
-          }),
+        if (response.ok) {
+          setOriginalProfilePicture(URL.createObjectURL(selectedFile));
+          setShowEditForm(false);
+        } else {
+          console.error("Error updating profile picture");
         }
-      );
-
-      if (response.ok) {
-        setShowEditForm(false);
-      } else {
-        console.error("Error updating profile picture");
+      } catch (error) {
+        console.error("Error updating profile picture:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } else {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/delete_profile_pic/?user_id=${userId}`,
+          {
+            method: "POST",
+          }
+        );
+
+        if (response.ok) {
+          setOriginalProfilePicture(profile);
+          setShowEditForm(false);
+        } else {
+          console.error("Error deleting profile picture");
+        }
+      } catch (error) {
+        console.error("Error deleting profile picture:", error);
+      }
     }
+    setSaveable(false);
   };
 
   const handleCloseEditForm = () => {
+    if (originalProfilePicture !== profilePicture) {
+      setProfilePicture(originalProfilePicture);
+    }
+    if (profilePicture === profile) {
+      setDeleteable(false);
+    }
     setShowEditForm(false);
+    setSaveable(false);
   };
   const handleDelete = () => {
     setProfilePicture(profile);
+    setSaveable(true);
   };
+  // Close form when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const form = document.getElementById("profile-picture-form");
+      if (form && !form.contains(event.target as Node)) {
+        handleCloseEditForm();
+      }
+    };
+
+    if (showEditForm) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showEditForm]);
 
   return (
     <form
@@ -125,21 +177,23 @@ const ProfilePictureForm = ({
               height={160}
             />
           </div>
-          <button
-            className="absolute right-8 top-3 hover:opacity-60 bg-white-100 cursor-pointer"
-            onClick={(e) => {
-              e.preventDefault();
-              handleDelete();
-            }}
-          >
-            <Image
-              src="/Profile-icon/delete.svg"
-              alt="delete"
-              width={30}
-              height={30}
-              layout="fixed"
-            />
-          </button>
+          {deleteable && (
+            <button
+              className="absolute top-0 right-8 top-3 hover:opacity-60 bg-white-100 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+            >
+              <Image
+                src="/Profile-icon/delete.svg"
+                alt="delete"
+                width={30}
+                height={30}
+                layout="fixed"
+              />
+            </button>
+          )}
         </div>
         <input
           type="file"
@@ -160,12 +214,14 @@ const ProfilePictureForm = ({
         >
           Change Profile Picture
         </button>
-        <button
-          type="submit"
-          className="w-1/4 text-white-50 px-5 py-3 text-sm bg-blue-400 hover:bg-blue-500 font-bold rounded-lg"
-        >
-          Save
-        </button>
+        {saveable && (
+          <button
+            type="submit"
+            className="w-1/4 text-white-50 px-5 py-3 text-sm bg-blue-400 hover:bg-blue-500 font-bold rounded-lg"
+          >
+            Save
+          </button>
+        )}
       </div>
     </form>
   );

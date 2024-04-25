@@ -150,6 +150,8 @@ export const StateProvider = ({ children }: any) => {
     } else {
       setBookings(pastBookings);
     }
+    console.log("currentBookings: ", currentBookings);
+    console.log("pastBookings: ", pastBookings);
   }, [isCurrentBooking]);
 
   return (

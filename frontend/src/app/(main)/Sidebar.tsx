@@ -10,9 +10,13 @@ import bookingRequestDark from "../../../public/Sidebar-icon/Booking Request Dar
 import bookingRequestLight from "../../../public/Sidebar-icon/Booking Request Light.svg";
 import feedbackLight from "../../../public/Sidebar-icon/Feedback Light.svg";
 import feedbackDark from "../../../public/Sidebar-icon/Feedback Dark.svg";
+import graphStatisticsDark from "../../../public/Sidebar-icon/Graph Statistics Dark.svg"
+import graphStatisticsLight from "../../../public/Sidebar-icon/Graph Statistics Light.svg"
 import viewfeedbackDark from "../../../public/Sidebar-icon/ViewFeedBack Dark.svg";
 import viewfeedbackLight from "../../../public/Sidebar-icon/ViewFeedBack Light.svg";
 import useNavigation from "./hook/use-navigation";
+import uploadDark from "../../../public/Sidebar-icon/Upload Dark.svg";
+import uploadLight from "../../../public/Sidebar-icon/Upload Light.svg";
 
 import Image from "next/image";
 import companylogo from "../../../public/Company-logo/Company Logo.svg";
@@ -28,6 +32,8 @@ const Sidebar = () => {
     isProfileActive,
     isBookingRequestActive,
     isAllBookingActive,
+    isGraphStatisticActive,
+    isUploadActive,
     isViewFeedbackActive,
   } = useNavigation();
   const checkRole = async () => {
@@ -68,7 +74,7 @@ const Sidebar = () => {
   const iconStyle = "mx-2 w-7 h-10 justify-center p-0.5";
 
   return (
-    <>
+    <div>
       <div className="relative top-0 flex flex-col h-screen bg-[#fefefe] ">
         <Link href="https://www.southampton.ac.uk/my/index.page">
           <Image
@@ -183,6 +189,59 @@ const Sidebar = () => {
               )}
             </Link>
           )}
+          {isAdmin && (
+            <Link
+              href="/graphstatistics"
+              className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+            >
+              {isGraphStatisticActive ? (
+                <div className={`${buttonActiveStyle}`}>
+                  <Image
+                    src={graphStatisticsDark}
+                    alt="Graph Statistics Dark"
+                    className={`${iconStyle} pt-1.5 pb-1.5 animate-vote duration-200`}
+                  />
+                  <span className={`${textActiveStyle}`}>Graph Statistics</span>
+                </div>
+              ) : (
+                <div className={`${buttonInactiveStyle}`}>
+                  <Image
+                    src={graphStatisticsLight}
+                    alt="Graph Statistics Light"
+                    className={`${iconStyle} pt-1.5 pb-1.5`}
+                  />
+                  <span className={`${textInactiveStyle}`}>Graph Statistics</span>
+                </div>
+              )}
+            </Link>
+          )}
+          {isAdmin && (
+            <Link
+              href="/upload"
+              className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+            >
+              {isUploadActive ? (
+                <div className={`${buttonActiveStyle}`}>
+                  <Image
+                    src={uploadDark}
+                    alt="Upload Dark"
+                    className={`${iconStyle} animate-vote duration-200`}
+                  />
+                  <span className={`${textActiveStyle}`}>Upload</span>
+                </div>
+              ) : (
+                <div className={`${buttonInactiveStyle}`}>
+                  <Image
+                    src={uploadLight}
+                    alt="Upload Light"
+                    className={`${iconStyle}`}
+                  />
+                  <span className={`${textInactiveStyle}`}>Upload</span>
+                </div>
+              )}
+            </Link>
+          )}
+              
 
           {isAdmin && (
             <Link
@@ -240,7 +299,7 @@ const Sidebar = () => {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

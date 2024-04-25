@@ -26,6 +26,7 @@ const DetailsBar = () => {
     );
   };
 
+
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
@@ -48,7 +49,7 @@ const DetailsBar = () => {
         }
       }
     } catch (error) {
-      console.error("Error cancel booking/booking request:", error);
+      console.error("Error Approving This Feedback", error);
       throw error;
     }
     if (selectedRowIndex >= 0 && feedbackList) {
@@ -61,13 +62,15 @@ const DetailsBar = () => {
   };
 
   const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3";
+
+
   return (
     <div className="flex flex-1 flex-col">
       <div className="justify-start text-2xl font-bold text-stone-900">
-        Booking Details
+        Feedback
       </div>
       <div className="border-neutral-400 flex-1 flex-col justify-start inline-flex">
-        <div className={`${subHeadingStyle}`}>Booking Specific:</div>
+        <div className={`${subHeadingStyle}`}>Feedback Specific:</div>
         <ul className="pl-1 space-y-2 mt-2 text-base font-medium text-stone-700">
           <li>Room Capacity: {room_capacity}</li>
           <li>Request Capacity: {request_capacity}</li>

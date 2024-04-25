@@ -11,11 +11,8 @@ const BookingsTable = () => {
   } = useStateContext();
   const header = [
     "Booking ID",
-    "Room",
-    "Date",
-    "Start Time",
-    "End Time",
-    "Status",
+    "Title",
+    "Description",
   ];
 
   useEffect(() => {
@@ -43,8 +40,10 @@ const BookingsTable = () => {
       );
 
       if (response.ok) {
+        
         const data = await response.json();
-        setFeedbackDetails({ index, ...data });
+        const roomID = await getRoomID(bookingId);
+        setFeedbackDetails({ index, roomID,  ...data });
       }
     } catch (error) {
       console.error("Error fetching booking request details: ", error);
@@ -52,6 +51,29 @@ const BookingsTable = () => {
     }
   };
 
+  const getRoomID = async (
+    bookingID: string
+  ) =>{
+    try{
+      const response = await fetch("http://localhost:8000/getRoomID", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({bookingID: feedbackList[selectedRowIndex][0],
+
+        }),
+      })
+
+      if(response.ok){
+        const data = await response.json
+        return data
+      }
+
+    }catch(error){
+      console.log("Room ID could not be found")
+    }
+  };
 
   return (
     <div className="flex flex-col overflow-y-auto">
@@ -59,7 +81,7 @@ const BookingsTable = () => {
         {header.map((item, index) => (
           <div
             key={index}
-            className={`flex-1 py-3 text-center font-semibold ${index === header.length - 1 ? `max-w-[140px] mx-5` : ""}`}
+            className={`flex-1 py-3 text-center font-semibold ${index === header.length - 1 ? ` mx-5` : ""}`}
           >
             {item}
           </div>
@@ -86,7 +108,7 @@ const BookingsTable = () => {
             {rowData.map((cellData, cellIndex) => (
               <div
                 key={cellIndex}
-                className={`flex-1 py-[0.7rem] font-xl text-center ${cellIndex === header.length - 1 ? `rounded-xl max-w-[140px] mx-5` : ""}`}
+                className={`flex-1 py-[0.7rem] font-xl text-center ${cellIndex === header.length - 1 ? `rounded-xl  mx-5` : ""}`}
               >
                 {cellData}
               </div>

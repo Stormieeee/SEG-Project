@@ -234,6 +234,13 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     className={`${iconStyle} p-1`}
                   />
                 </div>
+                <div className="h-85/100 bg-zinc-400 rounded-md text-sm flex justify-center items-center">
+                  <Image
+                    src={stairs}
+                    alt="Stair Icon"
+                    className={`${iconStyle} p-1`}
+                  />
+                </div>
               </div>
               <div className="w-4/5 flex flex-col">
                 <div className="h-2/5 text-[10px] bg-slate-400 rounded-md border-2 flex justify-center items-center">
@@ -473,6 +480,13 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                 className={`${iconStyle} p-1`}
               />
             </div>
+            <div className="w-45/100 bg-zinc-400 rounded-md flex justify-center items-center">
+              <Image
+                src={stairs}
+                alt="Stair Icon"
+                className={`${iconStyle} p-1`}
+              />
+            </div>
             <div className="w-34/100"></div>
           </div>
           <div className="h-58/100"></div>
@@ -685,6 +699,58 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                 />
               </div>
               <div className="h-68/100 bg-slate-400 rounded-md flex flex-col justify-center items-center space-y-1">
+                <span>
+                  <Image
+                    src={lift}
+                    alt="LiftIcon"
+                    className={`${iconStyle} p-1`}
+                  />
+                </span>
+                <span>
+                  <Image
+                    src={toilet}
+                    alt="Toilet Icon"
+                    className={`${iconStyle} p-1 `}
+                  />
+                </span>
+                <span>
+                  <Image
+                    src={toilet}
+                    alt="Toilet Icon"
+                    className={`${iconStyle} p-1 `}
+                  />
+                </span>
+              </div>
+              <div className="h-68/100 bg-slate-400 rounded-md flex flex-col justify-center items-center space-y-1">
+                <span>
+                  <Image
+                    src={lift}
+                    alt="LiftIcon"
+                    className={`${iconStyle} p-1`}
+                  />
+                </span>
+                <span>
+                  <Image
+                    src={toilet}
+                    alt="Toilet Icon"
+                    className={`${iconStyle} p-1 `}
+                  />
+                </span>
+                <span>
+                  <Image
+                    src={toilet}
+                    alt="Toilet Icon"
+                    className={`${iconStyle} p-1 `}
+                  />
+                </span>
+              <div className="h-10/100 bg-zinc-400 rounded-md flex justify-center items-center">
+                <Image
+                  src={stairs}
+                  alt="Stair Icon"
+                  className={`${iconStyle} p-2`}
+                />
+              </div>
+              <div className="h-68/100 bg-zinc-400 rounded-md flex flex-col justify-center items-center space-y-1">
                 <span>
                   <Image
                     src={lift}
@@ -1655,6 +1721,8 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
     return (
       <div className={`${floorplanStyle} p-2`}>
         <div className="h-10/100 bg-slate-400"></div>
+      <div className={`${floorplanStyle}`}>
+        <div className="h-10/100 bg-black-100"></div>
 
         <div className="h-80/100 flex flex-col">
           {/* Top Area */}
@@ -1680,6 +1748,33 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               disabled={getButtonDisabledState(colorMap["3L024"])}
             >
               3L024
+        <div className="h-80/100 flex flex-col">
+          {/* Top Area */}
+          <div className="h-40/100 w-98/100 flex flex-row">
+            <div className="w-4/100 flex flex-col">
+              <div className="h-73/100 rounded-md bg-zinc-400 flex items-center justify-center">
+                <Image
+                  src={stairs}
+                  alt="Stair Icon"
+                  className={`${iconStyle} p-1`}
+                />
+              </div>
+            </div>
+
+            <button
+              key={"2L011"}
+              onClick={() => {
+                handleButtonClick("2L011");
+              }}
+              className={`w-7/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["2L011"])}
+              ${getActiveButtonClass(activeButton === "2L011", colorMap["2L011"])}`}
+              disabled={getButtonDisabledState(colorMap["2L011"])}
+            >
+              <span className="flex justify-center items-center transform -rotate-90 origin-center">
+                2L011
+              </span>
             </button>
             <button
               key={"3L023"}
@@ -1750,6 +1845,47 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                 <span className="text-xs">3L019</span>
               </button>
             </div>
+
+            <button
+              key={"2L010"}
+              onClick={() => {
+                handleButtonClick("2L010");
+              }}
+              className={`w-15/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["2L010"])}
+              ${getActiveButtonClass(activeButton === "2L010", colorMap["2L010"])}`}
+              disabled={getButtonDisabledState(colorMap["2L010"])}
+            >
+              2L010
+            </button>
+            <button
+              key={"2L009"}
+              onClick={() => {
+                handleButtonClick("2L009");
+              }}
+              className={`w-18/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["2L009"])}
+              ${getActiveButtonClass(activeButton === "2L009", colorMap["2L009"])}`}
+              disabled={getButtonDisabledState(colorMap["2L009"])}
+            >
+              2L009
+            </button>
+            <button
+              key={"2L008"}
+              onClick={() => {
+                handleButtonClick("2L008");
+              }}
+              className={`w-36/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["2L008"])}
+              ${getActiveButtonClass(activeButton === "2L008", colorMap["2L008"])}`}
+              disabled={getButtonDisabledState(colorMap["2L008"])}
+            >
+              2L008
+            </button>
+
             <div className="w-10/100 flex flex-col">
               <button
                 key={"3L017"}
@@ -1907,6 +2043,22 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
                     3L010
                   </span>
                 </button>
+                <div className="w-3/5 flex">
+                  <button
+                    key={"2L003"}
+                    onClick={() => {
+                      handleButtonClick("2L003");
+                    }}
+                    className={`w-full h-full border-b-2
+                    ${textStyle}
+                    ${getButtonColorClass(colorMap["2L003"])}
+                    ${getActiveButtonClass(activeButton === "2L003", colorMap["2L003"])}`}
+                    style={{ clipPath: "polygon(0 100%, 0 0, 100% 100%)"}}
+                    disabled={getButtonDisabledState(colorMap["2L003"])}
+                  >
+                    <span className="flex transform -rotate-115 translate-x-[-30%] translate-y-[40%] text-[8px]">03-Cut</span>
+                  </button>
+                </div>
                 <button
                   key={"3L009"}
                   onClick={() => {
@@ -2048,6 +2200,144 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
               </div>
             </div>
           </div>
+          {/* Middle Corridor */}
+          <div className="h-10/100 w-98/100"></div>
+
+          {/* Bottom Area */}
+          <div className="h-50/100 w-98/100 flex flex-row">
+            <div className="w-5/100 flex flex-col">
+              <div className="h-2/3 flex flex-row">
+                <div className="w-2/3 flex flex-col">
+                  <div className="h-20/100"></div>
+                  <div className="h-30/100 bg-zinc-400 rounded-md flex items-center justify-center">
+                    <Image
+                      src={toilet}
+                      alt="Toilet Icon"
+                      className={`${iconStyle} p-1 `}
+                    />
+                  </div>
+                  <div className="h-50/100 bg-zinc-400 rounded-md flex items-center justify-center">
+                    <Image
+                      src={toilet}
+                      alt="Toilet Icon"
+                      className={`${iconStyle} p-1 `}
+                    />
+                  </div>
+                </div>
+                <div className="w-1/3"></div>
+              </div>
+              <div className="h-1/3 bg-zinc-400 rounded-md flex items-center justify-center">
+                <Image
+                  src={toilet}
+                  alt="Toilet Icon"
+                  className={`${iconStyle} p-1 `}
+                />
+              </div>
+            </div>
+
+            <div className="w-20/100 flex flex-col">
+              <div className="h-62/100 flex flex-row">
+                <div className="w-1/2 flex flex-col">
+                  <button
+                    key={"2L012"}
+                    onClick={() => {
+                      handleButtonClick("2L012");
+                    }}
+                    className={`h-50/100 rounded-md border-2
+                    ${textStyle}
+                    ${getButtonColorClass(colorMap["2L012"])}
+                    ${getActiveButtonClass(activeButton === "2L012", colorMap["2L012"])}`}
+                    disabled={getButtonDisabledState(colorMap["2L012"])}
+                  >
+                    2L012
+                  </button>
+                  <div className="h-30/100 flex flex-row">
+                    <button
+                      key={"2L016"}
+                      onClick={() => {
+                        handleButtonClick("2L016");
+                      }}
+                      className={`w-1/2 rounded-md border-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2L016"])}
+                      ${getActiveButtonClass(activeButton === "2L016", colorMap["2L016"])}`}
+                      disabled={getButtonDisabledState(colorMap["2L016"])}
+                    >
+                      <span className="text-[8px]">2L016</span>
+                    </button>
+                    <button
+                      key={"2L015"}
+                      onClick={() => {
+                        handleButtonClick("2L015");
+                      }}
+                      className={`w-1/2 rounded-md border-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2L015"])}
+                      ${getActiveButtonClass(activeButton === "2L015", colorMap["2L015"])}`}
+                      disabled={getButtonDisabledState(colorMap["2L015"])}
+                    >
+                      <span className="text-[8px]">2L015</span>
+                    </button>
+                  </div>
+                  <button
+                    key={"2L013"}
+                    onClick={() => {
+                      handleButtonClick("2L013");
+                    }}
+                    className={`h-20/100 rounded-l-md border-t-2 border-l-2 border-b-2
+                    ${textStyle}
+                    ${getButtonColorClass(colorMap["2L013"])}
+                    ${getActiveButtonClass(activeButton === "2L013", colorMap["2L013"])}`}
+                    disabled={getButtonDisabledState(colorMap["2L013"])}
+                  >
+                    <span className="text-[8px]">13-Cut</span>
+                  </button>
+                </div>
+
+                <div className="w-1/2 flex flex-col">
+                  <div className="h-4/5 flex flex-row">
+                    <button
+                      key={"2L014"}
+                      onClick={() => {
+                        handleButtonClick("2L014");
+                      }}
+                      className={`w-35/100 rounded-md border-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2L014"])}
+                      ${getActiveButtonClass(activeButton === "2L014", colorMap["2L014"])}`}
+                      disabled={getButtonDisabledState(colorMap["2L014"])}
+                    >
+                      <span className="flex justify-center items-center transform -rotate-90 text-xs">2L014</span>
+                    </button>
+                    <button
+                      key={"2L013"}
+                      onClick={() => {
+                        handleButtonClick("2L013");
+                      }}
+                      className={`w-65/100 rounded-t-md border-t-2 border-l-2 border-r-2
+                      ${textStyle}
+                      ${getButtonColorClass(colorMap["2L013"])}
+                      ${getActiveButtonClass(activeButton === "2L013", colorMap["2L013"])}`}
+                      disabled={getButtonDisabledState(colorMap["2L013"])}
+                    >
+                      <span className="flex justify-center items-center transform -rotate-90 text-xs">2L013</span>
+                    </button>
+                  </div>
+                  <button
+                    key={"2L013"}
+                    onClick={() => {
+                      handleButtonClick("2L013");
+                    }}
+                    className={`h-1/5 rounded-br-md border-r-2 border-b-2
+                    ${textStyle}
+                    ${getButtonColorClass(colorMap["2L013"])}
+                    ${getActiveButtonClass(activeButton === "2L013", colorMap["2L013"])}`}
+                    disabled={getButtonDisabledState(colorMap["2L013"])}
+                  >
+                    <span className="text-[8px]">13-Cut</span>
+                  </button>
+                </div>
+              </div>
 
           {/* Middle Corridor */}
           <div className="h-13/100"></div>
@@ -2154,12 +2444,608 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
           </div>
         </div>
         <div className="h-10/100 bg-slate-400"></div>
+              <div className="h-38/100 flex flex-row">
+                <button
+                  key={"2L017"}
+                  onClick={() => {
+                    handleButtonClick("2L017");
+                  }}
+                  className={`w-1/2 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["2L017"])}
+                  ${getActiveButtonClass(activeButton === "2L017", colorMap["2L017"])}`}
+                  disabled={getButtonDisabledState(colorMap["2L017"])}
+                >
+                  2L017
+                </button>
+                <button
+                  key={"2L018"}
+                  onClick={() => {
+                    handleButtonClick("2L018");
+                  }}
+                  className={`w-1/2 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["2L018"])}
+                  ${getActiveButtonClass(activeButton === "2L018", colorMap["2L018"])}`}
+                  disabled={getButtonDisabledState(colorMap["2L018"])}
+                >
+                  2L018
+                </button>
+              </div>
+            </div>
+
+            <button
+              key={"2L019"}
+              onClick={() => {
+                handleButtonClick("2L019");
+              }}
+              className={`w-15/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["2L019"])}
+              ${getActiveButtonClass(activeButton === "2L019", colorMap["2L019"])}`}
+              disabled={getButtonDisabledState(colorMap["2L019"])}
+            >
+              2L019
+            </button>
+
+            <button
+              key={"2L020"}
+              onClick={() => {
+                handleButtonClick("2L020");
+              }}
+              className={`w-10/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["2L020"])}
+              ${getActiveButtonClass(activeButton === "2L020", colorMap["2L020"])}`}
+              disabled={getButtonDisabledState(colorMap["2L020"])}
+            >
+              2L020
+            </button>
+
+            <div className="w-40/100 flex flex-row">
+              <button
+                key={"2L021"}
+                onClick={() => {
+                  handleButtonClick("2L021");
+                }}
+                className={`w-1/4 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2L021"])}
+                ${getActiveButtonClass(activeButton === "2L021", colorMap["2L021"])}`}
+                disabled={getButtonDisabledState(colorMap["2L021"])}
+              >
+                2L021
+              </button>
+              <button
+                key={"2L022"}
+                onClick={() => {
+                  handleButtonClick("2L022");
+                }}
+                className={`w-1/4 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2L022"])}
+                ${getActiveButtonClass(activeButton === "2L022", colorMap["2L022"])}`}
+                disabled={getButtonDisabledState(colorMap["2L022"])}
+              >
+                2L022
+              </button>
+              <button
+                key={"2L023"}
+                onClick={() => {
+                  handleButtonClick("2L023");
+                }}
+                className={`w-1/4 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2L023"])}
+                ${getActiveButtonClass(activeButton === "2L023", colorMap["2L023"])}`}
+                disabled={getButtonDisabledState(colorMap["2L023"])}
+              >
+                2L023
+              </button>
+              <button
+                key={"2L024"}
+                onClick={() => {
+                  handleButtonClick("2L024");
+                }}
+                className={`w-1/4 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["2L024"])}
+                ${getActiveButtonClass(activeButton === "2L024", colorMap["2L024"])}`}
+                disabled={getButtonDisabledState(colorMap["2L024"])}
+              >
+                2L024
+              </button>
+            </div>
+
+            <div className="w-10/100 flex transform -rotate-90 justify-center items-center text-2xl">Lobby</div>
+          </div>
+        </div>
+
+        <div className="h-10/100 bg-black-100"></div>
       </div>
     );
   };
 
+  const ThirdLeftWing = () => {
+    return(
+      <div className={`${floorplanStyle}`}>
+        <div className="h-10/100 bg-black-100"></div>
+
+        <div className="h-80/100 flex flex-col">
+          {/* Top Area */}
+          <div className="h-39/100 flex flex-row">
+            <div className="w-5/100 flex flex-col">
+              <div className="h-73/100 rounded-md bg-zinc-400 flex items-center justify-center">
+                <Image
+                  src={stairs}
+                  alt="Stair Icon"
+                  className={`${iconStyle} p-1`}
+                />
+              </div>
+            </div>
+            <button
+              key={"3L024"}
+              onClick={() => {
+                handleButtonClick("3L024");
+              }}
+              className={`w-11/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["3L024"])}
+              ${getActiveButtonClass(activeButton === "3L024", colorMap["3L024"])}`}
+              disabled={getButtonDisabledState(colorMap["3L024"])}
+            >
+              3L024
+            </button>
+            <button
+              key={"3L023"}
+              onClick={() => {
+                handleButtonClick("3L023");
+              }}
+              className={`w-10/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["3L023"])}
+              ${getActiveButtonClass(activeButton === "3L023", colorMap["3L023"])}`}
+              disabled={getButtonDisabledState(colorMap["3L023"])}
+            >
+              3L023
+            </button>
+            <div className="w-7/100 flex flex-col">
+              <button
+                key={"3L022"}
+                onClick={() => {
+                  handleButtonClick("3L022");
+                }}
+                className={`h-36/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["3L022"])}
+                ${getActiveButtonClass(activeButton === "3L022", colorMap["3L022"])}`}
+                disabled={getButtonDisabledState(colorMap["3L022"])}
+              >
+                <span className="text-xs">3L022</span>
+              </button>
+              <button
+                key={"3L021"}
+                onClick={() => {
+                  handleButtonClick("3L021");
+                }}
+                className={`h-64/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["3L021"])}
+                ${getActiveButtonClass(activeButton === "3L021", colorMap["3L021"])}`}
+                disabled={getButtonDisabledState(colorMap["3L021"])}
+              >
+                <span className="text-xs">3L021</span>
+              </button>
+            </div>
+            <div className="w-8/100 flex flex-col">
+              <button
+                key={"3L020"}
+                onClick={() => {
+                  handleButtonClick("3L020");
+                }}
+                className={`h-36/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["3L020"])}
+                ${getActiveButtonClass(activeButton === "3L020", colorMap["3L020"])}`}
+                disabled={getButtonDisabledState(colorMap["3L020"])}
+              >
+                <span className="text-xs">3L020</span>
+              </button>
+              <button
+                key={"3L019"}
+                onClick={() => {
+                  handleButtonClick("3L019");
+                }}
+                className={`h-64/100 rounded-md border-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["3L019"])}
+                ${getActiveButtonClass(activeButton === "3L019", colorMap["3L019"])}`}
+                disabled={getButtonDisabledState(colorMap["3L019"])}
+              >
+                <span className="text-xs">3L019</span>
+              </button>
+            </div>
+            <div className="w-10/100 flex flex-col">
+              <button
+                key={"3L017"}
+                onClick={() => {
+                  handleButtonClick("3L017");
+                }}
+                className={`h-57/100 rounded-t border-t-2 border-l-2 border-r-2
+                ${textStyle}
+                ${getButtonColorClass(colorMap["3L017"])}
+                ${getActiveButtonClass(activeButton === "3L017", colorMap["3L017"])}`}
+                disabled={getButtonDisabledState(colorMap["3L017"])}
+              >
+                3L017
+              </button>
+              <div className="h-43/100 flex flex-row">
+                <button
+                  key={"3L018"}
+                  onClick={() => {
+                    handleButtonClick("3L018");
+                  }}
+                  className={`w-40/100 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L018"])}
+                  ${getActiveButtonClass(activeButton === "3L018", colorMap["3L018"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L018"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L018</span>
+                </button>
+                <button
+                  key={"3L017"}
+                  onClick={() => {
+                    handleButtonClick("3L017");
+                  }}
+                  className={`w-60/100 rounded-b border-b-2 border-l-2 border-r-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L017"])}
+                  ${getActiveButtonClass(activeButton === "3L017", colorMap["3L017"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L017"])}
+                >
+                  <span className="text-xs">17-Cut</span>
+                </button>
+              </div>
+            </div>
+            <div className="w-19/100 flex flex-col">
+              <div className="h-57/100 flex flex-row">
+                <button
+                  key={"3L016"}
+                  onClick={() => {
+                    handleButtonClick("3L016");
+                  }}
+                  className={`w-1/6 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L016"])}
+                  ${getActiveButtonClass(activeButton === "3L016", colorMap["3L016"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L016"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L016</span>
+                </button>
+                <button
+                  key={"3L015"}
+                  onClick={() => {
+                    handleButtonClick("3L015");
+                  }}
+                  className={`w-1/6 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L015"])}
+                  ${getActiveButtonClass(activeButton === "3L015", colorMap["3L015"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L015"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L015</span>
+                </button>
+                <button
+                  key={"3L014"}
+                  onClick={() => {
+                    handleButtonClick("3L014");
+                  }}
+                  className={`w-1/6 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L014"])}
+                  ${getActiveButtonClass(activeButton === "3L014", colorMap["3L014"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L014"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L014</span>
+                </button>
+                <button
+                  key={"3L013"}
+                  onClick={() => {
+                    handleButtonClick("3L013");
+                  }}
+                  className={`w-1/6 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L013"])}
+                  ${getActiveButtonClass(activeButton === "3L013", colorMap["3L013"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L013"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L013</span>
+                </button>
+                <button
+                  key={"3L012"}
+                  onClick={() => {
+                    handleButtonClick("3L012");
+                  }}
+                  className={`w-1/6 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L012"])}
+                  ${getActiveButtonClass(activeButton === "3L012", colorMap["3L012"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L012"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L012</span>
+                </button>
+                <button
+                  key={"3L011"}
+                  onClick={() => {
+                    handleButtonClick("3L011");
+                  }}
+                  className={`w-1/6 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L011"])}
+                  ${getActiveButtonClass(activeButton === "3L011", colorMap["3L011"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L011"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L011</span>
+                </button>
+              </div>
+              <div className="h-43/100 bg-white-500"></div>
+            </div>
+            <div className="w-10/100 flex flex-col">
+              <div className="h-57/100 flex flex-row">
+                <button
+                  key={"3L010"}
+                  onClick={() => {
+                    handleButtonClick("3L010");
+                  }}
+                  className={`w-30/100 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L010"])}
+                  ${getActiveButtonClass(activeButton === "3L010", colorMap["3L010"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L010"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L010</span>
+                </button>
+                <button
+                  key={"3L009"}
+                  onClick={() => {
+                    handleButtonClick("3L009");
+                  }}
+                  className={`w-70/100 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L009"])}
+                  ${getActiveButtonClass(activeButton === "3L009", colorMap["3L009"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L009"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L009</span>
+                </button>
+              </div>
+              <div className="h-43/100 flex flex-row">
+                <div className="w-64/100 bg-white-500"></div>
+                <button
+                  key={"3L008"}
+                  onClick={() => {
+                    handleButtonClick("3L008");
+                  }}
+                  className={`w-36/100 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L008"])}
+                  ${getActiveButtonClass(activeButton === "3L008", colorMap["3L008"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L008"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-xs">3L008</span>
+                </button>
+              </div>
+            </div>
+            <div className="w-10/100 flex flex-col">
+              <div className="h-45/100"></div>
+              <div className="h-33/100 flex flex-row">
+                <button
+                  key={"3L007"}
+                  onClick={() => {
+                    handleButtonClick("3L007");
+                  }}
+                  className={`w-1/3 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L007"])}
+                  ${getActiveButtonClass(activeButton === "3L007", colorMap["3L007"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L007"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-[9px]">3L007</span>
+                </button>
+                <button
+                  key={"3L006"}
+                  onClick={() => {
+                    handleButtonClick("3L006");
+                  }}
+                  className={`w-1/3 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L006"])}
+                  ${getActiveButtonClass(activeButton === "3L006", colorMap["3L006"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L006"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-[9px]">3L006</span>
+                </button>
+                <button
+                  key={"3L005"}
+                  onClick={() => {
+                    handleButtonClick("3L005");
+                  }}
+                  className={`w-1/3 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L005"])}
+                  ${getActiveButtonClass(activeButton === "3L005", colorMap["3L005"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L005"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-[9px]">3L005</span>
+                </button>
+              </div>
+
+              <div className="h-22/100 flex flex-row">
+                <div className="w-2/3 bg-white-500"></div>
+                <button
+                  key={"3L004"}
+                  onClick={() => {
+                    handleButtonClick("3L004");
+                  }}
+                  className={`w-1/3 rounded-md border-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L004"])}
+                  ${getActiveButtonClass(activeButton === "3L004", colorMap["3L004"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L004"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-[9px]">3L004</span>
+                </button>
+              </div>
+            </div>
+            <div className="w-9/100 flex flex-col">
+              <div className="h-45/100"></div>
+              <div className="h-55/100 flex flex-row">
+                <button
+                  key={"3L003"}
+                  onClick={() => {
+                    handleButtonClick("3L003");
+                  }}
+                  className={`w-2/5 rounded-l-md border-t-2 border-b-2 border-l-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L003"])}
+                  ${getActiveButtonClass(activeButton === "3L003", colorMap["3L003"])}`}
+                  disabled={getButtonDisabledState(colorMap["3L003"])}
+                >
+                  <span className="flex transform -rotate-90 justify-center items-center text-[9px]">3L003</span>
+                </button>
+                <button
+                  key={"3L003"}
+                  onClick={() => {
+                    handleButtonClick("3L003");
+                  }}
+                  className={`w-3/5 border-b-2
+                  ${textStyle}
+                  ${getButtonColorClass(colorMap["3L003"])}
+                  ${getActiveButtonClass(activeButton === "3L003", colorMap["3L003"])}`}
+                  style={{ clipPath: "polygon(0 100%, 0 0, 100% 100%)"}}
+                  disabled={getButtonDisabledState(colorMap["3L003"])}
+                >
+                  <span className="flex transform -rotate-115 translate-x-[-30%] translate-y-[40%] text-[8px]">03-Cut</span>
+                </button>
+              </div>
+            </div>
+            
+          </div>
+
+          {/* Middle Corridor */}
+          <div className="h-13/100"></div>
+
+          {/* Bottom Area */}
+          <div className="h-48/100 flex flex-row">
+            <div className="w-5/100 flex flex-col">
+              <div className="h-13/100"></div>
+              <div className="h-23/100 flex flex-row">
+                <div className="w-70/100 bg-zinc-400 rounded-md flex items-center justify-center">
+                  <Image
+                    src={toilet}
+                    alt="Toilet Icon"
+                    className={`${iconStyle} p-1`}
+                  />
+                </div>
+              </div>
+              <div className="h-31/100 flex flex-row">
+                <div className="w-70/100 bg-zinc-400 rounded-md flex items-center justify-center">
+                  <Image
+                    src={toilet}
+                    alt="Toilet Icon"
+                    className={`${iconStyle} p-1`}
+                  />
+                </div>
+              </div>
+              <div className="h-33/100 bg-zinc-400 rounded-md flex items-center justify-center">
+                <Image
+                  src={toilet}
+                  alt="Toilet Icon"
+                  className={`${iconStyle} p-1`}
+                />
+              </div>
+            </div>
+            <button
+              key={"3L025"}
+              onClick={() => {
+                handleButtonClick("3L025");
+              }}
+              className={`w-10/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["3L025"])}
+              ${getActiveButtonClass(activeButton === "3L025", colorMap["3L025"])}`}
+              disabled={getButtonDisabledState(colorMap["3L025"])}
+            >
+              3L025
+            </button>
+            <button
+              key={"3L026"}
+              onClick={() => {
+                handleButtonClick("3L026");
+              }}
+              className={`w-10/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["3L026"])}
+              ${getActiveButtonClass(activeButton === "3L026", colorMap["3L026"])}`}
+              disabled={getButtonDisabledState(colorMap["3L026"])}
+            >
+              3L026
+            </button>
+            <button
+              key={"3L027"}
+              onClick={() => {
+                handleButtonClick("3L027");
+              }}
+              className={`w-25/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["3L027"])}
+              ${getActiveButtonClass(activeButton === "3L027", colorMap["3L027"])}`}
+              disabled={getButtonDisabledState(colorMap["3L027"])}
+            >
+              3L027
+            </button>
+            <button
+              key={"3L028"}
+              onClick={() => {
+                handleButtonClick("3L028");
+              }}
+              className={`w-20/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["3L028"])}
+              ${getActiveButtonClass(activeButton === "3L028", colorMap["3L028"])}`}
+              disabled={getButtonDisabledState(colorMap["3L028"])}
+            >
+              3L028
+            </button>
+            <button
+              key={"3L029"}
+              onClick={() => {
+                handleButtonClick("3L029");
+              }}
+              className={`w-20/100 rounded-md border-2
+              ${textStyle}
+              ${getButtonColorClass(colorMap["3L029"])}
+              ${getActiveButtonClass(activeButton === "3L029", colorMap["3L029"])}`}
+              disabled={getButtonDisabledState(colorMap["3L029"])}
+            >
+              3L029
+            </button>
+            {/* Lobby Area */}
+            <div className="w-10/100 flex justify-center items-center text-lg">Lobby</div>
+          </div>
+        </div>
+        <div className="h-10/100 bg-black-100"></div>
+        
+      </div>
+    );
+  }
+
   if (floor === "3" && floorSection === "R") {
     return ThirdFloor();
+  }
+  if (floor === "3" && floorSection === "L") {
+    return ThirdLeftWing();
   }
   if (floor === "3" && floorSection === "L") {
     return ThirdLeftWing();

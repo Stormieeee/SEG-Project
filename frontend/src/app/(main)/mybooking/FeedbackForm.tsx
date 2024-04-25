@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useStateContext } from "./MyBookingContext";
 import LoadingSpinner from "@/app/Components/LoadingSpinner";
+import { useStateContext as mainStateContext } from "../StateContext";
 
 const FeedbackForm = () => {
   const {
@@ -16,6 +17,9 @@ const FeedbackForm = () => {
   const [newFeedback, setNewFeedback] = useState("");
   const [newTitle, setNewTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Popup message after submitting feedback
+  const { setIsVisible, setMessage, setIsSuccess } = mainStateContext();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -34,18 +38,20 @@ const FeedbackForm = () => {
       });
 
       if (response.ok) {
-        alert("Feedback submitted successfully!");
+        setMessage("Feedback submitted successfully");
+        setIsSuccess(true);
         getNewDetails();
-      } else {
-        alert("Failed to submit feedback. Please try again later.");
       }
     } catch (error) {
       console.error("Error submitting feedback: ", error);
-      throw error;
+      setMessage("Error submitting feedback");
+      setIsSuccess(false);
+    } finally {
+      setIsLoading(false);
+      setIsVisible(true);
+      setShowForm(false);
+      setNewFeedback("");
     }
-    // TODO: Handle form submission
-    setShowForm(false);
-    setNewFeedback("");
   };
 
   const handleClose = () => {

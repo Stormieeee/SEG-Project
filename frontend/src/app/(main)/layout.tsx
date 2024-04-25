@@ -4,6 +4,7 @@ import "../styles/globals.css";
 
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import PopupMessage from "./PopupMessage";
 
 import dynamic from "next/dynamic";
 
@@ -24,10 +25,11 @@ const layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
         <div className="flex">
           <Sidebar />
           <div
-            className={`flex flex-col flex-grow overflow-x-hidden
+            className={`flex flex-col flex-grow overflow-x-hidden relative
           bg-[radial-gradient(circle_at_top_left,_var(--tw-gradient-stops))] from-gray-50 via-sky-400/10 to-gray-50`}
           >
             <StateProvider>
+              <PopupMessage />
               <Topbar />
               {children}
             </StateProvider>

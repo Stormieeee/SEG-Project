@@ -304,6 +304,13 @@ const config: Config = {
 
       },
 
+      rotate: {
+        '35': '35deg',
+        '65': '65deg',
+        '115': '115deg',
+        '-115': '-115deg',
+      }
+
     },
 
     fontFamily:{

@@ -22,6 +22,7 @@ interface MyFeedbackContextType {
 
   feedbackDetails?: {
     index: number;
+    roomID: string;
     title: string;
     request_capacity: string;
     room_capacity: string;
@@ -31,6 +32,7 @@ interface MyFeedbackContextType {
   setFeedbackDetails: React.Dispatch<
     React.SetStateAction<{
       index: number;
+      roomID: string;
       title: string;
       request_capacity: string;
       room_capacity: string;
@@ -76,6 +78,7 @@ export const StateProvider = ({ children }: any) => {
   const [feedbackStatus, setFeedbackStatus] = useState<string>("");
   const [feedbackDetails, setFeedbackDetails] = useState<{
     index: number;
+    roomID: string;
     title: string;
     request_capacity: string;
     room_capacity: string;
