@@ -10,6 +10,8 @@ import bookingRequestDark from "../../../public/Sidebar-icon/Booking Request Dar
 import bookingRequestLight from "../../../public/Sidebar-icon/Booking Request Light.svg";
 import feedbackLight from "../../../public/Sidebar-icon/Feedback Light.svg";
 import feedbackDark from "../../../public/Sidebar-icon/Feedback Dark.svg";
+import uploadDark from "../../../public/Sidebar-icon/Upload Dark.svg";
+import uploadLight from "../../../public/Sidebar-icon/Upload Light.svg";
 import useNavigation from "./hook/use-navigation";
 
 import Image from "next/image";
@@ -26,6 +28,7 @@ const Sidebar = () => {
     isProfileActive,
     isBookingRequestActive,
     isAllBookingActive,
+    isUploadActive,
   } = useNavigation();
   const checkRole = async () => {
     try {
@@ -176,6 +179,32 @@ const Sidebar = () => {
                     className={`${iconStyle}`}
                   />
                   <span className={`${textInactiveStyle}`}>All Bookings</span>
+                </div>
+              )}
+            </Link>
+          )}
+          {isAdmin && (
+            <Link
+              href="/upload"
+              className="space-x-2 mx-3 duration-200 hover:shadow-lg m-2 rounded-md"
+            >
+              {isUploadActive ? (
+                <div className={`${buttonActiveStyle}`}>
+                  <Image
+                    src={uploadDark}
+                    alt="Upload Dark"
+                    className={`${iconStyle} animate-vote duration-200`}
+                  />
+                  <span className={`${textActiveStyle}`}>Upload</span>
+                </div>
+              ) : (
+                <div className={`${buttonInactiveStyle}`}>
+                  <Image
+                    src={uploadLight}
+                    alt="Upload Light"
+                    className={`${iconStyle}`}
+                  />
+                  <span className={`${textInactiveStyle}`}>Upload</span>
                 </div>
               )}
             </Link>

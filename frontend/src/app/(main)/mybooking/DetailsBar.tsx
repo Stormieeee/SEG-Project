@@ -3,6 +3,8 @@ import React from "react";
 import editIcon from "../../../../public/Login-icon/edit_icon.svg";
 import Image from "next/image";
 import { useStateContext } from "./MyBookingContext";
+import { useStateContext as mainStateContext } from "../StateContext";
+import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 
 const DetailsBar = () => {
   const {
@@ -28,6 +30,9 @@ const DetailsBar = () => {
     feedback_text,
   } = bookingDetails ?? {};
 
+  // Popup message after canceling booking
+  const { setIsVisible, setMessage, setIsSuccess } = mainStateContext();
+
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (indexToRemove: number) => {
     setBookings((bookings) =>
@@ -42,15 +47,18 @@ const DetailsBar = () => {
     );
     if (confirmed) {
       setIsLoading(true);
+      console.log("selectedRowIndex", selectedRowIndex);
+      console.log("booking id", bookings[selectedRowIndex][0]);
       try {
-        const response = await fetch("http://localhost:8000/cancel_booking", {
+        const response = await fetch("http://localhost:8000/booking_Cancel", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            booking_id: bookings[selectedRowIndex][0],
+            bookingID: bookings[selectedRowIndex][0],
             reason: "User canceled",
+            handler: getEmailFromSessionStorage(),
           }),
         });
 
@@ -61,19 +69,18 @@ const DetailsBar = () => {
               setSelectedRowIndex(selectedRowIndex - 1);
             }
           }
+          setMessage("Booking canceled successfully");
+          setIsSuccess(true);
         }
       } catch (error) {
         console.error("Error cancel booking/booking request:", error);
-        throw error;
-      }
-      if (selectedRowIndex >= 0 && bookings) {
-        handleRemoveItem(selectedRowIndex);
-        if (selectedRowIndex === bookings.length - 1) {
-          setSelectedRowIndex(selectedRowIndex - 1);
-        }
+        setMessage("Error canceling booking/booking request");
+        setIsSuccess(false);
+      } finally {
+        setIsLoading(false);
+        setIsVisible(true);
       }
     }
-    setIsLoading(false);
   };
   const handleEdit = () => {
     setTitle(feedback_title ? feedback_title : "");
