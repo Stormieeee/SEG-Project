@@ -54,16 +54,17 @@ const defaultValue: StateContextType = {
   floor: "3",
   setFloor: () => {},
   floorSection: "R",
-  setFloorSection: () => {},
-  dataFromApi: null,
-  setFetchedData: () => {},
-
+  setFloorSection: () =>{},
+  dataFromApi : null,
+  setFetchedData : () => {},
+  
   roomCapacity: 0,
-  setRoomCapacity: () => {},
-  roomEquipment: [],
-  setRoomEquipment: () => {},
-  isRoomDescEmpty: true,
-  setRoomDescEmpty: () => {},
+  setRoomCapacity : () => {},
+  roomEquipment : [],
+  setRoomEquipment : () => {},
+  isRoomDescEmpty : true,
+  setRoomDescEmpty : () => {},
+
 
   message: "",
   setMessage: () => {},

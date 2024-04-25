@@ -95,7 +95,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
       //if newActiveButton is not null then set capacity else empty
       setRoomDescEmpty(true);
       setCapacity(newActiveButton);
-      setEquipment(newActiveButton);
+
+      setEquipment(newActiveButton)
+
     } else {
       setRoomDescEmpty(false);
     }
@@ -120,7 +122,9 @@ const FloorPlan: React.FC<FloorPlanProps> = ({ setRoomID, dataFromApi }) => {
     //get and set array of equipment of room
     getRoomDetails(roomid)
       .then((equipment) => {
-        setRoomEquipment(equipment);
+
+        setRoomEquipment(equipment)
+
       })
       .catch((error) => {
         console.log("Error fetching equipment" + error);

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import profile from "./default_profile_avatar.svg";
-import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 import { useEffect, useRef, useState } from "react";
 
 interface ProfilePictureFormProps {
@@ -178,7 +177,7 @@ const ProfilePictureForm = ({
           </div>
           {deleteable && (
             <button
-              className="absolute top-0 right-8 top-3 hover:opacity-60 bg-white-100 cursor-pointer"
+              className="absolute right-8 top-3 hover:opacity-60 bg-white-100 cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 handleDelete();

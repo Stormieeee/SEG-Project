@@ -11,6 +11,8 @@ import ResetPassword from "./ResetPassword";
 // import editIcon from "../../../../public/Login-icon/edit_icon.svg";
 import Authentication from "@/app/Components/Authentication";
 import ProfilePictureForm from "./ProfilePictureForm";
+import { LoadingState } from "../hook/loadingState";
+import LoadingPage from "@/app/loader/LoadingPage";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState<{
@@ -18,7 +20,8 @@ const Profile = () => {
     role: string | null;
     profilePicture: string | null; // Change from Blob to string
   } | null>(null);
-  const router = useRouter();
+  const { isLoading, stopLoading } = LoadingState();
+
   let email = "";
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
@@ -43,6 +46,7 @@ const Profile = () => {
         }
       );
       if (response.ok) {
+        stopLoading();
         const data = await response.json();
         // Assuming profile picture URL is returned in data.profilePicture
         setUserInfo({
@@ -63,6 +67,7 @@ const Profile = () => {
       console.error("Error:", error);
     }
   };
+
   useEffect(() => {
     getUserInfo();
     // setProfilePicture(userInfo?.profilePicture ?? null);
@@ -111,6 +116,10 @@ const Profile = () => {
   const handleEditProfileClick = () => {
     setShowEditForm(true);
   };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="h-full flex-col flex justify-center">
@@ -166,12 +175,12 @@ const Profile = () => {
           Log out
         </button>
         {showResetPassword && (
-          <div className="fixed inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
+          <div className="inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
             <ResetPassword setShowResetPassword={setShowResetPassword} />
           </div>
         )}
         {showAuth && (
-          <div className="fixed inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
+          <div className="inset-0 z-50 flex items-center absolute justify-center bg-black bg-opacity-50">
             <Authentication
               handleSuccessAuth={handleSuccessAuth}
               handleFailedAuth={handleFailedAuth}

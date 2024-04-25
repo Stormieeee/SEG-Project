@@ -39,7 +39,7 @@ const DetailsBar = () => {
           bookingID: feedbackList[selectedRowIndex][0],
         }),
       });
-
+  
       if (response.ok) {
         if (selectedRowIndex >= 0 && feedbackDetails) {
           handleRemoveItem(selectedRowIndex);
@@ -47,18 +47,14 @@ const DetailsBar = () => {
             setSelectedRowIndex(selectedRowIndex - 1);
           }
         }
+      } else {
+        console.error("Error in API response:", response.statusText);
       }
     } catch (error) {
       console.error("Error Approving This Feedback", error);
-      throw error;
+    } finally {
+      setIsLoading(false);
     }
-    if (selectedRowIndex >= 0 && feedbackList) {
-      handleRemoveItem(selectedRowIndex);
-      if (selectedRowIndex === feedbackList.length - 1) {
-        setSelectedRowIndex(selectedRowIndex - 1);
-      }
-    }
-    setIsLoading(false);
   };
 
   const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3";

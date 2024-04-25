@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2024 at 10:23 AM
+-- Generation Time: Apr 25, 2024 at 04:42 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `rbms`
+-- Database: `room`
 --
 
 -- --------------------------------------------------------
@@ -42,50 +42,18 @@ CREATE TABLE `booking id description` (
 --
 
 INSERT INTO `booking id description` (`Booking ID`, `Description`, `Date`, `Start Time`, `End Time`, `capacity`, `Comment`) VALUES
-('BD24S', 'Group work', '2024-03-20', '09:00:00', '12:59:00', 40, NULL),
-('8N3PZ', 'Study', '2024-03-18', '14:00:00', '16:59:00', 40, NULL),
-('R72BG', 'Meeting', '2024-03-19', '10:00:00', '13:59:00', 40, NULL),
-('K1ET2', 'Event', '2024-03-20', '09:00:00', '11:59:00', 40, NULL),
-('Z5WQ9', 'Study', '2024-03-20', '12:00:00', '13:59:00', 40, NULL),
-('P7L9C', 'Study', '2024-03-23', '11:00:00', '14:59:00', 40, NULL),
-('N4XI6', 'Study', '2024-03-24', '08:00:00', '10:59:00', 40, NULL),
-('U9F5H', 'Group work', '2024-03-26', '10:00:00', '12:59:00', 40, NULL),
-('V2G6Y', 'Meeting', '2024-03-27', '13:00:00', '15:59:00', 40, NULL),
-('I1T3J', 'Meeting', '2024-03-28', '11:00:00', '14:59:00', 40, NULL),
-('H4K8O', 'Group work', '2024-03-29', '09:00:00', '11:59:00', 40, NULL),
-('UzYRO', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
-('hHYCP', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
-('ViWib', 'Study', '2024-05-13', '15:00:00', '15:59:00', 15, 'Accepted as a test'),
-('Igkg9', 'This should accept', '2024-03-31', '13:00:00', '14:59:00', 20, 'can i approve this'),
-('g903J', 'yes', '2024-04-12', '10:00:00', '11:59:00', 20, 'I have accepted'),
-('26C1O', 'I want to book', '2024-04-20', '13:00:00', '13:59:00', 30, 'I approve this message'),
-('UupxI', 'I want to book', '2024-04-20', '15:00:00', '15:59:00', 30, 'yes'),
-('IPpRa', 'I want to book', '2024-04-20', '11:00:00', '11:59:00', 30, 'yes'),
-('TX3KI', 'yes booking it now', '2024-04-21', '11:00:00', '11:59:00', 30, 'yes'),
-('4q3iI', 'yes booking it now', '2024-04-21', '09:00:00', '09:59:00', 30, 'yes'),
-('UdI1C', 'yes booking it now', '2024-04-27', '09:00:00', '09:59:00', 30, 'yes'),
-('BD24S', 'Group work', '2024-03-20', '09:00:00', '12:59:00', 40, NULL),
-('8N3PZ', 'Study', '2024-03-18', '14:00:00', '16:59:00', 40, NULL),
-('R72BG', 'Meeting', '2024-03-19', '10:00:00', '13:59:00', 40, NULL),
-('K1ET2', 'Event', '2024-03-20', '09:00:00', '11:59:00', 40, NULL),
-('Z5WQ9', 'Study', '2024-03-20', '12:00:00', '13:59:00', 40, NULL),
-('P7L9C', 'Study', '2024-03-23', '11:00:00', '14:59:00', 40, NULL),
-('N4XI6', 'Study', '2024-03-24', '08:00:00', '10:59:00', 40, NULL),
-('U9F5H', 'Group work', '2024-03-26', '10:00:00', '12:59:00', 40, NULL),
-('V2G6Y', 'Meeting', '2024-03-27', '13:00:00', '15:59:00', 40, NULL),
-('I1T3J', 'Meeting', '2024-03-28', '11:00:00', '14:59:00', 40, NULL),
-('H4K8O', 'Group work', '2024-03-29', '09:00:00', '11:59:00', 40, NULL),
-('UzYRO', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
-('hHYCP', 'Study', '2024-04-23', '13:00:00', '15:59:00', 15, 'This is a test'),
-('ViWib', 'Study', '2024-05-13', '15:00:00', '15:59:00', 15, 'Accepted as a test'),
-('Igkg9', 'This should accept', '2024-03-31', '13:00:00', '14:59:00', 20, 'can i approve this'),
-('g903J', 'yes', '2024-04-12', '10:00:00', '11:59:00', 20, 'I have accepted'),
-('26C1O', 'I want to book', '2024-04-20', '13:00:00', '13:59:00', 30, 'I approve this message'),
-('UupxI', 'I want to book', '2024-04-20', '15:00:00', '15:59:00', 30, 'yes'),
-('IPpRa', 'I want to book', '2024-04-20', '11:00:00', '11:59:00', 30, 'yes'),
-('TX3KI', 'yes booking it now', '2024-04-21', '11:00:00', '11:59:00', 30, 'yes'),
-('4q3iI', 'yes booking it now', '2024-04-21', '09:00:00', '09:59:00', 30, 'yes'),
-('UdI1C', 'yes booking it now', '2024-04-27', '09:00:00', '09:59:00', 30, 'yes');
+('ox3nIIOsKexm', 'IFYP0023-LEC', '2024-04-29', '09:00:00', '10:00:00', 30, ''),
+('wt6oIJfJEGPJ', 'IFYP0023-LEC', '2024-05-06', '09:00:00', '10:00:00', 30, ''),
+('YMJCbUC9v7k6', 'IFYP0023-LEC', '2024-05-13', '09:00:00', '10:00:00', 30, ''),
+('L6GVK73rEJGM', 'IFYP0023-LEC', '2024-05-20', '09:00:00', '10:00:00', 30, ''),
+('Ln3hQbX0GNX7', 'IFYP0023-LEC', '2024-05-27', '09:00:00', '10:00:00', 30, ''),
+('IFf6obPBkSMa', 'IFYP0023-LEC', '2024-06-10', '09:00:00', '10:00:00', 30, ''),
+('H1aLl5LxAXuh', 'IFYP0023-LEC', '2024-06-17', '09:00:00', '10:00:00', 30, ''),
+('hV1If0bZYJSl', 'IFYP0023-LEC', '2024-06-24', '09:00:00', '10:00:00', 30, ''),
+('m0HQOpxgpu6K', 'IFYP0023-LEC', '2024-07-01', '09:00:00', '10:00:00', 30, ''),
+('XtL9UOu2Ixht', 'IFYP0023-LEC', '2024-07-08', '09:00:00', '10:00:00', 30, ''),
+('n7ypMqMiowun', 'IFYP0023-LEC', '2024-07-15', '09:00:00', '10:00:00', 30, ''),
+('ib1UpW2Ukb5q', 'yess', '2024-04-27', '10:00:00', '11:59:00', 30, 'yess');
 
 -- --------------------------------------------------------
 
@@ -105,28 +73,18 @@ CREATE TABLE `booking list` (
 --
 
 INSERT INTO `booking list` (`Booking ID`, `User ID`, `Room ID`, `handler`) VALUES
-('26C1O', 'ap1a21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
-('4q3iI', 'ap1a21@soton.ac.uk', '3R006', 'systema'),
-('8N3PZ', 'ap1a21@soton.ac.uk', '3R009', 'zzy1a21@soton.ac.uk'),
-('BD24S', 'ap1a21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
-('g903J', 'ap1a21@soton.ac.uk', '3R006', 'System'),
-('H4K8O', 'cht1c22@soton.ac.uk', '3R018', 'zzy1a21@soton.ac.uk'),
-('hHYCP', 'ap1a21@soton.ac.uk', '3R022', 'zzy1a21@soton.ac.uk'),
-('I1T3J', 'cht1c22@soton.ac.uk', '3R017', 'zzy1a21@soton.ac.uk'),
-('Igkg9', 'ap1a21@soton.ac.uk', '3R017', 'zzy1a21@soton.ac.uk'),
-('IPpRa', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
-('K1ET2', 'zzy1a21@soton.ac.uk', '3R009', 'zzy1a21@soton.ac.uk'),
-('N4XI6', 'jyi1n21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
-('P7L9C', 'psbs1a21@soton.ac.uk', '3R012', 'zzy1a21@soton.ac.uk'),
-('R72BG', 'ap1a21@soton.ac.uk', '3R009', 'zzy1a21@soton.ac.uk'),
-('TX3KI', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
-('U9F5H', 'jyi1n21@soton.ac.uk', '3R015', 'zzy1a21@soton.ac.uk'),
-('UdI1C', 'ap1a21@soton.ac.uk', '3R006', 'systemlol'),
-('UupxI', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
-('UzYRO', 'ap1a21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
-('V2G6Y', 'jyi1n21@soton.ac.uk', '3R016', 'zzy1a21@soton.ac.uk'),
-('ViWib', 'ap1a21@soton.ac.uk', '3R023', 'zzy1a21@soton.ac.uk'),
-('Z5WQ9', 'psbs1a21@soton.ac.uk', '3R011', 'zzy1a21@soton.ac.uk');
+('H1aLl5LxAXuh', 'Shaba', '2R011', 'System'),
+('hV1If0bZYJSl', 'Shaba', '2R011', 'System'),
+('ib1UpW2Ukb5q', 'ap1a21@soton.ac.uk', '3R006', 'yesss'),
+('IFf6obPBkSMa', 'Shaba', '2R011', 'System'),
+('L6GVK73rEJGM', 'Shaba', '2R011', 'System'),
+('Ln3hQbX0GNX7', 'Shaba', '2R011', 'System'),
+('m0HQOpxgpu6K', 'Shaba', '2R011', 'System'),
+('n7ypMqMiowun', 'Shaba', '2R011', 'System'),
+('ox3nIIOsKexm', 'Shaba', '2R011', 'System'),
+('wt6oIJfJEGPJ', 'Shaba', '2R011', 'System'),
+('XtL9UOu2Ixht', 'Shaba', '2R011', 'System'),
+('YMJCbUC9v7k6', 'Shaba', '2R011', 'System');
 
 -- --------------------------------------------------------
 
@@ -149,14 +107,25 @@ INSERT INTO `booking rejects` (`Reject ID`, `User ID`, `Room ID`, `handler`) VAL
 ('07nOc', 'ap1a21@soton.ac.uk', '3R006', 'System'),
 ('0w7pP', 'ap1a21@soton.ac.uk', '3R006', 'System'),
 ('7Nw0m', 'ap1a21@soton.ac.uk', '3R006', 'zzy1a21@soton.ac.uk'),
+('8JNkhr3V4Qr6', 'jyi1n21@soton.ac.uk', '3R019', 'jyi1n21@soton.ac.uk'),
+('92v82N4Dciig', 'jyi1n21@soton.ac.uk', '3R002', 'jyi1n21@soton.ac.uk'),
 ('BgmgU', 'ap1a21@soton.ac.uk', '3R006', 'System'),
 ('clOlK', 'ap1a21@soton.ac.uk', '3R026', 'System'),
 ('EGJgT', 'ap1a21@soton.ac.uk', '3R006', 'System'),
+('fEzdCeaE69vv', 'Kizito', '3R030', 'yayy'),
 ('gi3y4', 'ap1a21@soton.ac.uk', '3R006', 'System'),
 ('glzqb', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
+('ixrCwKhazsP4', 'jyi1n21@soton.ac.uk', '3R015', 'jyi1n21@soton.ac.uk'),
 ('jy6uM', 'zzy1a21@soton.ac.uk', '3R011', 'System'),
+('Kl8oPcVI4dNl', 'jyi1n21@soton.ac.uk', '3R015', 'jyi1n21@soton.ac.uk'),
 ('mrqYb', 'ap1a21@soton.ac.uk', '3R006', 'zzya21@soton.ac.uk'),
+('nyAp6ScBHGMg', 'Shaba', '2R011', 'yayy'),
+('op4jYuWf0eSb', 'jyi1n21@soton.ac.uk', '3R015', 'jyi1n21@soton.ac.uk'),
+('PotfqlVivYM3', 'Arsalan', '2L021', 'yayy'),
+('pVvSnRkswIUM', 'Soh', '3R019', 'yayy'),
 ('S4Wvr', 'ap1a21@soton.ac.uk', '3R011', 'zzy1a21@soton.ac.uk'),
+('SZ2YXryTqyUz', 'jyi1n21@soton.ac.uk', '3R015', 'jyi1n21@soton.ac.uk'),
+('tHlikgSxDXG6', 'jyi1n21@soton.ac.uk', '3R015', 'jyi1n21@soton.ac.uk'),
 ('UuzAB', 'ap1a21@soton.ac.uk', '3R006', 'system2'),
 ('WmVUl', 'ap1a21@soton.ac.uk', '3R006', 'yesss'),
 ('y3viy', 'ap1a21@soton.ac.uk', '3R006', 'System'),
@@ -215,7 +184,18 @@ INSERT INTO `booking rejects description` (`Reject ID`, `Description`, `Date`, `
 ('0w7pP', 'yes booking it now', '2024-04-21', '12:00:00', '12:59:00', 30, 'test for calendar'),
 ('UuzAB', 'yes booking it now', '2024-04-25', '10:00:00', '11:59:00', 30, 'yes'),
 ('Z0sN1', 'yes booking it now', '2024-04-26', '10:00:00', '11:59:00', 30, 'yes'),
-('WmVUl', 'yes booking it now', '2024-04-26', '09:00:00', '09:59:00', 30, 'yes');
+('WmVUl', 'yes booking it now', '2024-04-26', '09:00:00', '09:59:00', 30, 'yes'),
+('8JNkhr3V4Qr6', 'Description', '2024-04-25', '09:00:00', '09:59:00', 40, 'aloha'),
+('92v82N4Dciig', 'Description', '2024-04-24', '09:00:00', '09:59:00', 9, ''),
+('Kl8oPcVI4dNl', 'Description', '2024-04-25', '11:00:00', '11:59:00', 40, ''),
+('tHlikgSxDXG6', 'Description', '2024-04-25', '14:00:00', '14:59:00', 40, ''),
+('op4jYuWf0eSb', 'Description', '2024-04-25', '13:00:00', '13:59:00', 40, 'User canceled'),
+('SZ2YXryTqyUz', 'Description', '2024-04-25', '14:00:00', '14:59:00', 40, 'User canceled'),
+('ixrCwKhazsP4', 'Description', '2024-04-25', '15:00:00', '15:59:00', 40, 'good luck'),
+('fEzdCeaE69vv', 'ECON2004-LEC', '2024-06-19', '14:00:00', '15:00:00', 30, 'yes'),
+('pVvSnRkswIUM', 'GENG0002-TUT', '2024-06-05', '11:00:00', '12:00:00', 30, 'yes'),
+('PotfqlVivYM3', 'MANG2089-TUT', '2024-06-20', '15:00:00', '16:00:00', 30, 'yes'),
+('nyAp6ScBHGMg', 'IFYP0023-LEC', '2024-06-03', '09:00:00', '10:00:00', 30, 'iw ant to cry');
 
 -- --------------------------------------------------------
 
@@ -262,8 +242,7 @@ CREATE TABLE `feedback` (
 --
 
 INSERT INTO `feedback` (`Booking ID`, `Title`, `Text`, `Active`) VALUES
-('BD24S', 'Complain', 'This is a problem', 1),
-('BD24S', 'Complain', 'This is a problem', 1);
+('ib1UpW2Ukb5q', 'Problem', 'Im sad', 1);
 
 -- --------------------------------------------------------
 
@@ -332,7 +311,7 @@ INSERT INTO `room` (`Room ID`, `Room Type`, `Capacity`, `Section`, `StudentAcces
 ('2L022', 'Future spacing', 100, '2L', 0),
 ('2L023', 'Future spacing', 100, '2L', 0),
 ('2L024', 'Future spacing', 100, '2L', 0),
-('2R001', 'Lecture Hall', 100, '2R', 1),
+('2R011', 'Lecture Hall', 100, '2R', 1),
 ('2R012', 'Lecture Hall', 100, '2R', 1),
 ('2R013', 'Lecture Hall', 100, '2R', 1),
 ('2R014', 'Lecture Hall', 200, '2R', 1),
@@ -390,7 +369,7 @@ INSERT INTO `user login` (`User ID`, `Password`, `OTPKey`, `LoggedIn`) VALUES
 ('ap1a21@soton.ac.uk', 'AVDSg1qH6gdyuMhvn_WwNw==', 39282, 1),
 ('cht1c22@soton.ac.uk', 'password5', NULL, 0),
 ('jf1a21@soton.ac.uk', '6c0EnKPVYRxIQmXMOmAJQA==', NULL, NULL),
-('jyi1n21@soton.ac.uk', 'password2', NULL, 0),
+('jyi1n21@soton.ac.uk', 'ZOL_Ao9AxfQ0r7fe-wGpXw==', 80251, 1),
 ('psbs1a21@soton.ac.uk', 'password3', NULL, 0),
 ('test1@soton.ac.uk', 'ZOL_Ao9AxfQ0r7fe-wGpXw==', NULL, NULL),
 ('test2@soton.ac.uk', '7jO4ZsxWatTzEbgIxHTTOQ==', NULL, NULL),
@@ -433,7 +412,7 @@ INSERT INTO `user roles` (`Role ID`, `Name`) VALUES
 CREATE TABLE `users` (
   `User ID` varchar(255) NOT NULL,
   `Role ID` int(11) DEFAULT NULL,
-  `profile_picture` blob DEFAULT NULL
+  `profile_picture` longblob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -445,7 +424,7 @@ INSERT INTO `users` (`User ID`, `Role ID`, `profile_picture`) VALUES
 INSERT INTO `users` (`User ID`, `Role ID`, `profile_picture`) VALUES
 ('cht1c22@soton.ac.uk', 3, NULL),
 ('jf1a21@soton.ac.uk', 1, NULL),
-('jyi1n21@soton.ac.uk', 2, NULL),
+('jyi1n21@soton.ac.uk', 4, NULL),
 ('psbs1a21@soton.ac.uk', 5, NULL),
 ('test1@soton.ac.uk', 1, NULL),
 ('test2@soton.ac.uk', 2, NULL),
@@ -543,10 +522,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `booking id description`
   ADD CONSTRAINT `booking id description_ibfk_1` FOREIGN KEY (`Booking ID`) REFERENCES `booking list` (`Booking ID`);
-
---
--- Constraints for table `booking list`
---
 
 --
 -- Constraints for table `booking rejects`
