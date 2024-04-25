@@ -19,19 +19,9 @@ const BookingComponents = () => {
         <div
           className={`flex pl-5 h-full overflow-y-auto flex-shrink-0 border-l border-black-100 transform transition-transform duration-500 translate-x-0 mr-5 w-1/3`}
         >
-          <DetailsBar
-            bookings={bookings}
-            setBookings={setBookings}
-            bookingStatus={bookingStatus}
-            selectedRowIndex={selectedRowIndex}
-            setSelectedRowIndex={setSelectedRowIndex}
-            isCurrentBooking={isCurrentBooking}
-            {...bookingDetails}
-            setShowForm={setShowForm}
-          />
+          <DetailsBar />
         </div>
       )}
-
     </div>
   );
 };

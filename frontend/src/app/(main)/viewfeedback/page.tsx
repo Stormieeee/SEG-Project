@@ -3,7 +3,6 @@ import React from "react";
 import BookingSwitcher from "./BookingSwitcher";
 import Sortbar from "./Sortbar";
 import BookingComponents from "./BookingComponents";
-import FeedbackForm from "./FeedbackForm";
 import { StateProvider } from "./MyBookingContext";
 import { useStateContext } from "./MyBookingContext";
 import LoadingPage from "@/app/loader/LoadingPage";
@@ -24,7 +23,6 @@ const MyBookingPage = () => {
         <div className="h-full">
           <BookingComponents />
         </div>
-        <FeedbackForm />
       </div>
       {isLoading && <LoadingPage />}
     </StateProvider>

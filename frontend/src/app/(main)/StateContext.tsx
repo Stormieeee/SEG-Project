@@ -20,6 +20,9 @@ interface StateContextType {
   setFloor: React.Dispatch<React.SetStateAction<string>>;
   floorSection: string;
   setFloorSection: React.Dispatch<React.SetStateAction<string>>;
+  dataFromApi: null;
+  setFetchedData : React.Dispatch<React.SetStateAction<null>>;
+
   roomCapacity : number;
   setRoomCapacity : React.Dispatch<React.SetStateAction<number>>;
   roomEquipment: string[],
@@ -45,6 +48,8 @@ const defaultValue: StateContextType = {
   setFloor: () => {},
   floorSection: "R",
   setFloorSection: () =>{},
+  dataFromApi : null,
+  setFetchedData : () => {},
   
   roomCapacity: 0,
   setRoomCapacity : () => {},
@@ -65,6 +70,7 @@ export const StateProvider = ({ children }: any) => {
   const [endTime, setEndTime] = useState<number>(new Date().getHours() + 1);
   const [floor, setFloor] = useState<string>("3");
   const [floorSection, setFloorSection] = useState<string>("R");
+  const [dataFromApi, setFetchedData] = useState(null);
 
   const [roomCapacity , setRoomCapacity] = useState<number>(defaultValue.roomCapacity);
   const [roomEquipment , setRoomEquipment] =  useState<string[]>(defaultValue.roomEquipment);
@@ -89,6 +95,9 @@ export const StateProvider = ({ children }: any) => {
         setFloor,
         floorSection,
         setFloorSection,
+        dataFromApi,
+        setFetchedData,
+
         roomCapacity,
         setRoomCapacity,
         roomEquipment,

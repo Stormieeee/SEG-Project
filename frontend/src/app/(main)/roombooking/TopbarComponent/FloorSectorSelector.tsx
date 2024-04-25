@@ -7,12 +7,14 @@ import {
   dropdownHoverStyle,
   dropdownStyle,
 } from "../../style/MainStyle";
+import { getDataFromServer } from "../utils/utils";
+import { adjustTime, formatHour } from "../utils/commonFunction";
 
 const floorList = [{ floor: "2" }, { floor: "3" }];
 const sectionList = [{ section: "R" }, { section: "L" }];
 
 const FloorSectorSelector = () => {
-  const { floor, setFloor, floorSection, setFloorSection } = useStateContext();
+  const { floor, setFloor, floorSection, setFloorSection ,date,capacity,startTime,endTime,setFetchedData} = useStateContext();
   const [isFloorOpened, setFloorOpened] = useState(false);
   const [isSectionOpened, setSectionOpened] = useState(false);
   const selectorRef = useRef<HTMLDivElement>(null);

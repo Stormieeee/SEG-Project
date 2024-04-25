@@ -6,79 +6,58 @@ import { useStateContext } from "./MyBookingContext";
 
 const DetailsBar = () => {
   const {
-    bookings,
-    setBookings,
-    bookingStatus,
-    bookingDetails,
+    feedbackList,
+    setFeedbackList,
+    feedbackDetails,
     selectedRowIndex,
     setSelectedRowIndex,
-    isCurrentBooking,
-    setTitle,
+    isCurrentFeedback,
     setFeedback,
     isLoading,
     setIsLoading,
-    setShowForm,
   } = useStateContext();
-  const {
-    request_capacity,
-    room_capacity,
-    description,
-    comment,
-    feedback_title,
-    feedback_text,
-  } = bookingDetails ?? {};
+  const { title, request_capacity, room_capacity, description } =
+    feedbackDetails ?? {};
 
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (indexToRemove: number) => {
-    setBookings((bookings) =>
+    setFeedbackList((bookings) =>
       bookings.filter((_, index) => index !== indexToRemove)
     );
   };
-  const handleSubmit = async () => {
-    const confirmed = window.confirm(
-      bookingStatus === "Approved"
-        ? "Are you sure you want to cancel this approved booking?"
-        : "Are you sure you want to cancel this booking request?"
-    );
-    if (confirmed) {
-      setIsLoading(true);
-      try {
-        const response = await fetch("http://localhost:8000/cancel_booking", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            booking_id: bookings[selectedRowIndex][0],
-            reason: "User canceled",
-          }),
-        });
 
-        if (response.ok) {
-          if (selectedRowIndex >= 0 && bookings) {
-            handleRemoveItem(selectedRowIndex);
-            if (selectedRowIndex === bookings.length - 1) {
-              setSelectedRowIndex(selectedRowIndex - 1);
-            }
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("http://localhost:8000/read_Feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          bookingID: feedbackList[selectedRowIndex][0],
+        }),
+      });
+
+      if (response.ok) {
+        if (selectedRowIndex >= 0 && feedbackDetails) {
+          handleRemoveItem(selectedRowIndex);
+          if (selectedRowIndex === feedbackList.length - 1) {
+            setSelectedRowIndex(selectedRowIndex - 1);
           }
         }
-      } catch (error) {
-        console.error("Error cancel booking/booking request:", error);
-        throw error;
       }
-      if (selectedRowIndex >= 0 && bookings) {
-        handleRemoveItem(selectedRowIndex);
-        if (selectedRowIndex === bookings.length - 1) {
-          setSelectedRowIndex(selectedRowIndex - 1);
-        }
+    } catch (error) {
+      console.error("Error cancel booking/booking request:", error);
+      throw error;
+    }
+    if (selectedRowIndex >= 0 && feedbackList) {
+      handleRemoveItem(selectedRowIndex);
+      if (selectedRowIndex === feedbackList.length - 1) {
+        setSelectedRowIndex(selectedRowIndex - 1);
       }
     }
     setIsLoading(false);
-  };
-  const handleEdit = () => {
-    setTitle(feedback_title ? feedback_title : "");
-    setFeedback(feedback_text ? feedback_text : "");
-    setShowForm((prev) => !prev);
   };
 
   const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3";
@@ -97,56 +76,18 @@ const DetailsBar = () => {
             <li className="leading-tight text-justify">{description} </li>
           </ul>
         </ul>
-        {bookingStatus !== "Pending" && comment && (
-          <>
-            <div className={`${subHeadingStyle}`}>Comment:</div>
-            <ul className="space-y-3 mt-1 text-l leading-tight italic text-justify font-medium text-stone-700">
-              <li>{comment ? comment : "None"}</li>
-            </ul>
-          </>
-        )}
-        {bookingStatus === "Completed" && feedback_text && (
-          <>
-            <div
-              className={`${subHeadingStyle} flex justify-between pr-20 items-center`}
+        {isCurrentFeedback && (
+          <div className="flex justify-center mt-5">
+            <button
+              className="bg-primary-400 w-[150px] h-[50px] hover:bg-primary-600 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
+              onClick={() => {
+                handleSubmit();
+              }}
             >
-              Feedback:
-              <span onClick={handleEdit}>
-                <Image
-                  src={editIcon}
-                  alt="edit"
-                  className="w-4 h-4 cursor-pointer"
-                />
-              </span>
-            </div>
-          </>
+              Solved
+            </button>
+          </div>
         )}
-        {isCurrentBooking
-          ? (bookingStatus === "Approved" || bookingStatus === "Pending") && (
-              <div className="flex justify-center mt-5">
-                <button
-                  className="bg-red-500 w-[150px] h-[50px] hover:bg-red-700 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
-                  onClick={handleSubmit}
-                >
-                  Cancel
-                </button>
-              </div>
-            )
-          : bookingStatus === "Completed" &&
-            !feedback_text && (
-              <div className="flex justify-center mt-5">
-                <button
-                  className="bg-primary-400 w-[150px] h-[50px] hover:bg-primary-600 text-white-50 rounded-md py-2 px-4 transition duration-200 ease-in-out"
-                  onClick={() => {
-                    setTitle("");
-                    setFeedback("");
-                    setShowForm(true);
-                  }}
-                >
-                  Add Feedback
-                </button>
-              </div>
-            )}
       </div>
     </div>
   );

@@ -27,7 +27,6 @@ const BookingComponents = () => {
             setSelectedRowIndex={setSelectedRowIndex}
             isCurrentBooking={isCurrentBooking}
             {...bookingDetails}
-            setShowForm={setShowForm}
           />
         </div>
       )}

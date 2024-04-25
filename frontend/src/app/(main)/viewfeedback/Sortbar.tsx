@@ -23,8 +23,6 @@ const Sortbar = () => {
 
       if (columnType === "string") {
         return columnA.localeCompare(columnB);
-      } else if (columnType === "number") {
-        return parseFloat(columnA) - parseFloat(columnB);
       } else if (columnType === "date") {
         return new Date(columnA).getTime() - new Date(columnB).getTime();
       } else {
@@ -66,9 +64,6 @@ const Sortbar = () => {
         <option value="0,string">Booking Id</option>
         <option value="1,string">Room</option>
         <option value="2,date">Date</option>
-        <option value="3,time">Start Time</option>
-        <option value="4,time">End Time</option>
-        <option value="5,string">Status</option>
       </select>
     </div>
   );

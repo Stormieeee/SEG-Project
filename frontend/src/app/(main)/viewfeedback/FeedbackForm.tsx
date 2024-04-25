@@ -4,12 +4,11 @@ import LoadingSpinner from "@/app/Components/LoadingSpinner";
 
 const FeedbackForm = () => {
   const {
-    showForm,
-    setShowForm,
+    
     selectedRowIndex,
     selectedBookingId,
-    setBookingDetails,
-    bookingStatus,
+    setFeedbackDetails,
+    feedbackStatus,
     title,
     feedback,
   } = useStateContext();
@@ -63,14 +62,14 @@ const FeedbackForm = () => {
           },
           body: JSON.stringify({
             ID: selectedBookingId,
-            checkType: bookingStatus,
+            checkType: feedbackStatus,
           }),
         }
       );
 
       if (response.ok) {
         const data = await response.json();
-        setBookingDetails({ selectedRowIndex, ...data });
+        setFeedbackDetails({ selectedRowIndex, ...data });
       }
     } catch (error) {
       console.error("Error fetching booking request details: ", error);

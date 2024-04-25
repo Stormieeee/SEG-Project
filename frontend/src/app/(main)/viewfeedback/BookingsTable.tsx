@@ -3,12 +3,11 @@ import { useStateContext } from "./MyBookingContext";
 
 const BookingsTable = () => {
   const {
-    feedbacks,
+    feedbackList,
     setFeedbackStatus,
     setFeedbackDetails,
     selectedRowIndex,
     setSelectedRowIndex,
-    setSelectedBookingId,
   } = useStateContext();
   const header = [
     "Booking ID",
@@ -19,14 +18,40 @@ const BookingsTable = () => {
     "Status",
   ];
 
-
-  
   useEffect(() => {
-    if (selectedRowIndex >= 0 && feedbacks) {
-      const rowData = feedbacks[selectedRowIndex];
-      const [bookingId, bookingStatus] = [rowData[0], rowData[5]];
+    if (selectedRowIndex >= 0 && feedbackList) {
+      const rowData = feedbackList[selectedRowIndex];
+      // const [bookingId, bookingStatus] = [rowData[0], rowData[5]];
     }
-  }, [feedbacks]);
+  }, [feedbackList]);
+
+  const getFeedbackDetails = async (
+    bookingId: string,
+    index: number
+  ) => {
+    setSelectedRowIndex(index);
+    try {
+      const response = await fetch(
+        "http://localhost:8000/get_Booking_Details_Admin/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ bookingID: bookingId }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setFeedbackDetails({ index, ...data });
+      }
+    } catch (error) {
+      console.error("Error fetching booking request details: ", error);
+      throw error;
+    }
+  };
+
 
   return (
     <div className="flex flex-col overflow-y-auto">
@@ -40,8 +65,8 @@ const BookingsTable = () => {
           </div>
         ))}
       </div>
-      {feedbacks.length > 0 ? (
-        feedbacks.map((rowData: any[], rowIndex: number) => (
+      {feedbackList.length > 0 ? (
+        feedbackList.map((rowData: any[], rowIndex: number) => (
           <button
             key={rowIndex}
             className={`flex h-[50px] flex-shrink-0 mt-1 justify-between items-center border border-primary-400 rounded-md ${
@@ -50,7 +75,7 @@ const BookingsTable = () => {
                 : "bg-primary-50 hover:bg-primary-100 hover:border-primary-300 cursor-pointer transition duration-300 ease-in-out"
             }`}
             onClick={() => {
-              getBookingDetails(rowData[0], rowData[5], rowIndex);
+              getFeedbackDetails(rowData[0] , rowIndex);
               if (selectedRowIndex === rowIndex) {
                 setSelectedRowIndex(-1);
               } else {
@@ -61,7 +86,7 @@ const BookingsTable = () => {
             {rowData.map((cellData, cellIndex) => (
               <div
                 key={cellIndex}
-                className={`flex-1 py-[0.7rem] font-xl text-center ${cellIndex === header.length - 1 ? `rounded-xl max-w-[140px] mx-5 ${getStatusColor(cellData)}` : ""}`}
+                className={`flex-1 py-[0.7rem] font-xl text-center ${cellIndex === header.length - 1 ? `rounded-xl max-w-[140px] mx-5` : ""}`}
               >
                 {cellData}
               </div>
