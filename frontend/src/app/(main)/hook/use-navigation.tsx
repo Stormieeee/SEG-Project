@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { usePathname } from "next/navigation";
+import { LoadingState } from "./loadingState";
 
 const useNavigation = () => {
   const pathname = usePathname();
@@ -14,8 +15,10 @@ const useNavigation = () => {
   const [isGraphStatisticActive, setGraphStatisticActive] = useState(false);
   const [isUploadActive, setUploadActive] = useState(false);
   const [isViewFeedbackActive, setViewFeedbackActive] = useState(false);
+  const{startLoading} = LoadingState();
 
   useEffect(() => {
+    
     setRoomBookingActive(false);
     setMyBookingActive(false);
     setProfileActive(false);
@@ -33,6 +36,7 @@ const useNavigation = () => {
         setMyBookingActive(true);
         break;
       case "/profile":
+        startLoading(); //start loading 
         setProfileActive(true);
         break;
       case "/bookingrequest":

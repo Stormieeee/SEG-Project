@@ -6,6 +6,9 @@ import ForgotPassword from "./Components/ForgotPassword";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { LoadingState } from "@/app/(main)/hook/loadingState"
+
+
 export default function Page() {
   const router = useRouter();
   const [showLogin, setShowLogin] = useState<boolean>(true);
@@ -13,6 +16,8 @@ export default function Page() {
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false);
   const [showResetPassword, setShowResetPassword] = useState<boolean>(false);
   const [isReset, setIsReset] = useState<boolean>(false);
+
+  const { startLoading } = LoadingState();
 
   function storeEmailInSessionStorage(email: string): void {
     try {
@@ -36,6 +41,7 @@ export default function Page() {
       setIsReset(false);
     } else {
       router.push("/roombooking");
+      startLoading();
     }
   };
   const handleFailedAuth = () => {
@@ -72,6 +78,7 @@ export default function Page() {
     setShowLogin(true);
   };
   return (
+
     <div className="flex flex-1">
       {showAuth && (
         <Authentication

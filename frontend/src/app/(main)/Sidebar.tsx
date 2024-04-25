@@ -24,8 +24,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import getEmailFromSessionStorage from "../Components/CommonFunction";
 
+
 const Sidebar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
+  
   const {
     isRoomBookingActive,
     isMyBookingActive,

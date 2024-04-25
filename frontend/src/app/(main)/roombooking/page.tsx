@@ -11,9 +11,11 @@ import { useStateContext } from "../StateContext";
 import { formatHour, adjustTime } from "./utils/commonFunction";
 import FloorplanError from "../errorHandling/FloorplanError";
 import Loader from "@/app/loader/RoomBookingLoading";
+import { LoadingState } from "../hook/loadingState";
 
 export default function RoomBooking() {
-  const [isLoading, setLoading] = useState(true);
+  
+  const{stopLoading , isLoading} = LoadingState();
 
   const {
     setRoomID,
@@ -40,7 +42,7 @@ export default function RoomBooking() {
         floorSection
       );
       setFetchedData(data);
-      setLoading(false);
+      stopLoading();
     } catch (error) {
       console.error("Error fetching data:", error);
     }
