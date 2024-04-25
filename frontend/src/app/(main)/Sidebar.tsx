@@ -10,8 +10,8 @@ import bookingRequestDark from "../../../public/Sidebar-icon/Booking Request Dar
 import bookingRequestLight from "../../../public/Sidebar-icon/Booking Request Light.svg";
 import feedbackLight from "../../../public/Sidebar-icon/Feedback Light.svg";
 import feedbackDark from "../../../public/Sidebar-icon/Feedback Dark.svg";
-import graphStatisticsDark from "../../../public/Sidebar-icon/Graph-Statistics-Dark.svg"
-import graphStatisticsLight from "../../../public/Sidebar-icon/Graph-Statistics-Light.svg"
+import graphStatisticsDark from "../../../public/Sidebar-icon/Graph Statistics Dark.svg"
+import graphStatisticsLight from "../../../public/Sidebar-icon/Graph Statistics Light.svg"
 import useNavigation from "./hook/use-navigation";
 import uploadDark from "../../../public/Sidebar-icon/Upload Dark.svg";
 import uploadLight from "../../../public/Sidebar-icon/Upload Light.svg";
@@ -196,7 +196,7 @@ const Sidebar = () => {
                   <Image
                     src={graphStatisticsDark}
                     alt="Graph Statistics Dark"
-                    className={`${iconStyle} animate-vote duration-200`}
+                    className={`${iconStyle} pt-1.5 pb-1.5 animate-vote duration-200`}
                   />
                   <span className={`${textActiveStyle}`}>Graph Statistics</span>
                 </div>
@@ -205,7 +205,7 @@ const Sidebar = () => {
                   <Image
                     src={graphStatisticsLight}
                     alt="Graph Statistics Light"
-                    className={`${iconStyle} animate-vote duration-200`}
+                    className={`${iconStyle} pt-1.5 pb-1.5`}
                   />
                   <span className={`${textInactiveStyle}`}>Graph Statistics</span>
                 </div>
