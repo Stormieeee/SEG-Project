@@ -21,7 +21,7 @@ const PasswordInput = ({
     <div className=" w-full">
       <label
         htmlFor="password"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-slate-400"
+        className="block mb-2 text-base md:text-sm font-medium text-gray-900 dark:text-slate-300"
       >
         Password
       </label>

@@ -26,6 +26,10 @@ const getPageTitle = (path: string): string => {
       return "All Bookings";
     case "/upload":
       return "Upload";
+    case "/allbookings":
+      return "All Bookings";
+    case "/viewfeedback":
+      return "View Feedback";
     default:
       return "Default Title";
   }

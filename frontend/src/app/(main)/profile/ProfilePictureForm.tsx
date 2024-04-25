@@ -2,6 +2,7 @@ import Image from "next/image";
 import profile from "./default_profile_avatar.svg";
 import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 import { useEffect, useRef, useState } from "react";
+import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 
 interface ProfilePictureFormProps {
   showEditForm: boolean;
@@ -39,6 +40,7 @@ const ProfilePictureForm = ({
       event.target.value = "";
     }
   };
+
   useEffect(() => {
     setDeleteable(profilePicture !== profile);
   }, [profilePicture]);

@@ -71,7 +71,7 @@ const BookingsTable = () => {
 
   return (
     <div className="flex flex-col overflow-y-auto">
-      <div className="flex justify-between bg-white-200 border border-black-100 rounded-md sticky top-0">
+      <div className="flex justify-between bg-white-100 border border-black-100 rounded-md sticky top-0">
         {header.map((item, index) => (
           <div
             key={index}

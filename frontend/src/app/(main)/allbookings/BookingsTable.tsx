@@ -51,26 +51,6 @@ const RequestTable = () => {
         throw error;
       }
     }
-    // try {
-    //   const response = await fetch(
-    //     "http://localhost:8000/get_request_details_accepter",
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({ bookingID: bookingId }),
-    //     }
-    //   );
-
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     setRequestDetails({ index, bookingId, ...data });
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching booking request details: ", error);
-    //   throw error;
-    // }
   };
 
   const refreshTable = () => {

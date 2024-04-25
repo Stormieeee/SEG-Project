@@ -13,7 +13,6 @@ import FloorplanError from "../errorHandling/FloorplanError";
 import Loader from "@/app/loader/RoomBookingLoading";
 
 export default function RoomBooking() {
-  const [dataFromApi, setFetchedData] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
   const {
@@ -24,21 +23,21 @@ export default function RoomBooking() {
     date,
     startTime,
     endTime,
+    floor,
+    floorSection,
+    dataFromApi,
+    setFetchedData,
   } = useStateContext();
 
-  const fetchData = async (
-    date: string,
-    startTime: number,
-    endTime: number
-  ) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
+  const fetchData = async () => {
     try {
       const data = await getDataFromServer(
         date,
         formatHour(startTime),
         adjustTime(endTime),
-        capacity
+        capacity,
+        floor,
+        floorSection
       );
       setFetchedData(data);
       setLoading(false);
@@ -48,18 +47,18 @@ export default function RoomBooking() {
   };
 
   useEffect(() => {
-    fetchData(date, startTime, endTime); // Fetch data when component mounts
+    fetchData(); // Fetch data when component mounts
   }, []);
 
   if (isLoading) {
     return <Loader />;
   }
+
   return (
     <div className="flex flex-row">
       <div className="w-1/2 flex flex-col">
         <div className="p-1 mt-[10px] ml-[15px]">
           <DateTime fetchData={fetchData} />
-        
         </div>
 
         <div className="p-1 mt-[10px] ml-[15px]">

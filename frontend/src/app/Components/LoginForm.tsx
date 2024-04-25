@@ -4,7 +4,7 @@ import EmailInput from "./EmailInput";
 import PasswordInput from "./PasswordInput";
 import LoginButton from "./LoginButton";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../Components/LoadingSpinner";
+import LoadingSpinner from "./LoadingSpinner";
 import Image from "next/image";
 
 interface LoginProps {
@@ -79,8 +79,8 @@ const Login = ({
   //Login Form
   return (
     <section className="flex flex-auto bg-white-500 dark:bg-gray-900">
-      <div className="flex flex-col w-full items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      <div className="flex flex-col w-full items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" >
+        <div className="w-full h-[33.625rem] bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col">
             <div className="flex items-center justify-center mb-4">
               <Image
@@ -91,7 +91,7 @@ const Login = ({
                 layout="responsive"
               />
             </div>
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-slate-500">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-slate-200">
               Sign in to your account
             </h1>
             <form
@@ -107,8 +107,8 @@ const Login = ({
                 setShowPassword={setShowPassword}
                 error={passwordError}
               />
-              <button className="underline" onClick={handleForgotPassword}>
-                Forgot Password?
+              <button className="underline dark:text-slate-400 hover:text-slate-500 " onClick={handleForgotPassword}>
+                Forget Password?
               </button>
               {loading ? <LoadingSpinner /> : <LoginButton />}
             </form>

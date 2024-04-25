@@ -6,7 +6,7 @@ import { useStateContext } from "./MyBookingContext";
 import { useStateContext as mainStateContext } from "../StateContext";
 import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 
-const DetailsBar = () => {
+const   DetailsBar = () => {
   const {
     bookings,
     setBookings,
