@@ -15,7 +15,6 @@ from typing import List
 import openpyxl
 from io import BytesIO
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Response
-from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Response
 
 import smtplib
 from email.mime.text import MIMEText
@@ -25,8 +24,6 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from tempfile import NamedTemporaryFile
-from fastapi.responses import FileResponse
-import os
 from fastapi.responses import FileResponse
 import os
 
@@ -69,7 +66,7 @@ app.add_middleware(
 # Define database connection settings
 MYSQL_CONFIG = {
     "host": "127.0.0.1",
-    "port": 8111,
+    "port": 3306,
     "user": "root",
     "password": "",
     "database": "rbms"     #CHANGE THIS
@@ -544,11 +541,7 @@ def get_profile(profile: userClass, db_connection: mysql.connector.connection.My
     profile_picture_base64 = None
     if prof[1]:
         profile_picture_base64 = base64.b64encode(prof[1]).decode("utf-8")
-    profile_picture_base64 = None
-    if prof[1]:
-        profile_picture_base64 = base64.b64encode(prof[1]).decode("utf-8")
 
-    return {"username": prof[0], "role": prof[2], "profilePicture": profile_picture_base64}
     return {"username": prof[0], "role": prof[2], "profilePicture": profile_picture_base64}
 
 
@@ -595,7 +588,6 @@ def get_booking_r(db_connection, cursor, userID):
     if role == "Property Manager":
         sql_query = """
             SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
-            SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
                    `booking request description`.`Date`, 
                    `booking request description`.`Start Time`, 
                    `booking request description`.`End Time`
@@ -606,7 +598,6 @@ def get_booking_r(db_connection, cursor, userID):
         """
     else:
         sql_query = """
-            SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
             SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
                    `booking request description`.`Date`, 
                    `booking request description`.`Start Time`, 
@@ -661,7 +652,6 @@ class RequestDetails(BaseModel):
 def get_request_details(db_connection, cursor, bookingID):
     query = """
     SELECT DISTINCT
-    SELECT DISTINCT
         `users`.`user ID` AS user_id,
         `user roles`.`name` AS user_role,
         `booking request description`.`capacity` AS request_capacity,
@@ -706,7 +696,6 @@ class HandleBooking(BaseModel):
 
 def check_collision(db_connection, cursor, requestID):
     query = """
-        SELECT DISTINCT br.`Room ID`, brd.`Date`, brd.`Start Time`, brd.`End Time`
         SELECT DISTINCT br.`Room ID`, brd.`Date`, brd.`Start Time`, brd.`End Time`
         FROM `booking request` AS br
         JOIN `booking request description` AS brd ON br.`Request ID` = brd.`Request ID`
@@ -952,7 +941,6 @@ def get_user_requests(db_connection, cursor, UserID, checkType):
     if checkType == "current":
         sql_query1 = """
             SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
-            SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
                    `booking request description`.`Date`,
                    `booking request description`.`Start Time`,
                    `booking request description`.`End Time`
@@ -965,7 +953,6 @@ def get_user_requests(db_connection, cursor, UserID, checkType):
 
         sql_query2 = """
             SELECT DISTINCT `booking list`.`Booking ID`, `booking list`.`Room ID`,
-            SELECT DISTINCT `booking list`.`Booking ID`, `booking list`.`Room ID`,
                    `booking id description`.`Date`,
                    `booking id description`.`Start Time`,
                    `booking id description`.`End Time`
@@ -977,7 +964,6 @@ def get_user_requests(db_connection, cursor, UserID, checkType):
         """
 
         sql_query3 = """
-            SELECT DISTINCT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
             SELECT DISTINCT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
                    `booking rejects description`.`Date`,
                    `booking rejects description`.`Start Time`,
@@ -1000,11 +986,9 @@ def get_user_requests(db_connection, cursor, UserID, checkType):
         cursor.execute(sql_query3, (formatted_date,UserID))
         results3 = cursor.fetchall()
         results3_labeled = [row + ("Rejected",)  for row in results3]
-        results3_labeled = [row + ("Rejected",)  for row in results3]
 
     else:
         sql_query1 = """
-            SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
             SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
                    `booking request description`.`Date`,
                    `booking request description`.`Start Time`,
@@ -1018,7 +1002,6 @@ def get_user_requests(db_connection, cursor, UserID, checkType):
 
         sql_query2 = """
             SELECT DISTINCT `booking list`.`Booking ID`, `booking list`.`Room ID`,
-            SELECT DISTINCT `booking list`.`Booking ID`, `booking list`.`Room ID`,
                    `booking id description`.`Date`,
                    `booking id description`.`Start Time`,
                    `booking id description`.`End Time`
@@ -1030,7 +1013,6 @@ def get_user_requests(db_connection, cursor, UserID, checkType):
         """
 
         sql_query3 = """
-            SELECT DISTINCT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
             SELECT DISTINCT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
                    `booking rejects description`.`Date`,
                    `booking rejects description`.`Start Time`,
@@ -1066,7 +1048,6 @@ def get_user_requests(db_connection, cursor, UserID, checkType):
             formatted_row[3] = "09:00:00"
         formatted_row[4] = str(row[4])
         formatted_result.append(formatted_row)
-        #print (formatted_row)
         #print (formatted_row)
 
     return formatted_result
@@ -1224,7 +1205,6 @@ def daily_bookingsR_clear(db_connection, cursor):
     one_day_prior_str = one_day_prior.strftime('%Y-%m-%d')
     
     query = "SELECT DISTINCT `Request ID` FROM `booking request description` WHERE `Date` < %s"
-    query = "SELECT DISTINCT `Request ID` FROM `booking request description` WHERE `Date` < %s"
     cursor.execute(query, (one_day_prior_str,))
     bookings_today = cursor.fetchall()  
     print (bookings_today)
@@ -1258,19 +1238,7 @@ def getAllBookings (db_connection, cursor,typeCheck):
     print (formatted_date)
 
     if typeCheck == "current":
-        sql_query1 = """
-            SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
-                   `booking request description`.`Date`,
-                   `booking request description`.`Start Time`,
-                   `booking request description`.`End Time`
-            FROM `booking request`
-            JOIN `booking request description`
-            ON `booking request`.`Request ID` = `booking request description`.`Request ID`
-            WHERE `booking request description`.`Date` >= %s
-        """
-
         sql_query2 = """
-            SELECT DISTINCT `booking list`.`Booking ID`, `booking list`.`Room ID`,
             SELECT DISTINCT `booking list`.`Booking ID`, `booking list`.`Room ID`,
                    `booking id description`.`Date`,
                    `booking id description`.`Start Time`,
@@ -1282,7 +1250,6 @@ def getAllBookings (db_connection, cursor,typeCheck):
         """
 
         sql_query3 = """
-            SELECT DISTINCT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
             SELECT DISTINCT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
                    `booking rejects description`.`Date`,
                    `booking rejects description`.`Start Time`,
@@ -1302,19 +1269,7 @@ def getAllBookings (db_connection, cursor,typeCheck):
         results3_labeled = [row + ("Rejected",)  for row in results3]    
 
     else:
-        sql_query1 = """
-            SELECT DISTINCT `booking request`.`Request ID`, `booking request`.`Room ID`,
-                   `booking request description`.`Date`,
-                   `booking request description`.`Start Time`,
-                   `booking request description`.`End Time`
-            FROM `booking request`
-            JOIN `booking request description`
-            ON `booking request`.`Request ID` = `booking request description`.`Request ID`
-            WHERE `booking request description`.`Date` < %s
-        """
-
         sql_query2 = """
-            SELECT DISTINCT `booking list`.`Booking ID`, `booking list`.`Room ID`,
             SELECT DISTINCT `booking list`.`Booking ID`, `booking list`.`Room ID`,
                    `booking id description`.`Date`,
                    `booking id description`.`Start Time`,
@@ -1326,7 +1281,6 @@ def getAllBookings (db_connection, cursor,typeCheck):
         """
 
         sql_query3 = """
-            SELECT DISTINCT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
             SELECT DISTINCT `booking rejects`.`Reject ID`, `booking rejects`.`Room ID`,
                    `booking rejects description`.`Date`,
                    `booking rejects description`.`Start Time`,
@@ -1374,71 +1328,118 @@ class booking(BaseModel):
     bookingID : str
 
 def get_admin_details(db_connection,cursor, ID):
-    query = """
-        SELECT
-            `booking list`.`User ID`,
-            `user roles`.`Name`,
-            `booking list`.`Handler`,
-            `booking id description`.`capacity` AS request_capacity,
-            `room`.`capacity` AS room_capacity,
-            `booking id description`.`Description` AS request_description,
-            `booking id description`.`Comment` AS request_comment
-        FROM 
-            `booking list`
-        JOIN 
-            `users` ON `booking list`.`User ID` = `users`.`User ID`
-        JOIN 
-            `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
-        JOIN 
-            `booking id description` ON `booking list`.`Booking ID` = `booking id description`.`Booking ID`
-        JOIN 
-            `room` ON `booking list`.`Room ID` = `room`.`Room ID`
+    cursor = db_connection.cursor(buffered=True)
+
+
+    # Get User Information Query
+    user_info_query = """SELECT `User ID`, `Handler` FROM `booking list` WHERE `Booking ID` = %s"""
+    
+    cursor.execute(user_info_query, (ID,))
+    details1 = cursor.fetchone()
+
+    if details1:
+        # Get User Role Query
+        user_role_query = """SELECT `Name` FROM `user roles` JOIN `users` ON `users`.`Role ID` = `user roles`.`Role ID` WHERE `users`.`User ID` = %s"""
+        
+        # Get Booking Details Query
+        booking_details_query = """SELECT `capacity` AS request_capacity, `Description` AS request_description, `Comment` AS request_comment FROM `booking id description` WHERE `Booking ID` = %s"""
+
+
+        cursor.execute(user_role_query, (details1[0],))
+        details2 = cursor.fetchone()
+        
+        if details2 is None:
+            details2 = ["UoSM Staff"]
             
-        WHERE 
-            `booking list`.`Booking ID` = %s
-         """
-    query1 = """
-        SELECT
-            `booking rejects`.`User ID`,
-            `user roles`.`Name`,
-            `booking rejects`.`Handler`,
-            `booking rejects description`.`capacity` AS request_capacity,
-            `room`.`capacity` AS room_capacity,
-            `booking rejects description`.`Description` AS request_description,
-            `booking rejects description`.`Comment` AS request_comment
-        FROM 
-            `booking rejects`
-        JOIN 
-            `users` ON `booking rejects`.`User ID` = `users`.`User ID`
-        JOIN 
-            `user roles` ON `users`.`Role ID` = `user roles`.`Role ID`
-        JOIN 
-            `booking rejects description` ON `booking rejects`.`Reject ID` = `booking rejects description`.`Reject ID`
-        JOIN 
-            `room` ON `booking rejects`.`Room ID` = `room`.`Room ID`
+        cursor.execute(booking_details_query, (ID,))
+        details3 = cursor.fetchone()
+        
+        check = """SELECT `Room ID` FROM `booking list` WHERE `Booking ID` = %s"""
+        cursor.execute(check, (ID,))
+        yes = cursor.fetchone()  
+        room_capacity_query_rejects = """SELECT `Capacity` FROM `room` where `Room ID` = %s"""
+        cursor.execute(room_capacity_query_rejects, (yes[0],))
+        details4 = cursor.fetchone()  # Need to call `fetchone()` as a function
+        
+        if details4 is None:
+            details4 = ["Null"]
+
+        print(details1)
+        print(details2)
+        print(details3)
+        print(details4)
+
+        transformed_data = {
+        "user_id": details1[0],
+        "user_role": details2[0],
+        "handler": details1[1],
+        "request_capacity": details3[0],
+        "room_capacity": details4[0],
+        "description": details3[1],
+        "comment": details3[2]
+        }        
+
+    else:
+
+        # Get User Information Query
+        user_info_query = """SELECT `User ID`, `Handler` FROM `booking rejects` WHERE `Reject ID` = %s"""
+        
+        cursor.execute(user_info_query, (ID,))
+        details1 = cursor.fetchone()
+
+        print (details1)
+
+        # Get User Role Query for Booking Rejects
+        user_role_query_rejects = """SELECT `Name` FROM `user roles` JOIN `users` ON `users`.`Role ID` = `user roles`.`Role ID` WHERE `users`.`User ID` = %s"""
+
+        cursor.execute(user_role_query_rejects, (details1[0],))
+        details2 = cursor.fetchone()
+        print (details2)
+
+        if details2 is None:
+            details2 = ["UoSM Staff"]
             
-        WHERE 
-            `booking rejects`.`Reject ID` = %s
-         """
+        # Get Booking Rejects Details Query
+        booking_rejects_details_query = """SELECT `capacity` AS request_capacity, `Description` AS request_description, `Comment` AS request_comment FROM `booking rejects description` WHERE `Reject ID` = %s"""
 
-    cursor.execute(query, (ID,))
-    details = cursor.fetchone()
+        cursor.execute(booking_rejects_details_query, (ID,))
+        details3 = cursor.fetchone()
+        print (details3)
 
-    if details == None:
-        cursor.execute(query1, (ID,))
-        details = cursor.fetchone()
+        check = """SELECT `Room ID` FROM `booking rejects` WHERE `Reject ID` = %s"""
+        cursor.execute(check, (ID,))
+        yes = cursor.fetchone()  
+        room_capacity_query_rejects = """SELECT `Capacity` FROM `room` where `Room ID` = %s"""
+        cursor.execute(room_capacity_query_rejects, (yes[0],))
+        
+        details4 = cursor.fetchone()  # Need to call `fetchone()` as a function
+        print(details4[0])
+
+        if details4 is None:
+            details4 = ["Null"] 
 
 
-    transformed_data = {
-    "user_id": details[0],
-    "user_role": details[1],
-    "handler": details[2],
-    "request_capacity": details[3],
-    "room_capacity": details[4],
-    "description": details[5],
-    "comment": details[6]
-}
+##        # Get Room Capacity Query for Booking Rejects
+##        room_capacity_query_rejects = """SELECT `capacity` AS room_capacity FROM `room` JOIN `booking rejects` ON `booking rejects`.`Room ID` = `room`.`Room ID` WHERE `booking rejects`.`Room ID` = %s"""
+##
+##        cursor.execute(room_capacity_query_rejects, (ID,))
+##        details4 = cursor.fetchone()
+##
+##        if details4 is None:
+##            details4 = "None"
+##        print (details4)
 
+        transformed_data = {
+            "user_id": details1[0],
+            "user_role": details2[0],
+            "handler": details1[1],
+            "request_capacity": details3[0],
+            "room_capacity": (details4[0]),
+            "description": details3[1],
+            "comment": details3[2]
+        }
+
+    
     return transformed_data
 
 
@@ -1695,14 +1696,12 @@ def get_list_feedback(db_connection,cursor, typeCheck):
     if typeCheck == "current":
         query = """
             SELECT DISTINCT `Booking ID`, `Title`, `Text`
-            SELECT DISTINCT `Booking ID`, `Title`, `Text`
             FROM `feedback`
             WHERE `Active` = 1
         """
 
     else:
         query = """
-            SELECT DISTINCT `Booking ID`, `Title`, `Text`
             SELECT DISTINCT `Booking ID`, `Title`, `Text`
             FROM `feedback`
             WHERE `Active` = 0
@@ -1757,18 +1756,6 @@ def delete_profile_picture(user_id: str, db_connection: mysql.connector.connecti
     cursor = db_connection.cursor()
     delete_profile_picture_in_db(db_connection, cursor, user_id)
     return {"message": "Profile picture deleted successfully"}
-     
-def delete_profile_picture_in_db(db_connection, cursor, user_id):
-    # Update the profile picture in the database to NULL
-    update_query = "UPDATE users SET profile_picture = NULL WHERE `User ID` = %s"
-    cursor.execute(update_query, (user_id,))
-    db_connection.commit()
-
-@app.post("/delete_profile_pic/")
-def delete_profile_picture(user_id: str, db_connection: mysql.connector.connection.MySQLConnection = Depends(get_database_connection)):
-    cursor = db_connection.cursor()
-    delete_profile_picture_in_db(db_connection, cursor, user_id)
-    return {"message": "Profile picture deleted successfully"}
 
 #################################### READY
 
@@ -1797,8 +1784,6 @@ async def upload_excel(file: UploadFile = File(...), db_connection = Depends(get
     # Check if the file is an Excel file
     if not (file.filename.endswith(".xlsx") or file.filename.endswith(".xls")):
         raise HTTPException(status_code=400, detail="Only Excel files (.xlsx/.xls) are supported.")
-    if not (file.filename.endswith(".xlsx") or file.filename.endswith(".xls")):
-        raise HTTPException(status_code=400, detail="Only Excel files (.xlsx/.xls) are supported.")
 
     # Save the uploaded Excel file to a temporary file
     with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp:
@@ -1811,7 +1796,6 @@ async def upload_excel(file: UploadFile = File(...), db_connection = Depends(get
     # Iterate over the rows of the Excel file
     for index, row in excel_data.iterrows():
         # Extract data from each row
-        username = row['email']
         username = row['email']
         password = row['password']
         user_role = row['user role']
@@ -2043,13 +2027,10 @@ async def process_excel(file: UploadFile):
     start_column = 2
     totaldata = []
     
-    #for column_index in range(start_column, 2 + 1):
-        #for row_index in range(start_row,23 + 1, 3):
-    
-    #for column_index in range(start_column, 2 + 1):
-        #for row_index in range(start_row,23 + 1, 3):
-    for column_index in range(start_column, worksheet.max_column + 1):
-        for row_index in range(start_row,worksheet.max_row + 1, 3):
+    for column_index in range(start_column, 2 + 1):
+        for row_index in range(start_row,23 + 1, 3):
+    #for column_index in range(start_column, worksheet.max_column + 1):
+        #for row_index in range(start_row,worksheet.max_row + 1, 3):
             classroom = await get_value_above(worksheet, worksheet.cell(row=row_index, column=1))
             day = await get_value_left(worksheet, worksheet.cell(row=3, column=column_index))
             cell_b11_value = worksheet.cell(row=row_index, column=column_index).value
@@ -2077,7 +2058,6 @@ async def process_excel(file: UploadFile):
 
                     if output_string not in totaldata:
                         totaldata.append(output_string)
-
 
     
     return totaldata
@@ -2132,21 +2112,6 @@ def has_duplicate_entry(existing_data, new_entry):
             return True  # Duplicate entry found
         
     return False  # No duplicate entry found
-def has_duplicate_entry(existing_data, new_entry):
-    for data_entry in existing_data:
-        # Split each existing data entry based on comma
-        existing_sections = data_entry.split(", ")
-
-        # Split the new entry based on comma
-        new_sections = new_entry.split(", ")
-
-        # Compare the first, second, and fourth sections
-        if (existing_sections[0].strip() == new_sections[0].strip() and
-            existing_sections[1].strip() == new_sections[1].strip() and
-            existing_sections[3].strip() == new_sections[3].strip()):
-            return True  # Duplicate entry found
-        
-    return False  # No duplicate entry found
 
 
 async def writeData(data, db_connection, cursor):
@@ -2159,17 +2124,7 @@ async def writeData(data, db_connection, cursor):
             written.append(indi)
             
     for val in written:
-        written = []
-        unwritten = []
-    for indi in data:
-        if has_duplicate_entry(written,indi):
-            unwritten.append(indi)
-        else:
-            written.append(indi)
-            
-    for val in written:
         parts = val.split(", ")
-        day_of_week = upcoming_weekdays(parts[1],12)       #CHANGE THE LAST NUMBER FOR HOW MANY WEEKS
         day_of_week = upcoming_weekdays(parts[1],12)       #CHANGE THE LAST NUMBER FOR HOW MANY WEEKS
 
         for day in day_of_week:
@@ -2189,14 +2144,13 @@ async def writeData(data, db_connection, cursor):
                     break
                     
 
-                    
-
             # Insert data into Booking List table
             insertDetails1 = ("""
                 INSERT INTO `Booking List` (`Booking ID`, `User ID`, `Room ID`,`handler`)
                 VALUES (%s, %s, %s, %s);""")
             cursor.execute(insertDetails1, (NewbookingID, parts[5], parts[0], "System"))
 
+            db_connection.commit()
 
             # Insert the data into booking id description
             insertDetails2 = ("""
@@ -2204,7 +2158,6 @@ async def writeData(data, db_connection, cursor):
                 VALUES (%s, %s, %s, %s, %s, %s, %s);""")
 
             cursor.execute(insertDetails2, (NewbookingID, parts[2], day, parts[3], parts[4], 30, ""))
-                    
                     
             # Commit the transaction
             db_connection.commit()
@@ -2251,55 +2204,8 @@ def convert_to_nested_lists(data):
         nested_data.append(string.split(","))
     return nested_data
 
-
-    unwritten = list(set(unwritten))
-           
-    return unwritten
-
-async def createDuplicates(data):
-    from openpyxl import Workbook
-    # Create a new workbook and select the active worksheet
-    wb = Workbook()
-    ws = wb.active
-
-    # Define the data
-    headers = ["room", "day", "description", "start time", "end time", "lecturer"]
-
-    ws.append(headers)
-
-    dataset = convert_to_nested_lists(data)
-    
-    # Write the data to the worksheet
-    for row in dataset:
-        ws.append(row)
-
-    # Write the workbook to a BytesIO buffer instead of a temporary file
-    excel_buffer = io.BytesIO()
-    wb.save(excel_buffer)
-    excel_buffer.seek(0)
-
-    # Read the contents from the BytesIO buffer
-    content = excel_buffer.getvalue()
-
-    # Set the response headers to indicate it's an Excel file
-    response = Response(content, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    response.headers["Content-Disposition"] = "attachment; filename=duplicateClasses.xlsx"
-
-    return response
-
-def convert_to_nested_lists(data):
-    nested_data = []
-    for string in data:
-        nested_data.append(string.split(","))
-    return nested_data
-
 async def datahandler(file, db_connection, cursor):
     datalist = await process_excel(file)
-    unwritten_data = await writeData(datalist, db_connection, cursor)
-    #return unwritten_data
-    file = await createDuplicates(unwritten_data)        
-    return file
-
     unwritten_data = await writeData(datalist, db_connection, cursor)
     #return unwritten_data
     file = await createDuplicates(unwritten_data)        
@@ -2356,22 +2262,3 @@ def get_room_from_ID(room : getroom, db_connection: mysql.connector.connection.M
     return {room}
   
 
-
-# DELETE FROM `feedback`;
-# DELETE FROM `booking id description`;
-# DELETE FROM `booking list`;
-
-#################################### JIEYANG
-# Download the sample timetable Excel file
-@app.get("/download_sample_excel/{filename}")
-async def download_sample_excel(filename: str):
-    # Define the path to your sample Excel file
-    sample_excel_path = os.path.join("static", filename)
-
-    # Check if the file exists
-    if os.path.exists(sample_excel_path):
-        # Return the file as a FileResponse
-        return FileResponse(sample_excel_path, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename=filename)
-    else:
-        # Return a 404 error if the file does not exist
-        return {"error": "Sample Excel file not found"}

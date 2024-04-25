@@ -71,7 +71,7 @@ const Sortbars = () => {
 
         {/* Graph Title Sortbar */}
         <select 
-          className="text-2xl font-semibold block rounded-md py-2 pl-3 pr-10 hover:bg-gray-100 focus:outline-none cursor-pointer"
+          className="text-base font-semibold block rounded-md py-2 pl-3 pr-10 hover:bg-gray-100 focus:outline-none cursor-pointer"
           onChange={(e) => handleGraphChange((e.target.value), monthStateValue, yearStateValue)}
         >
           <option value={""} disabled={isDisabledGraph}>Select Graph</option>
@@ -85,11 +85,11 @@ const Sortbars = () => {
         </select>
       </div>
 
-      <div className="w-1/2 flex justify-end items-center mr-2">
+      <div className="w-1/2 flex justify-end items-center mr-2 space-x-4">
       
         {/* Month Sortbar */}
         <select 
-          className="text-2xl font-semibold block rounded-md py-2 pl-3 pr-10 hover:bg-gray-100 focus:outline-none cursor-pointer"
+          className="text-base font-semibold block rounded-md py-2 pl-3 pr-10 hover:bg-gray-100 focus:outline-none cursor-pointer"
           onChange={(e) => handleMonthChange(Number(e.target.value))}
         >
           <option value={0} disabled={isDisabledMonth}>Select Month</option>
@@ -109,7 +109,7 @@ const Sortbars = () => {
 
         {/* Year Sortbar */}
         <select 
-          className="text-2xl font-semibold block rounded-md py-2 pl-3 pr-10 hover:bg-gray-100 focus:outline-none cursor-pointer"
+          className="text-base font-semibold block rounded-md py-2 pl-3 pr-10 hover:bg-gray-100 focus:outline-none cursor-pointer"
           onChange={(e) => handleYearChange(Number(e.target.value))}
         >
           <option value={0} disabled={isDisabledYear}>Select Year</option>
