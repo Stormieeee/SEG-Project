@@ -3,7 +3,7 @@ import { useStateContext } from "./MyBookingContext";
 import { buttonStyle } from "../style/MainStyle";
 
 const Sortbar = () => {
-  const { bookings, setBookings, setSelectedRowIndex } = useStateContext();
+  const { feedbackList, setFeedbackList, setSelectedRowIndex } = useStateContext();
   const [sortColumn, setSortColumn] = useState<string>("");
   const [disableSelect] = useState<boolean>(false);
 
@@ -15,7 +15,7 @@ const Sortbar = () => {
     setSortColumn(event.target.value);
 
     // Sort the bookings based on the selected column
-    const sortedBookings = bookings ? [...bookings] : [];
+    const sortedBookings = feedbackList ? [...feedbackList] : [];
     sortedBookings.sort((a, b) => {
       // Compare the values in the selected column
       const columnA = a[selectedColumn];
@@ -31,7 +31,7 @@ const Sortbar = () => {
       }
     });
 
-    setBookings(sortedBookings);
+    setFeedbackList(sortedBookings);
     setSelectedRowIndex(-1);
   };
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

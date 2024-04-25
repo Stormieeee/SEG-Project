@@ -38,7 +38,6 @@ const BookingsTable = () => {
           body: JSON.stringify({ bookingID: bookingId }),
         }
       );
-
       if (response.ok) {
         
         const data = await response.json();
@@ -52,24 +51,23 @@ const BookingsTable = () => {
   };
 
   const getRoomID = async (
-    bookingID: string
+    bookingId: string
   ) =>{
     try{
-      const response = await fetch("http://localhost:8000/getRoomID", {
+      const response = await fetch("http://localhost:8000/get_room_from_ID", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({bookingID: feedbackList[selectedRowIndex][0],
+        body: JSON.stringify({bookingID: bookingId,
 
         }),
       })
-
+      
       if(response.ok){
-        const data = await response.json
+        const data = await response.json();
         return data
       }
-
     }catch(error){
       console.log("Room ID could not be found")
     }
@@ -97,6 +95,7 @@ const BookingsTable = () => {
                 : "bg-primary-50 hover:bg-primary-100 hover:border-primary-300 cursor-pointer transition duration-300 ease-in-out"
             }`}
             onClick={() => {
+              getRoomID(rowData[0])
               getFeedbackDetails(rowData[0] , rowIndex);
               if (selectedRowIndex === rowIndex) {
                 setSelectedRowIndex(-1);

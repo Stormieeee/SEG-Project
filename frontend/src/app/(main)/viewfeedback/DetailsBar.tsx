@@ -16,7 +16,7 @@ const DetailsBar = () => {
     isLoading,
     setIsLoading,
   } = useStateContext();
-  const { title, request_capacity, room_capacity, description } =
+  const { title,roomID, request_capacity, room_capacity, description } =
     feedbackDetails ?? {};
 
   // Remove request from table after approving/rejecting
@@ -72,6 +72,7 @@ const DetailsBar = () => {
       <div className="border-neutral-400 flex-1 flex-col justify-start inline-flex">
         <div className={`${subHeadingStyle}`}>Feedback Specific:</div>
         <ul className="pl-1 space-y-2 mt-2 text-base font-medium text-stone-700">
+          <li>Room ID: {roomID}</li>
           <li>Room Capacity: {room_capacity}</li>
           <li>Request Capacity: {request_capacity}</li>
           <li>Purpose:</li>
