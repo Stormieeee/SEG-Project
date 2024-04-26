@@ -10,7 +10,7 @@ const PopupMessage = () => {
     if (isVisible) {
       const timeout = setTimeout(() => {
         setIsVisible(false);
-      }, 1000);
+      }, 2000);
 
       return () => clearTimeout(timeout); // Clean up the timeout on unmount
     }
