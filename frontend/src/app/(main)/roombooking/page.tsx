@@ -15,7 +15,7 @@ import { LoadingState } from "../hook/loadingState";
 
 export default function RoomBooking() {
   
-  const{stopLoading , isLoading} = LoadingState();
+  const{startLoading, stopLoading , isLoading} = LoadingState();
 
   const {
     setRoomID,
@@ -49,6 +49,7 @@ export default function RoomBooking() {
   };
 
   useEffect(() => {
+    startLoading();
     fetchData(); // Fetch data when component mounts
   }, []);
 

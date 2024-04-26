@@ -36,7 +36,7 @@ const useNavigation = () => {
         setMyBookingActive(true);
         break;
       case "/profile":
-        startLoading(); //start loading 
+
         setProfileActive(true);
         break;
       case "/bookingrequest":
