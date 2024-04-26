@@ -10,6 +10,7 @@ import { useState } from "react";
 import LoadingSpinner from "../Components/LoadingSpinner";
 import userGuideIcon from "../../../public/Topbar-icon/User Guide.svg";
 import Image from "next/image";
+import getEmailFromSessionStorage from "../Components/CommonFunction";
 import { TopbarStyle } from "./style/MainStyle";
 
 const getPageTitle = (path: string): string => {
@@ -92,7 +93,7 @@ const Topbar = () => {
       <div className="flex flex-row w-full justify-between ">
         <div className="bg-white-400/10 mx-3 px-3 py-4 rounded-lg">
           <h1 className="text-2xl font-semibold text-gray-800 antialiased">
-            {pageTitle}
+            Hi, {getEmailFromSessionStorage()}
           </h1>
         </div>
 

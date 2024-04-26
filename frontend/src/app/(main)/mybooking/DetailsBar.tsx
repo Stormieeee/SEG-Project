@@ -6,7 +6,7 @@ import { useStateContext } from "./MyBookingContext";
 import { useStateContext as mainStateContext } from "../StateContext";
 import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 
-const   DetailsBar = () => {
+const DetailsBar = () => {
   const {
     bookings,
     setBookings,
@@ -20,6 +20,7 @@ const   DetailsBar = () => {
     isLoading,
     setIsLoading,
     setShowForm,
+    setCurrentBookings,
   } = useStateContext();
   const {
     request_capacity,
@@ -35,6 +36,10 @@ const   DetailsBar = () => {
 
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (indexToRemove: number) => {
+    const bookingID = bookings[indexToRemove][0];
+    setCurrentBookings((bookings) =>
+      bookings.filter((booking) => booking[0] !== bookingID)
+    );
     setBookings((bookings) =>
       bookings.filter((_, index) => index !== indexToRemove)
     );

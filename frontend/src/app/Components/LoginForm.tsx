@@ -37,8 +37,11 @@ const Login = ({
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //Make sure email always stay in school email format
-    if (!email.endsWith("@soton.ac.uk")) {
-      setError("Email domain must be @soton.ac.uk");
+    if (
+      !email.endsWith("@soton.ac.uk") ||
+      !email.endsWith("@southampton.ac.uk")
+    ) {
+      setError("Email domain must be @soton.ac.uk or @southampton.ac.uk");
       return;
     }
     setLoading(true);
@@ -79,7 +82,7 @@ const Login = ({
   //Login Form
   return (
     <section className="flex flex-auto bg-white-500 dark:bg-gray-900">
-      <div className="flex flex-col w-full items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0" >
+      <div className="flex flex-col w-full items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full h-[33.625rem] bg-white-200 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8 flex flex-col">
             <div className="flex items-center justify-center mb-4">
@@ -107,7 +110,10 @@ const Login = ({
                 setShowPassword={setShowPassword}
                 error={passwordError}
               />
-              <button className="underline dark:text-slate-400 hover:text-slate-500 " onClick={handleForgotPassword}>
+              <button
+                className="underline dark:text-slate-400 hover:text-slate-500 "
+                onClick={handleForgotPassword}
+              >
                 Forget Password?
               </button>
               {loading ? <LoadingSpinner /> : <LoginButton />}

@@ -29,27 +29,29 @@ const DateTime = ({ fetchData }: any) => {
       const isCurrentDate = date === getCurrentDate(); //boolean for if date selected is same as current date
       const isOutOfTimeRange = currentTime < 9 || currentTime > 23; //boolean for current time is < 9 or > 23
 
-      if (!isOutOfTimeRange && isCurrentDate) {           //if its not out of range and is today's date then initiate option with current time
+      if (!isOutOfTimeRange && isCurrentDate) {
+        //if its not out of range and is today's date then initiate option with current time
         setDisabled(false);
         const availableOptions = [];
         for (let i = currentTime; i <= 23; i++) {
-          availableOptions.push({ value: i, label: ` ${i}:00 `});
+          availableOptions.push({ value: i, label: ` ${i}:00 ` });
         }
         setStartOptions(availableOptions);
         setEndOptions(availableOptions.slice(1));
-      }else if(!isCurrentDate){ //else if date is not today's date then initiate option with 9am
+      } else if (!isCurrentDate) {
+        //else if date is not today's date then initiate option with 9am
         setDisabled(false);
         const availableOptions = [];
         for (let i = 9; i <= 23; i++) {
-          availableOptions.push({ value: i, label: ` ${i}:00 `});
+          availableOptions.push({ value: i, label: ` ${i}:00 ` });
         }
         setStartOptions(availableOptions);
         setEndOptions(availableOptions.slice(1));
-      }else{                                              //else set disabled if out of time range and today's date
-        setDisabled(true); 
+      } else {
+        //else set disabled if out of time range and today's date
+        setDisabled(true);
       }
     };
-
 
     generateOptions();
     const interval = setInterval(generateOptions, 60000);
@@ -60,14 +62,13 @@ const DateTime = ({ fetchData }: any) => {
   //Change Date
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value;
-    
-    if (selectedDate !== getCurrentDate()) {
 
+    if (selectedDate !== getCurrentDate()) {
       const availableOptions: Option[] = [];
       for (let i = 9; i <= 23; i++) {
         availableOptions.push({ value: i, label: `${i}:00` });
       }
-      setStartTime(9); 
+      setStartTime(9);
       setEndTime(10);
       setStartOptions(availableOptions);
       setEndOptions(availableOptions.slice(1));
@@ -80,9 +81,9 @@ const DateTime = ({ fetchData }: any) => {
       setStartTime(currentTime);
       setEndTime(currentTime);
       setStartOptions(availableOptions);
-      setEndOptions(availableOptions.slice(1)); 
+      setEndOptions(availableOptions.slice(1));
     }
-    
+
     setDate(selectedDate);
   };
 
@@ -143,6 +144,7 @@ const DateTime = ({ fetchData }: any) => {
               type="date"
               value={date}
               onChange={handleDateChange}
+              min={getCurrentDate()}
             />
           </div>
 
