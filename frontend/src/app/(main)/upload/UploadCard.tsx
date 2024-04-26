@@ -38,41 +38,43 @@ const UploadCard = ({
   };
 
   const formAction = async (e: React.FormEvent<HTMLFormElement>) => {
-    const startTime = Date.now();
-    const formData = new FormData();
-    if (selectedFile) {
-      formData.append("file", selectedFile);
-    } else {
-      console.error("No file selected");
-      return;
-    }
-    try {
-      console.log("file", formData.get("file"));
-      const response = await fetch(`http://localhost:8000/${actionUrl}`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        console.log("File uploaded successfully");
-        setMessage("File uploaded successfully");
-        setIsSuccess(true);
-        const fileBlob = await response.blob();
-        if (fileBlob) {
-          downloadFile("duplicateClasses.xlsx", fileBlob);
-        }
+    const confirmed = window.confirm(
+      "Are you sure you want to upload this file?"
+    );
+    if (confirmed) {
+      const formData = new FormData();
+      if (selectedFile) {
+        formData.append("file", selectedFile);
       } else {
-        console.error("Error uploading file");
+        console.error("No file selected");
+        return;
       }
-    } catch (error) {
-      setMessage("Error uploading file");
-      setIsSuccess(false);
-    } finally {
-      setIsVisible(true);
-      setSelectedFile(null);
-      handleRemoveFile();
-      const duration = Date.now() - startTime; // Calculate the duration
-      console.log("Request duration:", duration, "milliseconds");
+      try {
+        console.log("file", formData.get("file"));
+        const response = await fetch(`http://localhost:8000/${actionUrl}`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log("File uploaded successfully");
+          setMessage("File uploaded successfully");
+          setIsSuccess(true);
+          const fileBlob = await response.blob();
+          if (fileBlob) {
+            downloadFile("duplicateClasses.xlsx", fileBlob);
+          }
+        } else {
+          console.error("Error uploading file");
+        }
+      } catch (error) {
+        setMessage("Error uploading file");
+        setIsSuccess(false);
+      } finally {
+        setIsVisible(true);
+        setSelectedFile(null);
+        handleRemoveFile();
+      }
     }
   };
   const downloadFile = async (filename: string, fileBlob: Blob) => {
