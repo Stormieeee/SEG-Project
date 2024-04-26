@@ -21,8 +21,7 @@ interface StateContextType {
   floorSection: string;
   setFloorSection: React.Dispatch<React.SetStateAction<string>>;
   dataFromApi: null;
-  setFetchedData : React.Dispatch<React.SetStateAction<null>>;
-
+  setFetchedData: React.Dispatch<React.SetStateAction<null>>;
 
   roomCapacity: number;
   setRoomCapacity: React.Dispatch<React.SetStateAction<number>>;
@@ -65,9 +64,6 @@ const defaultValue: StateContextType = {
   setRoomEquipment : () => {},
   isRoomDescEmpty : true,
   setRoomDescEmpty : () => {},
-
-
-
 
 
   message: "",

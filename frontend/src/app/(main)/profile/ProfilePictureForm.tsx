@@ -1,7 +1,6 @@
 import Image from "next/image";
 import profile from "./default_profile_avatar.svg";
 import { useEffect, useRef, useState } from "react";
-import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
 
 interface ProfilePictureFormProps {
   showEditForm: boolean;

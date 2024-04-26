@@ -8,6 +8,8 @@ import { handleRoomBooking } from "./roombooking/utils/utils";
 import { formatHour, adjustTime } from "./roombooking/utils/commonFunction";
 import { useState } from "react";
 import LoadingSpinner from "../Components/LoadingSpinner";
+import userGuideIcon from "../../../public/Topbar-icon/User Guide.svg";
+import Image from "next/image";
 import { TopbarStyle } from "./style/MainStyle";
 
 const getPageTitle = (path: string): string => {
@@ -33,6 +35,24 @@ const getPageTitle = (path: string): string => {
     default:
       return "Default Title";
   }
+};
+
+const downloadUserGuide = () => {
+  const filename = "user_guide.pdf";
+  fetch(`http://localhost:8000/download_sample_excel/${filename}`)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch((error) => {
+      console.error("Error downloading sample Excel file:", error);
+    });
 };
 
 const Topbar = () => {
@@ -99,6 +119,22 @@ const Topbar = () => {
             </div>
           </div>
         )}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            downloadUserGuide();
+          }}
+          className="bg-transparent text-white rounded-md mr-5 hover:opacity-60"
+          title="Click to download user guide"
+        >
+          <Image
+            src={userGuideIcon}
+            alt="User Guide Icon"
+            width={24}
+            height={24}
+            layout="fixed"
+          />
+        </button>
       </div>
     </div>
   );
