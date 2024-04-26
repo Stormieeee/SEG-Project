@@ -2027,10 +2027,10 @@ async def process_excel(file: UploadFile):
     start_column = 2
     totaldata = []
     
-    for column_index in range(start_column, 2 + 1):
-        for row_index in range(start_row,23 + 1, 3):
-    #for column_index in range(start_column, worksheet.max_column + 1):
-        #for row_index in range(start_row,worksheet.max_row + 1, 3):
+    #for column_index in range(start_column, 2 + 1):
+        #for row_index in range(start_row,23 + 1, 3):
+    for column_index in range(start_column, worksheet.max_column + 1):
+        for row_index in range(start_row,worksheet.max_row + 1, 3):
             classroom = await get_value_above(worksheet, worksheet.cell(row=row_index, column=1))
             day = await get_value_left(worksheet, worksheet.cell(row=3, column=column_index))
             cell_b11_value = worksheet.cell(row=row_index, column=column_index).value
