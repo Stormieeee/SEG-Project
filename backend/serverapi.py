@@ -69,7 +69,7 @@ MYSQL_CONFIG = {
     "port": 3306,
     "user": "root",
     "password": "",
-    "database": "rbms"     #CHANGE THIS
+    "database": "roombookingfinal"     #CHANGE THIS
 }
 
 # Dependency to establish database connection
@@ -2238,18 +2238,7 @@ async def download_sample_excel(filename: str):
         # Return a 404 error if the file does not exist
         return {"error": "Sample Excel file not found"}
 
-@app.get("/download_user_guide/")
-async def download_user_guide():
-    # Define the path to the user guide PDF file
-    user_guide_path = os.path.join("static", "user_guide.pdf")
 
-    # Check if the file exists
-    if os.path.exists(user_guide_path):
-        # Return the file as a FileResponse
-        return FileResponse(user_guide_path, media_type="application/pdf", filename="user_guide.pdf")
-    else:
-        # Return a 404 error if the file does not exist
-        return {"error": "User guide PDF file not found"}
 
 
 ####################################

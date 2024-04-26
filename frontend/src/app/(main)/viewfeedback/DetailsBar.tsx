@@ -15,17 +15,27 @@ const DetailsBar = () => {
     setFeedback,
     isLoading,
     setIsLoading,
+    setCurrentFeedbackList,
+    setPastFeedbackList,
   } = useStateContext();
-  const { title,roomID, request_capacity, room_capacity, description } =
+  const { title, roomID, request_capacity, room_capacity, description } =
     feedbackDetails ?? {};
 
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (indexToRemove: number) => {
+    const feedbackID = feedbackList[indexToRemove][0];
+    setCurrentFeedbackList((bookings) =>
+      bookings.filter((booking) => booking[0] !== feedbackID)
+    );
+    // add feedback of feedbackID to pastFeedbackList
+    setPastFeedbackList((bookings) => [
+      ...bookings,
+      feedbackList[indexToRemove],
+    ]);
     setFeedbackList((bookings) =>
       bookings.filter((_, index) => index !== indexToRemove)
     );
   };
-
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -39,7 +49,7 @@ const DetailsBar = () => {
           bookingID: feedbackList[selectedRowIndex][0],
         }),
       });
-  
+
       if (response.ok) {
         if (selectedRowIndex >= 0 && feedbackDetails) {
           handleRemoveItem(selectedRowIndex);
@@ -58,7 +68,6 @@ const DetailsBar = () => {
   };
 
   const subHeadingStyle = "text-lg font-bold text-stone-800 mt-3";
-
 
   return (
     <div className="flex flex-1 flex-col">

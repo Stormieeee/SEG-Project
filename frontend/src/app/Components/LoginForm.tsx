@@ -38,7 +38,7 @@ const Login = ({
     e.preventDefault();
     //Make sure email always stay in school email format
     if (
-      !email.endsWith("@soton.ac.uk") ||
+      !email.endsWith("@soton.ac.uk") &&
       !email.endsWith("@southampton.ac.uk")
     ) {
       setError("Email domain must be @soton.ac.uk or @southampton.ac.uk");
