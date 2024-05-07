@@ -2,6 +2,7 @@ import Image from "next/image";
 import profile from "./default_profile_avatar.svg";
 import { useEffect, useRef, useState } from "react";
 import getEmailFromSessionStorage from "@/app/Components/CommonFunction";
+import { useStateContext } from "../StateContext";
 
 interface ProfilePictureFormProps {
   showEditForm: boolean;
@@ -28,6 +29,7 @@ const ProfilePictureForm = ({
   const [saveable, setSaveable] = useState<boolean>(false);
   const [deleteable, setDeleteable] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { setIsVisible, setMessage, setIsSuccess } = useStateContext();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSaveable(true);
@@ -64,11 +66,17 @@ const ProfilePictureForm = ({
         if (response.ok) {
           setOriginalProfilePicture(URL.createObjectURL(selectedFile));
           setShowEditForm(false);
+          setMessage("Profile picture updated successfully");
+          setIsSuccess(true);
         } else {
           console.error("Error updating profile picture");
+          setMessage("Error updating profile picture");
+          setIsSuccess(false);
         }
       } catch (error) {
         console.error("Error updating profile picture:", error);
+        setMessage("Error updating profile picture");
+        setIsSuccess(false);
       }
     } else {
       try {
@@ -82,14 +90,21 @@ const ProfilePictureForm = ({
         if (response.ok) {
           setOriginalProfilePicture(profile);
           setShowEditForm(false);
+          setMessage("Profile picture deleted successfully");
+          setIsSuccess(true);
         } else {
           console.error("Error deleting profile picture");
+          setMessage("Error deleting profile picture");
+          setIsSuccess(false);
         }
       } catch (error) {
         console.error("Error deleting profile picture:", error);
+        setMessage("Error deleting profile picture");
+        setIsSuccess(false);
       }
     }
     setSaveable(false);
+    setIsVisible(true);
   };
 
   const handleCloseEditForm = () => {

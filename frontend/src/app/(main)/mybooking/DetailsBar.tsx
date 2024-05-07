@@ -18,7 +18,6 @@ const DetailsBar = () => {
     setTitle,
     setFeedback,
     isLoading,
-    setIsLoading,
     setShowForm,
     setCurrentBookings,
   } = useStateContext();
@@ -32,7 +31,8 @@ const DetailsBar = () => {
   } = bookingDetails ?? {};
 
   // Popup message after canceling booking
-  const { setIsVisible, setMessage, setIsSuccess } = mainStateContext();
+  const { setIsVisible, setMessage, setIsSuccess, setIsLoading } =
+    mainStateContext();
 
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (indexToRemove: number) => {

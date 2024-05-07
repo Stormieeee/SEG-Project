@@ -3,6 +3,7 @@ import React from "react";
 import editIcon from "../../../../public/Login-icon/edit_icon.svg";
 import Image from "next/image";
 import { useStateContext } from "./MyBookingContext";
+import { useStateContext as mainStateContext } from "../StateContext";
 
 const DetailsBar = () => {
   const {
@@ -14,12 +15,12 @@ const DetailsBar = () => {
     isCurrentFeedback,
     setFeedback,
     isLoading,
-    setIsLoading,
     setCurrentFeedbackList,
     setPastFeedbackList,
   } = useStateContext();
   const { title, roomID, request_capacity, room_capacity, description } =
     feedbackDetails ?? {};
+  const { setIsLoading } = mainStateContext();
 
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (indexToRemove: number) => {

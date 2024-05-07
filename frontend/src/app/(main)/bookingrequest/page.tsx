@@ -5,10 +5,11 @@ import SearchBar from "./SearchBar";
 import RequestComponents from "./RequestComponents";
 import { StateProvider } from "./RequestContext";
 import { useStateContext } from "./RequestContext";
+import { useStateContext as mainStateContext } from "../StateContext";
 import LoadingPage from "@/app/loader/LoadingPage";
 
 const BookingRequestPage = () => {
-  const { isLoading } = useStateContext();
+  const { isLoading } = mainStateContext();
   return (
     <StateProvider>
       <div className="flex flex-1 flex-col">

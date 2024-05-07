@@ -4,7 +4,7 @@ import BookingSwitcher from "./BookingSwitcher";
 import Sortbar from "./Sortbar";
 import BookingComponents from "./BookingComponents";
 import { StateProvider } from "./MyBookingContext";
-import { useStateContext } from "./MyBookingContext";
+import { useStateContext } from "../StateContext";
 import LoadingPage from "@/app/loader/LoadingPage";
 
 const MyBookingPage = () => {

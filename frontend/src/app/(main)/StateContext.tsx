@@ -36,6 +36,8 @@ interface StateContextType {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isSuccess: boolean;
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultValue: StateContextType = {
@@ -54,17 +56,16 @@ const defaultValue: StateContextType = {
   floor: "3",
   setFloor: () => {},
   floorSection: "R",
-  setFloorSection: () =>{},
-  dataFromApi : null,
-  setFetchedData : () => {},
-  
-  roomCapacity: 0,
-  setRoomCapacity : () => {},
-  roomEquipment : [],
-  setRoomEquipment : () => {},
-  isRoomDescEmpty : true,
-  setRoomDescEmpty : () => {},
+  setFloorSection: () => {},
+  dataFromApi: null,
+  setFetchedData: () => {},
 
+  roomCapacity: 0,
+  setRoomCapacity: () => {},
+  roomEquipment: [],
+  setRoomEquipment: () => {},
+  isRoomDescEmpty: true,
+  setRoomDescEmpty: () => {},
 
   message: "",
   setMessage: () => {},
@@ -72,6 +73,8 @@ const defaultValue: StateContextType = {
   setIsVisible: () => {},
   isSuccess: false,
   setIsSuccess: () => {},
+  isLoading: false,
+  setIsLoading: () => {},
 };
 
 const StateContext = createContext<StateContextType>(defaultValue);
@@ -99,6 +102,7 @@ export const StateProvider = ({ children }: any) => {
   const [message, setMessage] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <StateContext.Provider
@@ -134,6 +138,8 @@ export const StateProvider = ({ children }: any) => {
         setIsVisible,
         isSuccess,
         setIsSuccess,
+        isLoading,
+        setIsLoading,
       }}
     >
       {children}

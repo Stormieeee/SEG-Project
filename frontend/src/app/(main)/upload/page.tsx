@@ -1,7 +1,10 @@
 "use client";
 import React from "react";
 import UploadCard from "./UploadCard";
+import LoadingPage from "@/app/loader/LoadingPage";
+import { useStateContext } from "../StateContext";
 const Upload = () => {
+  const { isLoading } = useStateContext();
   const requiredFormatUsers = () => {
     return (
       <ul className="list-decimal ml-6">
@@ -65,6 +68,7 @@ const Upload = () => {
           requiredFormat={requiredFormatTimetable}
         />
       </div>
+      {isLoading && <LoadingPage />}
     </div>
   );
 };

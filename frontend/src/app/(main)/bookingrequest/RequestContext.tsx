@@ -116,6 +116,10 @@ export const StateProvider = ({ children }: any) => {
     getRequestData();
   }, []);
 
+  useEffect(() => {
+    console.log("isLoading", isLoading);
+  }, [isLoading]);
+
   return (
     <RequestContext.Provider
       value={{

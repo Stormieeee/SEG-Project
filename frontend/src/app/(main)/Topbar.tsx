@@ -58,8 +58,17 @@ const downloadUserGuide = () => {
 
 const Topbar = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { roomID, capacity, description, date, startTime, endTime } =
-    useStateContext();
+  const {
+    roomID,
+    capacity,
+    description,
+    date,
+    startTime,
+    endTime,
+    setIsVisible,
+    setMessage,
+    setIsSuccess,
+  } = useStateContext();
 
   const handleButtonPress = (
     roomID: any,
@@ -79,11 +88,16 @@ const Topbar = () => {
         formatHour(startTime),
         adjustTime(endTime)
       );
-      alert("Booking successful");
+      // alert("Booking successful");
+      setMessage("Booking successful");
+      setIsSuccess(true);
     } catch (error) {
       console.log("handle room booking failure: " + error);
+      setMessage("Booking failed");
+      setIsSuccess(false);
     }
     setIsLoading(false);
+    setIsVisible(true);
   };
 
   const pathname = usePathname();

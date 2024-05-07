@@ -19,7 +19,8 @@ const UploadCard = ({
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState("");
-  const { setMessage, setIsVisible, setIsSuccess } = useStateContext();
+  const { setMessage, setIsVisible, setIsSuccess, setIsLoading } =
+    useStateContext();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -42,6 +43,7 @@ const UploadCard = ({
       "Are you sure you want to upload this file?"
     );
     if (confirmed) {
+      setIsLoading(true);
       const formData = new FormData();
       if (selectedFile) {
         formData.append("file", selectedFile);
@@ -71,6 +73,7 @@ const UploadCard = ({
         setMessage("Error uploading file");
         setIsSuccess(false);
       } finally {
+        setIsLoading(false);
         setIsVisible(true);
         setSelectedFile(null);
         handleRemoveFile();

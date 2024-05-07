@@ -10,7 +10,6 @@ const DetailsBar = () => {
   const [comment, setComment] = useState("");
   const [checked, setChecked] = useState(false);
   const {
-    setIsLoading,
     setRequests,
     selectedRowIndex,
     setSelectedRowIndex,
@@ -27,7 +26,8 @@ const DetailsBar = () => {
     description,
   } = requestDetails ?? {};
   // Popup message after approving/rejecting booking
-  const { setIsVisible, setMessage, setIsSuccess } = mainStateContext();
+  const { setIsVisible, setMessage, setIsSuccess, setIsLoading } =
+    mainStateContext();
 
   // Remove request from table after approving/rejecting
   const handleRemoveItem = (bookingId: string) => {
